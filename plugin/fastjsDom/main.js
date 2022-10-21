@@ -1,4 +1,7 @@
 import _dev from "../dev";
+import dataEdit from "./dataEdit";
+import domEdit from "./domEdit";
+import event from "./event";
 
 const main = function (el) {
     let _this = {
@@ -7,7 +10,7 @@ const main = function (el) {
     }
 
     // import methods
-    _this = _dev.initMethod(_this, import("./dataEdit"), import("./domEdit"), import("./event"));
+    _this = _dev.initMethod(_this, dataEdit, domEdit, event);
 
     Object.entries(_this).forEach(e => {
         this[e[0]] = e[1];
