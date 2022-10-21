@@ -1,17 +1,19 @@
 import fastjsBind from "../fastjsBind";
 
-export default {
-    each(callback) {
-        this._el.children.forEach(callback);
-        return this;
-    },
-    on(event = "click", callback) {
-        this._el.addEventListener(event, callback);
-        return this;
-    },
-    bind(bind, key, object = {}, isAttr = false) {
-        if (bind === "html") bind = "innerHTML";
-        if (bind === "text") bind = "innerText";
-        return fastjsBind(this, bind, key, object, isAttr);
-    },
+export default _e => {
+    return {
+        each(callback) {
+            _e._el.children.forEach(callback);
+            return _e;
+        },
+        on(event = "click", callback) {
+            _e._el.addEventListener(event, callback);
+            return _e;
+        },
+        bind(bind, key, object = {}, isAttr = false) {
+            if (bind === "html") bind = "innerHTML";
+            if (bind === "text") bind = "innerText";
+            return fastjsBind(_e, bind, key, object, isAttr);
+        },
+    }
 }

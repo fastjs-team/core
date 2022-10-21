@@ -14,7 +14,7 @@ const _dev = {
         // Object.assign(arguments[0], arguments[i]);
         let obj = arguments[0];
         for (let i = 1; i < arguments.length; i++) {
-            obj = Object.assign(obj, arguments[i]);
+            obj = Object.assign(obj, arguments[i](obj));
         }
         return obj;
     }

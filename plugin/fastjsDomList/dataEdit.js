@@ -1,16 +1,18 @@
-export default {
-    toArray() {
-        return this._list;
-    },
-    set(key, val) {
-        this._list.forEach((e) => {
-            e.set(key, val);
-        })
-        return this;
-    },
-    get(key, target) {
-        if (key)
-            return this._list[key || 0]
-        return this._list[key || 0].get(target);
+export default _e => {
+    return {
+        toArray() {
+            return _e._list;
+        },
+        set(key, val) {
+            _e._list.forEach((e) => {
+                e.set(key, val);
+            })
+            return _e;
+        },
+        get(key, target) {
+            if (key)
+                return _e._list[key || 0]
+            return _e._list[key || 0].get(target);
+        }
     }
 }

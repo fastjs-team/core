@@ -1,9 +1,11 @@
-export default {
-    get(key) {
-        return this._el[key];
-    },
-    set(key, val) {
-        this._el[key] = val;
-        return this;
+export default _e => {
+    return {
+        get(key) {
+            return _e._el[key];
+        },
+        set(key, val) {
+            _e._el[key] = val;
+            return _e;
+        }
     }
 }
