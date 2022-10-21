@@ -42,11 +42,14 @@ export default {
         el.appendChild(this._el);
         return this;
     },
+    push(el = _dev._dom.body) {
+        this._el.appendChild(el);
+        return this;
+    },
     append(el) {
         this._el.appendChild(el);
         return this;
     },
-    push: this.append,
     remove() {
         this._el.remove();
         return null;
