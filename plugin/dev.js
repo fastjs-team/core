@@ -7,6 +7,16 @@ const _dev = {
     },
     newError(send, name = "Error") {
 
+    },
+    initMethod() {
+        // arguments[0] -> object
+        // arguments >= 1 -> object need to add
+        // Object.assign(arguments[0], arguments[i]);
+        let obj = arguments[0];
+        for (let i = 1; i < arguments.length; i++) {
+            obj = Object.assign(obj, arguments[i]);
+        }
+        return obj;
     }
 }
 

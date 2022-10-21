@@ -1,4 +1,5 @@
 import fastjsDom from "../fastjsDom/main";
+import _dev from "../dev";
 
 const main = function (list) {
     let domList = [];
@@ -12,9 +13,7 @@ const main = function (list) {
     }
 
     // import methods
-    _this = Object.assign(_this, import("./dataEdit"));
-    _this = Object.assign(_this, import("./domEdit"));
-    _this = Object.assign(_this, import("./event"));
+    _this = _dev.initMethod(_this, import("./dataEdit"), import("./domEdit"), import("./event"));
 
     domList.forEach((e, key) => {
         this[key] = e;
