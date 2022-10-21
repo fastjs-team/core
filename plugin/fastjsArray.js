@@ -1,4 +1,4 @@
-const fastjsArray = function (array, config) {
+const fastjsArray = function (array, config = {}) {
     /*
     config = {
         type: <string>::type / <array>::type,
@@ -24,11 +24,14 @@ const fastjsArray = function (array, config) {
         if (type === "object") {
             if (item instanceof Element)
                 type = "Element";
+            // if null
+            else if (item === null)
+                type = "Null";
             else
                 type = item.constructor.name;
         }
         if (config.type !== "Any") {
-            // if config.type is array
+            // if config.type is array -> multi type
             if (Array.isArray(config.type)) {
                 // if type is not in config.type ** ignore case
                 if (!config.type.some(v => v.toLowerCase() === type.toLowerCase())) {
@@ -77,8 +80,12 @@ const fastjsArray = function (array, config) {
             setKey();
             return _e;
         },
-        push(val) {
-            return _e.add(val);
+        push() {
+            // arguments each
+            for (let i = 0; i < arguments.length; i++) {
+                _e.add(arguments[i]);
+            }
+            return _e;
         },
         remove(key) {
             _e._array.splice(key, 1);
