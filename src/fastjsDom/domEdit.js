@@ -44,7 +44,7 @@ export default _e => {
             return _e;
         },
         push(el = _dev._dom.body) {
-            _e._el.appendChild(el);
+            el.appendChild(_e._el);
             return _e;
         },
         append(el) {
