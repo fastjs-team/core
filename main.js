@@ -1,7 +1,7 @@
-import fastjsDom from "./plugin/fastjsDom/main";
-import fastjsDomList from "./plugin/fastjsDomList/main";
+import fastjsDom from "./src/fastjsDom/main";
+import fastjsDomList from "./src/fastjsDomList/main";
 import config from "./config";
-import _dev from "./plugin/dev";
+import _dev from "./src/dev";
 
 let fastjs = {
     dom(el) {
