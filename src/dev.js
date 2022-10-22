@@ -1,24 +1,24 @@
 const _dev = {
     _dom: document,
-    newWarn(send, index, info) {
+    newWarn(send, index, file) {
         // if in dev
         if (process.env.NODE_ENV === "development") {
             let output = `[Fastjs warn] ${send}: ${index}`
-            if (info) {
+            if (file) {
                 output += "\n";
-                info.forEach((v) => {
+                file.forEach((v) => {
                     output += `  ${v}\n`;
                 })
             }
             console.warn(output);
         }
     },
-    newError(send, index, info) {
+    newError(send, index, file) {
         if (process.env.NODE_ENV === "development") {
             let output = `[Fastjs error] ${send}: ${index}`
-            if (info) {
+            if (file) {
                 output += "\n";
-                info.forEach((v) => {
+                file.forEach((v) => {
                     output += `  ${v}\n`;
                 })
             }
