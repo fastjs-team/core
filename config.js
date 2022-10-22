@@ -1,7 +1,7 @@
 let config = {
   dom: {
     defaultTag: 'div',
-    specialDom: ["#", "body", "head", "html"],
+    specialDom: ["body", "head", "html"],
   },
   modules: {
     ajax: {
