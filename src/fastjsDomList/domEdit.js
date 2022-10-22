@@ -18,12 +18,16 @@ export default _e => {
             return _e;
         },
         html(val) {
+            if (val === undefined)
+                return _e._list[0].html();
             _e._list.forEach((e) => {
                 e.html(val);
             })
             return _e;
         },
         text(val) {
+            if (val === undefined)
+                return _e._list[0].text(val);
             _e._list.forEach((e) => {
                 e.text(val);
             })
