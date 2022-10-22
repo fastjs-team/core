@@ -2,11 +2,28 @@ const _dev = {
     _dom: document,
     newWarn(send, index, info) {
         // if in dev
-        if (process.env.NODE_ENV === "development")
-            console.warn(`[FastjsWarn] ${send}: ${index}${info ? `\n(${info})` : ""}`);
+        if (process.env.NODE_ENV === "development") {
+            let output = `[Fastjs warn] ${send}: ${index}`
+            if (info) {
+                output += "\n";
+                info.forEach((v) => {
+                    output += `  ${v}\n`;
+                })
+            }
+            console.warn(output);
+        }
     },
-    newError(send, name = "Error") {
-
+    newError(send, index, info) {
+        if (process.env.NODE_ENV === "development") {
+            let output = `[Fastjs error] ${send}: ${index}`
+            if (info) {
+                output += "\n";
+                info.forEach((v) => {
+                    output += `  ${v}\n`;
+                })
+            }
+            console.error(output);
+        }
     },
     initMethod() {
         // arguments[0] -> object

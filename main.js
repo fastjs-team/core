@@ -13,7 +13,6 @@ let fastjs = {
         return new fastjsDom(el);
     },
     selecter(el, place = _dev._dom) {
-        _dev.newWarn("fastjs.main.selecter", "This is a test warning");
         let dom = []
         // if place = fastjsDomList
         if (place.constructor === fastjsDomList) {
