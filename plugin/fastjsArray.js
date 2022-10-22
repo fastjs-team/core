@@ -1,3 +1,5 @@
+import _dev from "./dev";
+
 const fastjsArray = function (array, config = {}) {
     /*
     config = {
@@ -20,16 +22,7 @@ const fastjsArray = function (array, config = {}) {
         const reject = () => {
             throw new Error(`[FastjsArray] TypeError: ${type} cannot be a item of <${config.type}>FastjsArray`);
         }
-        let type = typeof item;
-        if (type === "object") {
-            if (item instanceof Element)
-                type = "Element";
-            // if null
-            else if (item === null)
-                type = "Null";
-            else
-                type = item.constructor.name;
-        }
+        let type = _dev.type(item);
         if (config.type !== "Any") {
             // if config.type is array -> multi type
             if (Array.isArray(config.type)) {

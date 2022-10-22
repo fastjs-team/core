@@ -17,6 +17,19 @@ const _dev = {
             obj = Object.assign(obj, arguments[i](obj));
         }
         return obj;
+    },
+    type(arg) {
+        let type = typeof arg;
+        if (type === "object") {
+            if (arg instanceof Element)
+                type = "Element";
+            // if null
+            else if (arg === null)
+                type = "Null";
+            else
+                type = arg.constructor.name;
+        }
+        return type;
     }
 }
 
