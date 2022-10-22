@@ -1,4 +1,4 @@
-import fastjsDom from "./main";
+import {selecter as _selecter} from "../../main";
 import _dev from "../dev";
 
 export default _e => {
@@ -12,7 +12,7 @@ export default _e => {
             return val ? _e : _e._el.innerText;
         },
         next(selecter) {
-            return new fastjsDom(selecter, _e._el);
+            return _selecter(selecter, _e._el);
         },
         father() {
             return _e._el.parentNode;
