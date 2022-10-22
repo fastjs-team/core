@@ -1,17 +1,9 @@
-import fastjsDom from "./src/fastjsDom/main";
-import fastjsDomList from "./src/fastjsDomList/main";
+import fastjsDom from "./src/fastjsDom/fastjsDom";
+import fastjsDomList from "./src/fastjsDomList/fastjsDomList";
 import config from "./config";
 import _dev from "./src/dev";
 
 let fastjs = {
-    dom(el) {
-        // el -> element / tagName
-        el = el || config.dom.defaultTag;
-        if (typeof el == "string") {
-            _dev._dom.createElement(el);
-        }
-        return new fastjsDom(el);
-    },
     selecter(el, place = _dev._dom) {
         let dom = []
         // if place = fastjsDomList
@@ -43,9 +35,10 @@ let fastjs = {
     copy(text) {
         // copy text to clipboard
         let input = new fastjsDom("input");
-        input.val(text).push(document.body);
+        input.val(text).push();
         input._el.select();
         document.execCommand("copy");
+        console.log(input);
         input.remove();
     }
 }
