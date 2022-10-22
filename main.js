@@ -5,6 +5,7 @@ import _dev from "./plugin/dev";
 
 let fastjs = {
     dom(el) {
+        console.log("test46546546546");
         // el -> element / tagName
         el = el || config.dom.defaultTag;
         if (typeof el == "string") {
