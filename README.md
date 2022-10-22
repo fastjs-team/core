@@ -16,9 +16,9 @@ npm install fastjs-next
 
 ## Contributor
 
-- dy-xiaodong
+- dy-xiaodong2022
 
 ## Info
 
 Author: dy-xiaodong<br />
-Readme version: v0.0.2
+Readme version: v0.0.3
