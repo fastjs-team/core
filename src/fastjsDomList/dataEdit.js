@@ -5,33 +5,33 @@ export default _e => {
         toArray() {
             return _e._list;
         },
-        set(val, key) {
+        set(key, val, el) {
             // dev start
             if (process.env.NODE_ENV !== 'production') {
-                if (val === undefined)
+                if (key === undefined)
                     _dev.newError('fastjsDomList', 'argument val require a value', [
-                        'set(val, key)',
+                        'set(key, val, el)',
                         'dataEdit.js',
                         'fastjsDomList'
                     ]);
             }
             // dev end
-            if (key === undefined)
+            if (el === undefined)
                 _e.each((e) => {
-                    e.set(val);
+                    e.set(key, val);
                 })
             else
-                _e.get(key).set(val);
+                _e.get(el).set(key, val);
             return _e;
         },
         get(target, key) {
             return _e._list[key || 0].get(target);
         },
-        getEl(key) {
+        getEl(key = 0) {
             // dev start
             if (process.env.NODE_ENV !== 'production') {
                 // overflow
-                if (key >= _e.length)
+                if (key >= _e._list.length)
                     return _dev.newWarn('fastjsDomList', 'key is overflow', [
                         'getEl(key)',
                         'dataEdit.js',
@@ -39,7 +39,7 @@ export default _e => {
                     ]);
             }
             // dev end
-            return _e[key || 0];
+            return _e._list[key || 0];
         }
     }
 }
