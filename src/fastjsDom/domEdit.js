@@ -91,5 +91,9 @@ export default _e => {
                 callback(_e);
             return _e;
         },
+        focus() {
+            _e._el.focus();
+            return _e;
+        }
     }
 }
