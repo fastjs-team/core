@@ -1,7 +1,7 @@
-import fastjsDom from "./plugin/fastjsDom/main";
-import fastjsDomList from "./plugin/fastjsDomList/main";
+import fastjsDom from "./src/fastjsDom/main";
+import fastjsDomList from "./src/fastjsDomList/main";
 import config from "./config";
-import _dev from "./plugin/dev";
+import _dev from "./src/dev";
 
 let fastjs = {
     dom(el) {
@@ -27,11 +27,14 @@ let fastjs = {
         } else {
             dom = place.querySelectorAll(el);
         }
-        let special = false
-        config.dom.specialDom.forEach((v) => {
-            if (el.startsWith(v))
-                special = true;
-        })
+        // if last selecter is id
+        let special = el.split(" ")[el.split(" ").length - 1].startsWith("#");
+        // prevent extra forEach
+        if (!special)
+            config.dom.specialDom.forEach((v) => {
+                if (el.startsWith(v))
+                    special = true;
+            })
         if (special)
             // -> fastjsDom -> element
             return new fastjsDom(dom[0]);
