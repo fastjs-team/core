@@ -1,6 +1,5 @@
 import fastjsDom from "./src/fastjsDom/fastjsDom";
 import fastjsDomList from "./src/fastjsDomList/fastjsDomList";
-import config from "./config";
 import _dev from "./src/dev";
 
 let fastjs = {
@@ -46,5 +45,5 @@ let fastjs = {
 let selecter = fastjs.selecter
 let copy = fastjs.copy
 
-export {config, selecter, copy}
+export {selecter, copy}
 export default fastjs
