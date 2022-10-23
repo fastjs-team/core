@@ -63,6 +63,10 @@ export default _e => {
             // add _e._el before el
             el.parentNode.insertBefore(_e._el, el);
         },
+        addFirst(el) {
+            // add _e._el first in el
+            el.insertBefore(_e._el, el.firstChild);
+        },
         val(val) {
             const btn = _e._el.tagName === "BUTTON";
             if (val != null) {
@@ -94,6 +98,12 @@ export default _e => {
         focus() {
             _e._el.focus();
             return _e;
+        },
+        first() {
+            return _e._el.firstElementChild;
+        },
+        last() {
+            return _e._el.lastElementChild;
         }
     }
 }
