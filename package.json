@@ -2,9 +2,9 @@
   "name": "fastjs-next",
   "version": "1.0.0",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
-  "main": "main.js",
+  "module": "dist/fastjs-next-runtime.esm.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c"
   },
   "keywords": [
     "fastjs"

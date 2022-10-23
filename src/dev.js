@@ -10,6 +10,7 @@ const _dev = {
                     output += `  ${v}\n`;
                 })
             }
+            // new warn
             console.warn(output);
         }
     },
@@ -22,7 +23,8 @@ const _dev = {
                     output += `  ${v}\n`;
                 })
             }
-            console.error(output);
+            // new error
+            throw new Error(output);
         }
     },
     initMethod() {

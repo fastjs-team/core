@@ -1,4 +1,4 @@
-import _config from "../../config";
+import _config from "../../src/config";
 import send from "./send";
 
 const Ajax = function (url, data, callback, failed, config = {}) {
@@ -16,6 +16,7 @@ const Ajax = function (url, data, callback, failed, config = {}) {
             datatype: config.datatype || "auto",
             headers: config.headers || {}
         },
+        response: null,
         xhr: null,
         send: send(this).send
     }
