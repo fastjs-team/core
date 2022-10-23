@@ -20,7 +20,7 @@ npm install fastjs-next
 
 - Commit message should be in English
 - First letter of commit message should be capitalized
-- Each line should more than 30 words
+- Each line should not more than 30 words
 - Commit message should be clear and concise
 - You need to write down the change of the code
 - Please use the word like `Update` / `Fix ? bug` / `Delete` / `Add` / `Test` to start your commit message
@@ -34,4 +34,4 @@ npm install fastjs-next
 ## Info
 
 Author: dy-xiaodong<br />
-Readme version: v0.0.5
+Readme version: v0.0.6
