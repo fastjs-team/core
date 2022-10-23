@@ -16,6 +16,18 @@ npm install fastjs-next
 
 ## Contributing
 
+### Environment
+
+#### rollup.js
+
+```bash
+npm install --global rollup
+```
+
+#### node.js
+
+Please install last LTS version of node.js.
+
 ### Commit / Pull Request specification
 
 - Commit message should be in English
@@ -34,4 +46,4 @@ npm install fastjs-next
 ## Info
 
 Author: dy-xiaodong<br />
-Readme version: v0.0.6
+Readme version: v0.0.7
