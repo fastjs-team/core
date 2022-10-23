@@ -1,4 +1,4 @@
-let config = {
+export default {
   dom: {
     defaultTag: 'div',
     specialDom: ["body", "head", "html"],
@@ -22,5 +22,3 @@ let config = {
     }
   }
 }
-
-export default config

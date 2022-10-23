@@ -1,4 +1,4 @@
-import fastjsDom from "./main";
+import {selecter as _selecter} from "../../main";
 import _dev from "../dev";
 
 export default _e => {
@@ -12,7 +12,7 @@ export default _e => {
             return val ? _e : _e._el.innerText;
         },
         next(selecter) {
-            return new fastjsDom(selecter, _e._el);
+            return _selecter(selecter, _e._el);
         },
         father() {
             return _e._el.parentNode;
@@ -44,7 +44,7 @@ export default _e => {
             return _e;
         },
         push(el = _dev._dom.body) {
-            _e._el.appendChild(el);
+            el.appendChild(_e._el);
             return _e;
         },
         append(el) {
@@ -62,6 +62,10 @@ export default _e => {
         addBefore(el) {
             // add _e._el before el
             el.parentNode.insertBefore(_e._el, el);
+        },
+        addFirst(el) {
+            // add _e._el first in el
+            el.insertBefore(_e._el, el.firstChild);
         },
         val(val) {
             const btn = _e._el.tagName === "BUTTON";
@@ -91,5 +95,15 @@ export default _e => {
                 callback(_e);
             return _e;
         },
+        focus() {
+            _e._el.focus();
+            return _e;
+        },
+        first() {
+            return _e._el.firstElementChild;
+        },
+        last() {
+            return _e._el.lastElementChild;
+        }
     }
 }

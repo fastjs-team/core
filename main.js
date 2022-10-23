@@ -1,19 +1,10 @@
-import fastjsDom from "./src/fastjsDom/main";
-import fastjsDomList from "./src/fastjsDomList/main";
+import fastjsDom from "./src/fastjsDom/fastjsDom";
+import fastjsDomList from "./src/fastjsDomList/fastjsDomList";
 import config from "./config";
 import _dev from "./src/dev";
 
 let fastjs = {
-    dom(el) {
-        // el -> element / tagName
-        el = el || config.dom.defaultTag;
-        if (typeof el == "string") {
-            _dev._dom.createElement(el);
-        }
-        return new fastjsDom(el);
-    },
     selecter(el, place = _dev._dom) {
-        _dev.newWarn("fastjs.main.selecter", "This is a test warning");
         let dom = []
         // if place = fastjsDomList
         if (place.constructor === fastjsDomList) {
@@ -44,9 +35,10 @@ let fastjs = {
     copy(text) {
         // copy text to clipboard
         let input = new fastjsDom("input");
-        input.val(text).push(document.body);
+        input.val(text).push();
         input._el.select();
         document.execCommand("copy");
+        console.log(input);
         input.remove();
     }
 }
@@ -54,5 +46,5 @@ let fastjs = {
 let selecter = fastjs.selecter
 let copy = fastjs.copy
 
-export {config, selecter, copy}
+export {selecter, copy}
 export default fastjs
