@@ -5,18 +5,21 @@ const Ajax = function (url, data, callback, failed, config = {}) {
     if (!url) {
         throw new Error("Fastjs.modules.ajax: url is required in setup");
     }
-    this.url = url;
-    this.data = data || {};
     const func = () => 0
-    this.callback = callback || func;
-    this.failed = failed || func;
-    this.config = {
-        timeout: config.timeout || _config.modules.ajax.timeout,
-        datatype: config.datatype || "auto",
-        headers: config.headers || {}
-    };
+    let _this = {
+        url: url,
+        data: data || {},
+        callback: callback || func,
+        failed: failed || func,
+        config: {
+            timeout: config.timeout || _config.modules.ajax.timeout,
+            datatype: config.datatype || "auto",
+            headers: config.headers || {}
+        },
+        xhr: null,
+        send: send(this).send
+    }
+    Object.assign(this, _this);
 }
-
-Ajax.prototype.send = send;
 
 export default Ajax

@@ -1,36 +1,42 @@
 import _config from "../../config";
 const config = _config.modules.ajax
 
-const send = method => {
-    let xhr = new XMLHttpRequest();
-    xhr.open(method, this.url, true);
-    xhr.timeout = this.config.timeout;
-    xhr.onload = () => {
+// _e = Ajax
+export default _e => {
+    return {
+        send(method) {
+            console.log(_e);
+            let xhr = new XMLHttpRequest();
+            _e.xhr = xhr;
+            xhr.open(method, _e.url, true);
+            xhr.timeout = _e.config.timeout;
+            xhr.onload = () => {
 
-    }
-    const fail = () => {
-        if (config.hooks.failed(this) === false) return;
-        // cut out xhr
-        xhr.abort();
-    }
-    xhr.onerror = fail;
-    xhr.ontimeout = fail;
-    xhr.onload = () => {
-        const data = xhr.response;
-        // if auto
-        if (this.config.datatype === "auto") {
-            // try to parse json
-            try {
-                this.data = JSON.parse(xhr.responseText);
-            } catch {
-                this.data = xhr.responseText;
             }
+            const fail = () => {
+                if (config.hooks.failed(_e) === false) return;
+                // cut out xhr
+                xhr.abort();
+            }
+            xhr.onerror = fail;
+            xhr.ontimeout = fail;
+            xhr.onload = () => {
+                const data = xhr.response;
+                // if auto
+                if (_e.config.datatype === "auto") {
+                    // try to parse json
+                    try {
+                        _e.data = JSON.parse(xhr.responseText);
+                    } catch {
+                        _e.data = xhr.responseText;
+                    }
+                }
+                if (config.hooks.success(_e) === false) return;
+                if (config.hooks.callback(_e, data) === false) return;
+                _e.callback(data);
+            }
+            xhr.send(_e.data);
         }
-        if (config.hooks.success(this) === false) return;
-        if (config.hooks.callback(this, data) === false) return;
-        this.callback(data);
-    }
-    xhr.send(this.data);
-}
 
-export default send
+    }
+}
