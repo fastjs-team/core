@@ -1,4 +1,4 @@
-import {selecter} from "../../main";
+import {selecter} from "../main";
 
 export default _e => {
     return {

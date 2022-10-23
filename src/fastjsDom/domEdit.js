@@ -1,4 +1,4 @@
-import {selecter as _selecter} from "../../main";
+import {selecter as _selecter} from "../main";
 import _dev from "../dev";
 import fastjsDom from "./fastjsDom";
 

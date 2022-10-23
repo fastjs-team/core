@@ -1,4 +1,4 @@
-import _config from "../../config";
+import _config from "../../src/config";
 const config = _config.modules.ajax
 
 // _e = Ajax

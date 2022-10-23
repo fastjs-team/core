@@ -1,4 +1,4 @@
-import _config from "../../config";
+import _config from "../../src/config";
 import send from "./send";
 
 const Ajax = function (url, data, callback, failed, config = {}) {
