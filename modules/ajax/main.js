@@ -16,6 +16,7 @@ const Ajax = function (url, data, callback, failed, config = {}) {
             datatype: config.datatype || "auto",
             headers: config.headers || {}
         },
+        response: null,
         xhr: null,
         send: send(this).send
     }

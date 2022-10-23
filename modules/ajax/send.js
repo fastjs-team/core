@@ -26,9 +26,9 @@ export default _e => {
                 if (_e.config.datatype === "auto") {
                     // try to parse json
                     try {
-                        _e.data = JSON.parse(xhr.responseText);
+                        _e.response = JSON.parse(xhr.responseText);
                     } catch {
-                        _e.data = xhr.responseText;
+                        _e.response = xhr.responseText;
                     }
                 }
                 if (config.hooks.success(_e) === false) return;
