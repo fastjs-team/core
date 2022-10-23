@@ -1,4 +1,4 @@
-import fastjsConfig from "../../main";
+import _config from "../../config";
 import send from "./send";
 
 const Ajax = function (url, data, callback, failed, config = {}) {
@@ -11,7 +11,7 @@ const Ajax = function (url, data, callback, failed, config = {}) {
     this.callback = callback || func;
     this.failed = failed || func;
     this.config = {
-        timeout: config.timeout || fastjsConfig.ajax.timeout,
+        timeout: config.timeout || _config.modules.ajax.timeout,
         datatype: config.datatype || "auto",
         headers: config.headers || {}
     };
