@@ -1,4 +1,4 @@
-import _dev from "./dev";
+import _dev from "../dev";
 
 const fastjsArray = function (array, config = {}) {
     /*
@@ -16,11 +16,11 @@ const fastjsArray = function (array, config = {}) {
     const check = item => {
         // check length
         if (config.length && this._array.length >= config.length) {
-            throw new Error(`[FastjsArray] Error: Max length of <${config.type}>FastjsArray is ` + config.length);
+            _dev.newError("FastjsArray", `Max length of <${config.type}>FastjsArray is ` + config.length);
         }
         // check type
         const reject = () => {
-            throw new Error(`[FastjsArray] TypeError: ${type} cannot be a item of <${config.type}>FastjsArray`);
+            _dev.newError("FastjsArray", `TypeError: ${type} cannot be a item of <${config.type}>FastjsArray`);
         }
         let type = _dev.type(item);
         if (config.type !== "Any") {
