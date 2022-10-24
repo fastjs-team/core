@@ -1,7 +1,7 @@
+import _dev from "./dev";
 import fastjsDom from "./fastjsDom/fastjsDom";
 import fastjsDomList from "./fastjsDomList/fastjsDomList";
 import config from "./config";
-import _dev from "./dev";
 
 let fastjs = {
     selecter(el, place = _dev._dom) {

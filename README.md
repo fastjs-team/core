@@ -28,6 +28,12 @@ npm install --global rollup
 
 Please install last LTS version of node.js.
 
+#### typescript
+
+```bash
+npm install --global typescript
+```
+
 ### Commit / Pull Request specification
 
 - Commit message should be in English
@@ -38,6 +44,11 @@ Please install last LTS version of node.js.
 - Please use the word like `Update` / `Fix ? bug` / `Delete` / `Add` / `Test` to start your commit message
 - Pull Request need add a line `\n{date} {author}` at the end of the commit message
 
+### Not allowed
+
+- Don't submit outdated branch
+- Don't use `any` type at 99% of the time
+
 ## Contributors
 
 - dy-xiaodong2022
@@ -46,4 +57,4 @@ Please install last LTS version of node.js.
 ## Info
 
 Author: dy-xiaodong<br />
-Readme version: v0.0.7
+Readme version: v0.0.8

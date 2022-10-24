@@ -16,11 +16,20 @@ const fastjsArray = function (array, config = {}) {
     const check = item => {
         // check length
         if (config.length && this._array.length >= config.length) {
-            _dev.newError("FastjsArray", `Max length of <${config.type}>FastjsArray is ` + config.length);
+            // dev start
+            if (process.env.NODE_ENV !== 'production') {
+                _dev.newError("FastjsArray", `Max length of <${config.type}>FastjsArray is ` + config.length);
+            }
+            // dev end
+            else return
         }
         // check type
         const reject = () => {
-            _dev.newError("FastjsArray", `TypeError: ${type} cannot be a item of <${config.type}>FastjsArray`);
+            // dev start
+            if (process.env.NODE_ENV !== 'production') {
+                _dev.newError("FastjsArray", `TypeError: ${type} cannot be a item of <${config.type}>FastjsArray`);
+            }
+            // dev end
         }
         let type = _dev.type(item);
         if (config.type !== "Any") {

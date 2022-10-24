@@ -10,5 +10,8 @@
     "fastjs"
   ],
   "author": "dy-xiaodong",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.4"
+  }
 }
