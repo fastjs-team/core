@@ -6,8 +6,8 @@ import event from "./event";
 
 class fastjsDomList {
     constructor(list: Array<Element> = []) {
-        let domList: Array<Element> = [];
-        list?.forEach(el => {
+        let domList: Array<fastjsDom> = [];
+        list?.forEach((el: Element) => {
             domList.push(new fastjsDom(el));
         })
 
@@ -20,15 +20,20 @@ class fastjsDomList {
         // init methods
         _this = _dev.initMethod(_this, dataEdit, domEdit, event)
 
-        domList.forEach((e:Element, key:number) => {
+        // mount domList: Array<Element> -> this
+        domList.forEach((e:fastjsDom, key:number) => {
             this[key] = e;
         })
+
+        // mount _this -> this
         Object.entries(_this).forEach((e:Array<any>) => {
             this[e[0]] = e[1];
         })
 
         return this;
     }
+
+    [key: string]: any;
 }
 
 export default fastjsDomList
