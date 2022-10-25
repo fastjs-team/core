@@ -21,12 +21,12 @@ class fastjsDomList {
         _this = _dev.initMethod(_this, dataEdit, domEdit, event)
 
         // mount domList: Array<Element> -> this
-        domList.forEach((e:fastjsDom, key:number) => {
+        domList.forEach((e: fastjsDom, key: number) => {
             this[key] = e;
         })
 
         // mount _this -> this
-        Object.entries(_this).forEach((e:Array<any>) => {
+        Object.entries(_this).forEach((e: Array<any>) => {
             this[e[0]] = e[1];
         })
 
