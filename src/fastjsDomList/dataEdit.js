@@ -6,16 +6,17 @@ export default _e => {
             return _e._list;
         },
         set(key, val, el) {
-            // dev start
-            if (process.env.NODE_ENV !== 'production') {
-                if (key === undefined)
+            if (key === undefined)
+                // dev start
+                if (process.env.NODE_ENV !== 'production') {
                     _dev.newError('fastjsDomList', 'argument val require a value', [
                         'set(key, val, el)',
                         'dataEdit.js',
                         'fastjsDomList'
                     ]);
-            }
-            // dev end
+                }
+                // dev end
+                else return
             if (el === undefined)
                 _e.each((e) => {
                     e.set(key, val);
