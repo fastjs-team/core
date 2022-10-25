@@ -28,7 +28,7 @@ export default {
             throw new Error(output);
         }
     },
-    initMethod(): object {
+    initMethod(_this: any, ...methods: any): object {
         // arguments[0] -> object
         // arguments >= 1 -> object need to add
         // Object.assign(arguments[0], arguments[i]);
