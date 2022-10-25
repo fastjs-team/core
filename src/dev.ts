@@ -1,6 +1,6 @@
 export default {
     _dom: document,
-    newWarn(send: string, warn: string, file: Array<string>): void {
+    newWarn(send: string, warn: string, file?: Array<string>): void {
         // if in dev
         if (process.env.NODE_ENV === "development") {
             let output = `[Fastjs warn] ${send}: ${warn}`
@@ -14,7 +14,7 @@ export default {
             console.warn(output);
         }
     },
-    newError(send: string, error: string, file: Array<string>): void {
+    newError(send: string, error: string, file?: Array<string>): void {
         // if in dev
         if (process.env.NODE_ENV === "development") {
             let output = `[Fastjs error] ${send}: ${error}`
