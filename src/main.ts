@@ -1,5 +1,5 @@
 // modules
-import Ajax from "../modules/ajax/main";
+import FastjsAjax from "../modules/ajax/main";
 
 // src
 import FastjsArray from "../src/fastjsArray/fastjsArray";
@@ -11,5 +11,5 @@ import fastjs from "./methods";
 import {selecter, copy} from "./methods";
 
 // export
-export {Ajax, FastjsArray, FastjsDom, FastjsDomList, selecter, copy};
+export {FastjsAjax, FastjsArray, FastjsDom, FastjsDomList, selecter, copy};
 export default fastjs;
