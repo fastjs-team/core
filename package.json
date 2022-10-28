@@ -13,7 +13,7 @@
   "author": "dy-xiaodong",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^18.11.4"
+    "@types/node": "^18.11.7"
   },
   "dependencies": {
     "@rollup/plugin-typescript": "^9.0.2"
