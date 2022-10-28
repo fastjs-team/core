@@ -7,7 +7,7 @@ export default {
             if (file) {
                 output += "\n";
                 file.forEach((v) => {
-                    output += `  ${v}\n`;
+                    output += `   |-> ${v}\n`;
                 })
             }
             // new warn
@@ -21,7 +21,7 @@ export default {
             if (file) {
                 output += "\n";
                 file.forEach((v) => {
-                    output += `  ${v}\n`;
+                    output += `   |-> ${v}\n`;
                 })
             }
             // new error
