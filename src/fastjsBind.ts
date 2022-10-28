@@ -14,6 +14,12 @@ interface target {
     [key: string]: any;
 }
 
+interface event {
+    attr: boolean,
+    _el: fastjsDom,
+    bind: string,
+}
+
 class fastjsBind {
     constructor(el: fastjsDom, bind: string, key: string | number, object: config = {}, isAttr: boolean = false) {
         if (!object._event) {
@@ -25,11 +31,11 @@ class fastjsBind {
                         target[key] = value;
                         // do event
                         if (object._event[key] && key !== "_event") {
-                            object._event[key].forEach((e) => {
+                            object._event[key].forEach((e: event) => {
                                 if (e.attr)
-                                    e._el.attr(e.bind, value);
+                                    e._el._el.attr(e.bind, value);
                                 else
-                                    e._el[e.bind] = value;
+                                    e._el._el[e.bind] = value;
                             })
                         }
                     }
