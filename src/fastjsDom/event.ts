@@ -14,7 +14,7 @@ export default (_e: fastjsDom) => {
         bind(bind: string = "text", key: string, object: object = {}, isAttr: boolean = false) {
             if (bind === "html") bind = "innerHTML";
             if (bind === "text") bind = "innerText";
-            return fastjsBind(_e, bind, key, object, isAttr);
+            return new fastjsBind(_e, bind, key, object, isAttr);
         },
     }
 }

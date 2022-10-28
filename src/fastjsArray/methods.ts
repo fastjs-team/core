@@ -12,7 +12,6 @@ export default (_e: fastjsArray) => {
             return _e._array.length;
         },
         add(val: any, key: number = _e._array.length) {
-            if (!_e.check(val)) return
             _e._array[key] = val;
             return _e;
         },
@@ -62,6 +61,6 @@ export default (_e: fastjsArray) => {
                 callback(_e);
             return _e;
         },
-        construct: `<${_e.config.type}>FastjsArray`,
+        construct: `<${_e._config.type}>FastjsArray`,
     }
 }
