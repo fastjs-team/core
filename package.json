@@ -4,6 +4,7 @@
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "module": "dist/fastjs-next-runtime.esm.ts",
   "scripts": {
+    "dev": "rollup -cw",
     "build": "rollup -c"
   },
   "keywords": [
@@ -13,5 +14,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^18.11.4"
+  },
+  "dependencies": {
+    "@rollup/plugin-typescript": "^9.0.2"
   }
 }
