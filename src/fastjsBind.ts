@@ -8,6 +8,7 @@ interface config {
             bind: string,
         }>
     }
+    [key: string]: any
 }
 
 interface target {
@@ -22,39 +23,56 @@ interface event {
 
 class fastjsBind {
     constructor(el: fastjsDom, bind: string, key: string | number, object: config = {}, isAttr: boolean = false) {
-        if (!object._event) {
-            object._event = {};
-            object = new Proxy(object, {
-                set(target: target, p: string, value: any): boolean {
-                    if (object._event) {
-                        // set value -> pass
-                        target[key] = value;
-                        // do event
-                        if (object._event[key] && key !== "_event") {
-                            object._event[key].forEach((e: event) => {
-                                if (e.attr)
-                                    e._el._el.attr(e.bind, value);
-                                else
-                                    e._el._el[e.bind] = value;
-                            })
-                        }
-                    }
-                    return true;
-                }
-            })
+        // deep clone object
+        let _object = JSON.parse(JSON.stringify(object));
+        if (!_object._event) {
+            _object._event = {};
         }
+        _object = new Proxy(_object, {
+            set(target: target, p: string, value: any): boolean {
+                if (_object._event) {
+                    // set value -> pass
+                    target[key] = value;
+                    // do event
+                    if (_object._event[key] && key !== "_event") {
+                        _object._event[key].forEach((e: event) => {
+                            if (e.attr)
+                                e._el._el.attr(e.bind, value);
+                            else
+                                e._el._el[e.bind] = value;
+                        })
+                    }
+                }
+                return true;
+            }
+        })
 
-        if (object._event === undefined) return
+        if (_object._event === undefined) return
 
-        if (!object._event[key])
-            object._event[key] = []
+        if (!_object._event[key])
+            _object._event[key] = []
 
-        object._event[key].push({
+        // find same event & dom
+        let same = false;
+        _object._event[key].forEach((e: event) => {
+            if (e._el._el === el._el && e.bind === bind)
+                same = true;
+        })
+        if (same) return
+
+        _object._event[key].push({
             attr: isAttr,
             _el: el,
             bind: bind
         });
-        return object;
+
+        // init
+        if (isAttr)
+            el._el.attr(bind, _object[key]);
+        else
+            el._el[bind] = _object[key];
+
+        return _object;
     }
 }
 
