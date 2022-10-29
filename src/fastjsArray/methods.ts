@@ -1,6 +1,6 @@
 import fastjsArray from "./fastjsArray";
 
-export default (_e: fastjsArray) => {
+const methods: Function = (_e: fastjsArray) => {
     return {
         first() {
             return _e._array[0];
@@ -64,3 +64,5 @@ export default (_e: fastjsArray) => {
         construct: `<${_e._config.type}>FastjsArray`,
     }
 }
+
+export default methods
