@@ -11,10 +11,6 @@ interface config {
     length: number | null
 }
 
-interface proxy {
-    [key: string]: any
-}
-
 class fastjsArray {
     constructor(array: Array<any>, config: config = defaultConfig) {
         /*
@@ -59,7 +55,7 @@ class fastjsArray {
 
     _config: config
     // array = Proxy -> Array
-    _array: proxy
+    _array: Array<any>
 
     // methods
     [key: string]: any
