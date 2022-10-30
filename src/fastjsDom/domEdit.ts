@@ -18,14 +18,14 @@ export default (_e: fastjsDom) => {
         father() {
             return _e._el.parentNode;
         },
-        attr(key: string, value: string) {
+        attr(key: string, value?: string) {
             if (value != null)
                 value = value.toString()
             if (value)
                 _e._el.setAttribute(key, value);
             if (value === null)
                 _e._el.removeAttribute(key);
-            return value === undefined ? _e : _e._el.getAttribute(key);
+            return value !== undefined ? _e : _e._el.getAttribute(key);
         },
         css(key: string | object, value?: string) {
             if (typeof key === "string") {
