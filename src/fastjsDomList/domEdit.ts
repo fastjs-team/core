@@ -56,5 +56,15 @@ export default (_e: fastjsDomList) => {
 
             return _e._list[0].father();
         },
+        remove() {
+            // remove()
+            // remove element
+
+            _e._list.forEach((e: fastjsDom) => {
+                e.remove();
+            })
+            return null;
+
+        }
     }
 }
