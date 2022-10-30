@@ -34,11 +34,15 @@ let fastjs = {
     },
     copy(text: string) {
         // copy text to clipboard
-        let input = new fastjsDom("input");
-        input.val(text).push();
-        input._el.select();
+        let input = new fastjsDom("span");
+        input.html(text).push();
+        const range: Range = document.createRange();
+        range.selectNode(input._el);
+        const selection: Selection | null = window.getSelection();
+        if (!selection) return;
+        selection.removeAllRanges();
+        selection.addRange(range);
         document.execCommand("copy");
-        console.log(input);
         input.remove();
     }
 }
