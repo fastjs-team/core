@@ -44,6 +44,7 @@ let fastjs = {
         selection.removeAllRanges();
         selection.addRange(range);
         document.execCommand("copy");
+        input.remove();
     }
 }
 
