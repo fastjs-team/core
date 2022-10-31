@@ -26,10 +26,10 @@ export default (_e: fastjsArray) => {
             _e._array.splice(key, 1);
             return _e;
         },
-        get(key: number | string) {
+        get(key: number) {
             return _e._array[key];
         },
-        set(key: number | string, val: any) {
+        set(key: number, val: any) {
             _e._array[key] = val;
             return _e;
         },
