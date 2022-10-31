@@ -1,14 +1,24 @@
 {
   "name": "fastjs-next",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "main": "dist/fastjs-next-runtime.esm.js",
+  "types": "dist/src/main.d.ts",
   "scripts": {
     "dev": "rollup -cw",
-    "build": "rollup -c"
+    "build": "mkdir dist && tsc && rollup -c"
+  },
+  "bugs": {
+    "url": "https://github.com/fastjs-team/fastjs-next/issues",
+    "email": "xiaodong@indouyin.cn"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fastjs-team/fastjs-next.git"
   },
   "keywords": [
-    "fastjs"
+    "fastjs",
+    "fastjs-next"
   ],
   "author": "dy-xiaodong",
   "license": "MIT",
