@@ -129,6 +129,9 @@ export default (_e: fastjsDom) => {
         },
         last() {
             return new fastjsDom(_e._el.lastElementChild);
+        },
+        el() {
+            return _e._el;
         }
     }
 }
