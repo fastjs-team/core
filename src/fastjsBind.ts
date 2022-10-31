@@ -45,39 +45,6 @@ class fastjsBind {
             })
         }
 
-        // deep clone object
-        // const deepClone = (source: { [key: string | number]: any }, superCall: boolean = true) => {
-        //     if (typeof source !== 'object' || source == null) {
-        //         return source;
-        //     }
-        //
-        //     let target: { [key: string | number]: any } | Array<any>
-        //
-        //     if (superCall)
-        //         target = effect(source);
-        //     else
-        //         target = Array.isArray(source) ? [] : {};
-        //
-        //     let key: string | number;
-        //     for (key in source) {
-        //         if (Object.prototype.hasOwnProperty.call(source, key)) {
-        //             // if key = string, target != array
-        //             if (typeof key === "string" && !Array.isArray(target)) {
-        //                 // if source[key] = element
-        //                 if (source[key].nodeType) {
-        //                     target[key] = source[key].cloneNode(true);
-        //                 } else if (typeof source[key] === 'object' && source[key] !== null) {
-        //                     target[key] = deepClone(source[key], false);
-        //                 }
-        //             } else if (typeof key === "number" && Array.isArray(target)) {
-        //                 target[key] = source[key];
-        //             }
-        //         }
-        //     }
-        //     return target;
-        // }
-        // deep clone
-        // let _object = deepClone(object);
         let _object = object;
 
         if (!_object._event) {
