@@ -1,9 +1,9 @@
 {
   "name": "fastjs-next",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "main": "dist/fastjs-next-runtime.esm.js",
-  "types": "dist/src/main.d.ts",
+  "types": "types/src/main.d.ts",
   "scripts": {
     "dev": "rollup -cw",
     "build": "mkdir dist && tsc && rollup -c"
