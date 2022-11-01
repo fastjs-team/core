@@ -4,10 +4,10 @@ import fastjsDom from "../fastjsDom/fastjsDom";
 
 export default (_e: fastjsDomList) => {
     return {
-        toArray() {
+        toArray(): Array<fastjsDom> {
             return _e._list;
         },
-        set(key: string, val: any, el?: number) {
+        set(key: string, val: any, el?: number): fastjsDomList {
             // set()
             // set a value of element
 
@@ -21,13 +21,13 @@ export default (_e: fastjsDomList) => {
                 _e.getEl(el).set(key, val);
             return _e;
         },
-        get(target: string, key?: number) {
+        get(target: string, key?: number): any {
             // get()
             // get a value of element
 
             return _e._list[key || 0].get(target);
         },
-        getEl(key: number = 0) {
+        getEl(key: number = 0): fastjsDom {
             // getEl()
             // get a fastjsDom element
 

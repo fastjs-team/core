@@ -3,13 +3,13 @@ import fastjsDom from "../fastjsDom/fastjsDom";
 
 export default (_e: fastjsDomList) => {
     return {
-        each(callback: Function) {
+        each(callback: Function): fastjsDomList {
             _e._list.forEach((e: fastjsDom) => {
                 callback(e);
             })
             return _e;
         },
-        then(callback: Function, time: number = 0) {
+        then(callback: Function, time: number = 0): fastjsDomList {
             if (time)
                 setTimeout(() => {
                     callback(_e);

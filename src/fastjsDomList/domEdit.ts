@@ -4,13 +4,13 @@ import fastjsDomList from "./fastjsDomList";
 
 export default (_e: fastjsDomList) => {
     return {
-        next(el: string) {
+        next(el: string): fastjsDom | fastjsDomList {
             // next()
             // select element in child
 
             return selecter(el, _e);
         },
-        attr(key: string, value: string) {
+        attr(key: string, value: string): any {
             // attr()
             // set attribute
 
@@ -19,7 +19,7 @@ export default (_e: fastjsDomList) => {
             })
             return _e;
         },
-        css(key: string | object, value: string) {
+        css(key: string | object, value: string): fastjsDomList {
             // css()
             // set css
 
@@ -28,7 +28,7 @@ export default (_e: fastjsDomList) => {
             })
             return _e;
         },
-        html(val: string) {
+        html(val: string): string | fastjsDomList {
             // html()
             // set html
 
@@ -39,7 +39,7 @@ export default (_e: fastjsDomList) => {
             })
             return _e;
         },
-        text(val: string) {
+        text(val: string): string | fastjsDomList {
             // text()
             // set text
 
@@ -50,21 +50,25 @@ export default (_e: fastjsDomList) => {
             })
             return _e;
         },
-        father() {
+        father(): Element {
             // father()
             // get father element
 
             return _e._list[0].father();
         },
-        remove() {
+        remove(key?: number): fastjsDomList | null {
             // remove()
             // remove element
+
+            if (key !== undefined) {
+                _e._list[key].remove();
+                return _e;
+            }
 
             _e._list.forEach((e: fastjsDom) => {
                 e.remove();
             })
             return null;
-
         }
     }
 }

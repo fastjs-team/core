@@ -2,57 +2,57 @@ import fastjsArray from "./fastjsArray";
 
 export default (_e: fastjsArray) => {
     return {
-        first() {
+        first(): any {
             return _e._array[0];
         },
-        last() {
+        last(): any {
             return _e._array[_e._array.length - 1];
         },
-        length() {
+        length(): number {
             return _e._array.length;
         },
-        add(val: any, key: number = _e._array.length) {
+        add(val: any, key: number = _e._array.length): fastjsArray {
             _e._array[key] = val;
             return _e;
         },
-        push() {
+        push(): fastjsArray {
             // arguments each
             for (let i = 0; i < arguments.length; i++) {
                 _e.add(arguments[i]);
             }
             return _e;
         },
-        remove(key: number) {
+        remove(key: number): fastjsArray {
             _e._array.splice(key, 1);
             return _e;
         },
-        get(key: number) {
+        get(key: number): any {
             return _e._array[key];
         },
-        set(key: number, val: any) {
+        set(key: number, val: any): fastjsArray {
             _e._array[key] = val;
             return _e;
         },
-        each(callback: Function) {
+        each(callback: Function): fastjsArray {
             _e._array.forEach((e: any, key: number) => {
                 callback(e, key);
             })
             return _e;
         },
-        filter(callback: Function) {
+        filter(callback: Function): any {
             return _e._array.filter((e: any, key: number) => {
                 return callback(e, key);
             })
         },
-        map(callback: Function) {
+        map(callback: Function): any {
             return _e._array.map((e: any, key: number) => {
                 return callback(e, key);
             })
         },
-        toArray() {
+        toArray(): Array<any> {
             return _e._array;
         },
-        then(callback: Function, time = 0) {
+        then(callback: Function, time = 0): fastjsArray {
             if (time)
                 setTimeout(() => {
                     callback(_e);
