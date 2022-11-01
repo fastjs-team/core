@@ -35,4 +35,6 @@ class fastjsDom {
     [key: string]: any;
 }
 
+
+
 export default fastjsDom
