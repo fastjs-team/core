@@ -1,6 +1,6 @@
 {
   "name": "fastjs-next",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "main": "dist/fastjs-next-runtime-esm.js",
   "types": "types/src/main.d.ts",
