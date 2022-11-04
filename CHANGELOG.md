@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Fix 1 bug - type check error in FastjsArray
+
 ## 1.0.3
 
 * Fix 1 bug - uncorrected entry in package.json

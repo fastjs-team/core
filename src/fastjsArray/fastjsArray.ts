@@ -7,8 +7,8 @@ let defaultConfig = {
 }
 
 interface config {
-    type: string | Array<string>,
-    length: number | null
+    type?: string | Array<string>,
+    length?: number | null
 }
 
 class fastjsArray {
