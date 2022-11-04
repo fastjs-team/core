@@ -1,6 +1,6 @@
 interface config {
-    type: string | Array<string>;
-    length: number | null;
+    type?: string | Array<string>;
+    length?: number | null;
 }
 declare class fastjsArray {
     constructor(array: Array<any>, config?: config);

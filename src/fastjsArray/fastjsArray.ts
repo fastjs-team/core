@@ -20,6 +20,10 @@ class fastjsArray {
         }
         */
 
+        // init config
+        if (config.type === undefined) config.type = defaultConfig.type;
+        if (config.length === undefined) config.length = defaultConfig.length;
+
         const check = _check(this);
         const effect = () => {
             this._array.forEach((v: any, k: number) => {
@@ -41,6 +45,7 @@ class fastjsArray {
                 return true
             }
         });
+        // @ts-ignore
         this._config = config;
 
         // init methods
@@ -53,7 +58,10 @@ class fastjsArray {
         effect();
     }
 
-    _config: config
+    _config: {
+        type: string | Array<string>,
+        length?: number | null
+    }
     // array = Proxy -> Array
     _array: Array<any>
 
