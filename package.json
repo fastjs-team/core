@@ -1,12 +1,15 @@
 {
   "name": "fastjs-next",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
-  "main": "dist/fastjs-next-runtime.esm.js",
+  "main": "dist/fastjs-next-runtime-esm.js",
   "types": "types/src/main.d.ts",
   "scripts": {
     "dev": "rollup -cw",
-    "build": "mkdir dist && tsc && rollup -c"
+    "build": "rollup -c",
+    "types": "tsc -p dist/types",
+    "setup": "mkdir dist && mkdir dist/types",
+    "init": "npm install && npm run dev"
   },
   "bugs": {
     "url": "https://github.com/fastjs-team/fastjs-next/issues",
