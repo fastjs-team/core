@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "rollup -cw",
     "build": "rollup -c",
-    "types": "tsc -p dist/types",
-    "setup": "mkdir dist && mkdir dist/types",
+    "types": "tsc",
+    "rm": "rmdir dist",
+    "setup": "mkdir dist && cd dist && mkdir types",
     "init": "npm install && npm run dev"
   },
   "bugs": {
