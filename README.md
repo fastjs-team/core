@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Emm... It's not ready yet. Wait for a while to learn fastjs-next.
+https://docs.fastjs.com.cn/
 
 ## Description
 
@@ -14,41 +14,6 @@ Fastjs-next is a version that can be used in node projects. It adapts the tree-s
 npm install fastjs-next
 ```
 
-## Contributing
-
-### Environment
-
-#### rollup.js
-
-```bash
-npm install --global rollup
-```
-
-#### node.js
-
-Please install last LTS version of node.js.
-
-#### typescript
-
-```bash
-npm install --global typescript
-```
-
-### Commit / Pull Request specification
-
-- Commit message should be in English
-- First letter of commit message should be capitalized
-- Each line should not more than 30 words
-- Commit message should be clear and concise
-- You need to write down the change of the code
-- Please use the word like `Update` / `Fix ? bug` / `Delete` / `Add` / `Test` to start your commit message
-- Pull Request need add a line `\n{date} {author}` at the end of the commit message
-
-### Not allowed
-
-- Don't submit outdated branch
-- Don't use `any` type at 99% of the time
-
 ## Contributors
 
 - dy-xiaodong2022
@@ -57,4 +22,4 @@ npm install --global typescript
 ## Info
 
 Author: dy-xiaodong<br />
-Readme version: v0.0.8
+Readme version: v1.0.0
