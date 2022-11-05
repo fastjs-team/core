@@ -8,9 +8,10 @@
     "dev": "rollup -cw",
     "build": "rollup -c",
     "types": "tsc",
-    "rm": "rmdir dist",
+    "rm": "rmdir /s/q dist",
     "setup": "mkdir dist && cd dist && mkdir types",
-    "init": "npm install && npm run dev"
+    "init": "npm install && npm run dev",
+    "repack": "npm run rm && npm run setup && npm+ run build && npm run types"
   },
   "bugs": {
     "url": "https://github.com/fastjs-team/fastjs-next/issues",

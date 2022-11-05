@@ -98,8 +98,6 @@ export default (_e: fastjsDom) => {
             const btn = _e._el.tagName === "BUTTON";
             if (val != null) {
                 val = String(val);
-                console.log(val);
-                console.log(_e);
                 if (btn)
                     _e._el.innerText = val;
                 else
