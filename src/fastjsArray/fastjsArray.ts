@@ -49,7 +49,6 @@ class fastjsArray {
         this._config = config;
 
         // init methods
-        console.log(methods(this));
         Object.entries(methods(this)).forEach(e => {
             this[e[0]] = e[1];
         })
