@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Fix 1 bug - FastjsArray.add
+
 ## 1.0.6
 
 * Fix 1 bug - type check in FastjsArray
