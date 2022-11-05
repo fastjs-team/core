@@ -11,7 +11,7 @@ declare class fastjsArray {
     last(): any;
     length(): number;
     add(val: any, key?: number): fastjsArray;
-    push(): fastjsArray;
+    push(...val: any): fastjsArray;
     remove(key: number): fastjsArray;
     get(key: number): any;
     set(key: number, val: any): fastjsArray;

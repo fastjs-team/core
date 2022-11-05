@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Fix 1 bug - type check in FastjsArray
+
 ## 1.0.5
 
 * Remove log output

@@ -15,7 +15,7 @@ export default (_e: fastjsArray) => {
             _e._array[key] = val;
             return _e;
         },
-        push(): fastjsArray {
+        push(...val: any): fastjsArray {
             // arguments each
             for (let i = 0; i < arguments.length; i++) {
                 _e.add(arguments[i]);
