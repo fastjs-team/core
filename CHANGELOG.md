@@ -1,3 +1,9 @@
+## 1.0.10
+
+* Fix 1 bug - FastjsArray remove element will cause index error and can't remove element correctly
+* Update .npmignore
+* Update package.json
+
 ## 1.0.9
 
 * Update README.md
