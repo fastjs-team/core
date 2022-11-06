@@ -32,8 +32,5 @@
   },
   "dependencies": {
     "@rollup/plugin-typescript": "^9.0.2"
-  },
-  "files": [
-    "dist/fastjs-next-runtime-esm.js"
-  ]
+  }
 }

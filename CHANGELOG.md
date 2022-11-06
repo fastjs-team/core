@@ -1,3 +1,8 @@
+## 1.0.14
+
+* Update package.json
+* Update .npmignore
+
 ## 1.0.13
 
 * Fix 1 bug - FastjsArray run hooks
