@@ -20,6 +20,7 @@ declare class fastjsArray {
     map(callback: Function): any;
     toArray(): Array<any>;
     then(callback: Function, time?: number): fastjsArray;
+    addHook(callback: Function): fastjsArray;
     construct: string;
 }
 export default fastjsArray;

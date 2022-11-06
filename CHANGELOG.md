@@ -1,3 +1,7 @@
+## 1.0.12
+
+* Update FastjsArray - add function addHooks()
+
 ## 1.0.11
 
 * Fix 1 bug - FastjsArray add element place error
