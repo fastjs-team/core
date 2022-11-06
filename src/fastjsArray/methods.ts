@@ -11,7 +11,7 @@ export default (_e: fastjsArray) => {
         length(): number {
             return _e._array.length;
         },
-        add(val: any, key: number = _e._array.length - 1): fastjsArray {
+        add(val: any, key: number = _e._array.length): fastjsArray {
             _e._array.splice(key, 0, val);
             return _e;
         },
