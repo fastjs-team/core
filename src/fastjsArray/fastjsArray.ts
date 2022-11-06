@@ -43,6 +43,8 @@ class fastjsArray {
                 // @ts-ignore
                 target[key] = value;
                 effect();
+                // run hooks
+                this._hooks.forEach((e: Function) => { e(this) })
                 return true
             }
         });

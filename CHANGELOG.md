@@ -1,3 +1,7 @@
+## 1.0.13
+
+* Fix 1 bug - FastjsArray run hooks
+
 ## 1.0.12
 
 * Update FastjsArray - add function addHooks()
