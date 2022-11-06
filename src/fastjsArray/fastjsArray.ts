@@ -40,7 +40,8 @@ class fastjsArray {
         this._array = new Proxy(array, {
             set: (target: Array<any>, key: string, value) => {
                 if (!check(value)) return false
-                target[Number(key)] = value;
+                // @ts-ignore
+                target[key] = value;
                 effect();
                 return true
             }
