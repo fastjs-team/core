@@ -1,3 +1,7 @@
+## 1.0.8
+
+* Update README.md
+
 ## 1.0.7
 
 * Fix 1 bug - FastjsArray.add
