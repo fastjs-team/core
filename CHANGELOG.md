@@ -1,3 +1,7 @@
+## 1.0.11
+
+* Fix 1 bug - FastjsArray add element place error
+
 ## 1.0.10
 
 * Fix 1 bug - FastjsArray remove element will cause index error and can't remove element correctly
