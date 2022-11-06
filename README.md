@@ -2,8 +2,8 @@
 
 ## Getting Started
 
-https://fastjs.com.cn/
-https://docs.fastjs.com.cn/
+- https://fastjs.com.cn/
+- https://docs.fastjs.com.cn/
 
 ## Description
 
@@ -22,5 +22,5 @@ npm install fastjs-next
 
 ## Info
 
-Author: dy-xiaodong<br />
-Readme version: v1.1.0
+- Author: dy-xiaodong2022
+- Readme version: v1.2.0
