@@ -61,6 +61,10 @@ export default (_e: fastjsArray) => {
                 callback(_e);
             return _e;
         },
+        addHook(callback: Function): fastjsArray {
+            _e._hooks.push(callback);
+            return _e;
+        },
         construct: `<${_e._config.type}>FastjsArray`,
     }
 }

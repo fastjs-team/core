@@ -49,6 +49,9 @@ class fastjsArray {
         // @ts-ignore
         this._config = config;
 
+        // init hooks
+        this._hooks = []
+
         // init methods
         Object.entries(methods(this)).forEach(e => {
             this[e[0]] = e[1];
@@ -64,6 +67,7 @@ class fastjsArray {
     }
     // array = Proxy -> Array
     _array: Array<any>
+    _hooks: Array<Function>
 
     // methods
     [key: string]: any
