@@ -8,7 +8,8 @@ export default (_e: fastjsDom) => {
             return _e;
         },
         on(event: string = "click", callback: Function): fastjsDom {
-            _e._el.addEventListener(event, callback);
+            let eventTrig = () => void callback(_e);
+            _e._el.addEventListener(event, eventTrig);
             return _e;
         },
         bind(bind: string = "text", key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
