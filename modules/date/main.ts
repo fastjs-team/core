@@ -1,4 +1,8 @@
 class fastjsDate {
+    readonly #date: number;
+    readonly #createAt: number;
+    private readonly construct: string;
+
     constructor(format: string, date: number = new Date().getTime()) {
         /*
          * Y = year
@@ -17,12 +21,12 @@ class fastjsDate {
          */
 
         this.format = format;
-        this.date = date;
-        this.createAt = new Date().getTime();
+        this.#date = date;
+        this.#createAt = new Date().getTime();
         this.construct = "fastjsDate";
     }
 
-    toString() {
+    toString(newFormat?: string): string {
         let timestamp: number = this.toNumber();
         const date: Date = new Date(timestamp);
         const year: number = date.getFullYear();
@@ -36,19 +40,19 @@ class fastjsDate {
         const ampm2: string = hour >= 12 ? "pm" : "am";
         const hour12: number = hour % 12;
 
-        let string = this.format;
+        let string: string = newFormat || this.format;
 
         // ignore
-        let token = 0
-        let ignoreTemp = []
+        let token: number = 0
+        let ignoreTemp: Array<string> = []
         // check ignore format
         while ((/<.*?>/.test(string))) {
-            const match = string.match(/<.*?>/);
+            const match: RegExpMatchArray | null = string.match(/<.*?>/);
             if (match === null) break;
             // get user ignore text
-            const matchString = match[0];
+            const matchString: string = match[0];
             // noinspection UnnecessaryLocalVariableJS
-            const exactString = matchString.replace(/</g, "").replace(/>/g, "");
+            const exactString: string = matchString.replace(/</g, "").replace(/>/g, "");
             ignoreTemp[token] = exactString;
             // replace ignore text to token
             string = string.replace(/<.*?>/, `{{*${token}}}`);
@@ -86,13 +90,12 @@ class fastjsDate {
         return string;
     }
 
-    toNumber() {
-        const timeLeft = new Date().getTime() - this.createAt;
-        return this.date + timeLeft;
+    toNumber(): number {
+        const timeLeft = new Date().getTime() - this.#createAt;
+        return this.#date + timeLeft;
     }
 
     format: string;
-    date: number;
-    createAt: number;
-    construct: string;
 }
+
+export default fastjsDate;
