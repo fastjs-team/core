@@ -4,18 +4,20 @@ import {selecter as _selecter} from "./methods";
 import fastjsDomList from "./fastjsDomList";
 
 class fastjsDom {
+    private readonly construct: string;
+
     constructor(el: HTMLElement | string) {
         // if string
         if (typeof el === "string") {
-            // create
+            // create element
             el = _dev._dom.createElement(el);
         }
 
+        // define _el
         this._el = el
-        Object.defineProperty(this, "construct", {
-            writable: false,
-            value: "fastjsDom"
-        })
+
+        // construct
+        this.construct = "fastjsDom";
 
         return this;
     }
@@ -31,36 +33,43 @@ class fastjsDom {
     }
 
     set(key: string, val: any): fastjsDom {
+        // ts ignore for readonly property
         // @ts-ignore
         this._el[key as keyof Element] = val;
         return this;
     }
 
-    html(val: string): string | fastjsDom {
-        this._el.innerHTML = val ? val : this._el.innerHTML;
-        return val ? this : this._el.innerHTML;
+    // if val null -> return string, if val string, number -> return fastjsDom
+    html<T extends string | number>(val: T): T extends undefined ? string : fastjsDom {
+        // if null -> not change || String(val)
+        this._el.innerHTML = val !== undefined ? String(val) : this._el.innerHTML;
+        // @ts-ignore
+        return val !== undefined ? this : this._el.innerHTML;
     }
 
-    text(val: string): string | fastjsDom {
-        this._el.innerText = val ? val : this._el.innerText;
-        return val ? this : this._el.innerText;
+    // if val null -> return string, if val string, number -> return fastjsDom
+    text<T extends string | number>(val?: T): T extends undefined ? string : fastjsDom {
+        // if null -> not change || String(val)
+        this._el.innerText = val !== undefined ? String(val) : this._el.innerText;
+        // @ts-ignore
+        return val !== undefined ? this : this._el.innerText;
     }
 
     next(selecter: string): fastjsDom | fastjsDomList {
         return _selecter(selecter, this._el);
     }
 
-    father(): ParentNode | null {
-        return this._el.parentNode;
+    father(): fastjsDom | null {
+        return new fastjsDom(this.el().parentNode as HTMLElement);
     }
 
-    attr(key: string, value?: string): any {
-        if (value != null)
-            value = value.toString()
-        if (value)
-            this._el.setAttribute(key, value);
+    attr(key: string, value?: string): string | fastjsDom | null {
         if (value === null)
             this._el.removeAttribute(key);
+        if (value) {
+            value = value.toString()
+            this._el.setAttribute(key, value);
+        }
         return value !== undefined ? this : this._el.getAttribute(key);
     }
 
@@ -68,7 +77,6 @@ class fastjsDom {
         if (typeof key === "string") {
             // @ts-ignore
             this._el.style[key as keyof CSSStyleDeclaration] = value;
-            return this;
         } else if (!key) {
             return this._el.style;
         } else {
@@ -76,8 +84,8 @@ class fastjsDom {
                 // @ts-ignore
                 this._el.style[v[0] as keyof CSSStyleDeclaration] = v[1];
             })
-            return this;
         }
+        return this;
     }
 
     appendTo(el: Element = _dev._dom.body): fastjsDom {
@@ -142,7 +150,7 @@ class fastjsDom {
         return this;
     }
 
-    val(val: string | boolean | number): any {
+    val(val: string | boolean | number): string | fastjsDom | null {
         if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
             const btn = this._el instanceof HTMLButtonElement;
             // if val and is button || input || textarea
@@ -198,9 +206,15 @@ class fastjsDom {
         return this;
     }
 
-    on(event: string = "click", callback: Function): fastjsDom {
-        let eventTrig = () => void callback(this);
+    on(event: string = "click", callback: Function = () => void 0): fastjsDom {
+        let eventTrig = (e: any) => void callback(this, e);
         this._el.addEventListener(event, eventTrig);
+        return this;
+    }
+
+    off(event: string = "click", callback: Function = () => void 0): fastjsDom {
+        let eventTrig = () => void  callback(this);
+        this._el.removeEventListener(event, eventTrig);
         return this;
     }
 
