@@ -11,6 +11,8 @@ interface config {
 }
 
 class fastjsArray {
+    private readonly construct: string;
+
     constructor(array: Array<any>, config: config = defaultConfig) {
         /*
         config = {
@@ -148,8 +150,6 @@ class fastjsArray {
         this._hooks.push(callback);
         return this;
     }
-
-    construct: String
 
     // private methods
 
