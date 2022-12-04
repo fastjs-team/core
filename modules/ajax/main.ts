@@ -20,6 +20,8 @@ let defaultConfig: config = {
 }
 
 class fastjsAjax {
+    private readonly construct: string;
+
     constructor(url: string, data?: data, callback?: Function, failed?: Function, config: config = defaultConfig) {
         const func = () => 0
 
@@ -33,6 +35,9 @@ class fastjsAjax {
 
         // init methods
         this.send = send;
+
+        // construct
+        this.construct = "fastjsAjax";
     }
 
     [key: string]: any;
