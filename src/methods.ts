@@ -1,13 +1,13 @@
 import _dev from "./dev";
-import fastjsDom from "./fastjsDom/fastjsDom";
-import fastjsDomList from "./fastjsDomList/fastjsDomList";
+import fastjsDom from "./fastjsDom";
+import fastjsDomList from "./fastjsDomList";
 import config from "./config";
 
 let fastjs = {
-    selecter(el: string, place: Element | Document | fastjsDomList = _dev._dom) {
-        let dom: Array<Element> = []
+    selecter(el: string, place: Element | Document | fastjsDomList = _dev._dom): fastjsDom | fastjsDomList {
+        let dom: Element[] = []
         // if place = fastjsDomList
-        if (place.constructor === fastjsDomList) {
+        if (place instanceof fastjsDomList) {
             place._list.forEach((e: fastjsDom) => {
                 e._el.querySelectorAll(el).forEach((v: Element) => {
                     // check if v is in dom
@@ -16,6 +16,7 @@ let fastjs = {
                 })
             })
         } else {
+            // @ts-ignore
             dom = place.querySelectorAll(el);
         }
         // if last selecter is id
@@ -28,7 +29,7 @@ let fastjs = {
             })
         if (special)
             // -> fastjsDom -> element
-            return new fastjsDom(dom[0]);
+            return new fastjsDom(dom[0] as HTMLElement);
         // -> fastjsDomList -> fastjsDom -> element
         return new fastjsDomList(dom);
     },
@@ -45,6 +46,9 @@ let fastjs = {
         selection.addRange(range);
         document.execCommand("copy");
         input.remove();
+    },
+    rand(min: number, max: number): number {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }
 
