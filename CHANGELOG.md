@@ -9,6 +9,8 @@
 * Fix some bug
 * Add some methods in `FastjsDom`
 * Private variable refactor
+* Update FastjsAjax
+* FastjsAjax refactor
 
 ### 1.0.14
 
