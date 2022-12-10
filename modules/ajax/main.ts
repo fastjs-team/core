@@ -88,6 +88,10 @@ class fastjsAjax {
             let xhr = new XMLHttpRequest();
             this.xhr = xhr;
             xhr.open(method, this.url, true);
+            // set header
+            for (let key in this.config.headers) {
+                xhr.setRequestHeader(key, this.config.headers[key]);
+            }
             xhr.timeout = this.config.timeout;
             const fail = () => {
                 // hook
