@@ -25,7 +25,7 @@ class fastjsDomList {
             this.length = this._list.length;
         }
 
-        this.effect();
+        this.#effect();
 
         // construct
         this.construct = 'fastjsDomList';
@@ -34,6 +34,7 @@ class fastjsDomList {
     }
 
     [key: string]: any;
+
     _list: Array<fastjsDom>
     length: number
 
@@ -69,17 +70,13 @@ class fastjsDomList {
         // getEl()
         // get a fastjsDom element
 
-        // dev start
-        if (process.env.NODE_ENV !== 'production') {
-            // overflow
-            if (key >= this._list.length)
-                _dev.newWarn('fastjsDomList', 'key is overflow', [
-                    'getEl(key)',
-                    'dataEdit.js',
-                    'fastjsDomList'
-                ]);
-        }
-        // dev end
+        // overflow
+        if (key >= this._list.length)
+            _dev.newWarn('fastjsDomList', 'key is overflow', [
+                'getEl(key)',
+                'dataEdit.js',
+                'fastjsDomList'
+            ]);
         return this._list[key || 0];
     }
 
@@ -100,12 +97,12 @@ class fastjsDomList {
         return this;
     }
 
-    css(key: string | object, value: string): fastjsDomList {
+    css(key: string | object, value?: string, other?: string): fastjsDomList {
         // css()
         // set css
 
         this._list.forEach((e: fastjsDom) => {
-            e.css(key, value);
+            e.css(key, value, other);
         })
         return this;
     }
