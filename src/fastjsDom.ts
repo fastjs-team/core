@@ -73,10 +73,10 @@ class fastjsDom {
         return value !== undefined ? this : this._el.getAttribute(key);
     }
 
-    css(key?: string | object, value?: string): fastjsDom | CSSStyleDeclaration {
+    css(key?: string | object, value?: string, other?: string): fastjsDom | CSSStyleDeclaration {
         if (typeof key === "string") {
             // @ts-ignore
-            this._el.style[key as keyof CSSStyleDeclaration] = value;
+            this._el.style.setProperty(key, value, other);
         } else if (!key) {
             return this._el.style;
         } else {
@@ -111,31 +111,26 @@ class fastjsDom {
     addAfter(el: Element): fastjsDom {
         if (!el.parentNode) {
             // dev start
-            if (process.env.NODE_ENV !== 'production') {
-                _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
-                    "addAfter(el: Element)",
-                    "domEdit.ts",
-                    "fastjsDom"
-                ]);
-            }
+            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+                "addAfter(el: Element)",
+                "domEdit.ts",
+                "fastjsDom"
+            ]);
             // dev end
         } else
             // add this._el after el
             el.parentNode.insertBefore(this._el, el.nextSibling);
-
         return this;
     }
 
     addBefore(el: Element): fastjsDom {
         if (!el.parentNode) {
             // dev start
-            if (process.env.NODE_ENV !== 'production') {
-                _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
-                    "addAfter(el: Element)",
-                    "domEdit.ts",
-                    "fastjsDom"
-                ]);
-            }
+            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+                "addAfter(el: Element)",
+                "domEdit.ts",
+                "fastjsDom"
+            ]);
             // dev end
         } else
             // add this._el before el
@@ -213,7 +208,7 @@ class fastjsDom {
     }
 
     off(event: string = "click", callback: Function = () => void 0): fastjsDom {
-        let eventTrig = () => void  callback(this);
+        let eventTrig = () => void callback(this);
         this._el.removeEventListener(event, eventTrig);
         return this;
     }
