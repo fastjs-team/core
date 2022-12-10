@@ -202,7 +202,7 @@ class fastjsDom {
     }
 
     on(event: string = "click", callback: Function = () => void 0): fastjsDom {
-        let eventTrig = (e: any) => void callback(this, e);
+        let eventTrig = (...e: any) => void callback(this, ...e);
         this._el.addEventListener(event, eventTrig);
         return this;
     }
