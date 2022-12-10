@@ -1,6 +1,4 @@
 src/
 modules/
 node_modules/
-dist/src/
-dist/modules/
-dist/types/
+types/

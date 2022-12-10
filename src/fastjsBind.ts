@@ -1,4 +1,4 @@
-import fastjsDom from "./fastjsDom/fastjsDom";
+import fastjsDom from "./fastjsDom";
 
 interface config {
     _event?: {
@@ -34,9 +34,10 @@ class fastjsBind {
                         if (_object._event[key] && key !== "_event") {
                             _object._event[key].forEach((e: event) => {
                                 if (e.attr)
-                                    e._el._el.attr(e.bind, value);
+                                    e._el.attr(e.bind, value);
                                 else
-                                    e._el._el[e.bind] = value;
+                                    // @ts-ignore
+                                    e._el._el[e.bind as keyof HTMLElement] = value;
                             })
                         }
                     }
@@ -78,9 +79,10 @@ class fastjsBind {
 
         // init
         if (isAttr)
-            el._el.attr(bind, _object[key]);
+            el.attr(bind, _object[key]);
         else
-            el._el[bind] = _object[key];
+            // @ts-ignore
+            el._el[bind as keyof HTMLElement] = _object[key];
 
         return _object;
     }
