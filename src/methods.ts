@@ -1,6 +1,7 @@
 import _dev from "./dev";
 import fastjsDom from "./fastjsDom";
 import fastjsDomList from "./fastjsDomList";
+import fastjsArray from "./fastjsArray";
 import config from "./config";
 
 let fastjs = {
@@ -56,22 +57,16 @@ let fastjs = {
     rand(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
-    install(module: string) {
+    /*  Beta Feature  */
+    install<T extends "fastjsDom" | "fastjsArray">(name: T): T extends "fastjsDom" ? typeof fastjsDom : typeof fastjsArray {
         interface module {
             0: string,
             1: Function,
         }
         type method = Function;
 
-        // check if require is defined
-        if (typeof require === "undefined") {
-            _dev.newError("install", "require is not defined, if you use fastjs-cli to build, please update to v2.3.0 to create a new project", [
-                "Help: https://docs.fastjs.cc/"
-            ]);
-            return;
-        }
-        // require module
-        const install = require(`${module}.ts`);
+        // module
+        const install = eval(name);
         // get all methods
         let methods: Array<module> = Object.entries(install);
         const moduleList: Array<module> = [];
@@ -92,6 +87,7 @@ let fastjs = {
                 }
             );
         })
+        // @ts-ignore
         return methodList
     }
 }
