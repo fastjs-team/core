@@ -192,6 +192,13 @@ class fastjsDomList {
         return this;
     }
 
+    off(event: string = "click", callback: Function) {
+        this._list.forEach((e: fastjsDom) => {
+            e.off(event, callback);
+        })
+        return this;
+    }
+
     add(el: fastjsDom | Element) {
         this._list.push(
             el instanceof fastjsDom ? el : new fastjsDom(el as HTMLElement)
