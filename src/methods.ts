@@ -38,7 +38,7 @@ let fastjs = {
         // -> fastjsDomList -> fastjsDom -> element
         return new fastjsDomList(dom);
     },
-    copy(text: string) {
+    copy(text: string): void {
         // copy text to clipboard
         let input = new fastjsDom("span");
         input.html(text.replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;")).push();
@@ -66,7 +66,7 @@ let fastjs = {
         type method = Function;
 
         // module
-        const install = eval(name);
+        const install = eval(`new ${name}()`);
         // get all methods
         let methods: Array<module> = Object.entries(install);
         const moduleList: Array<module> = [];
@@ -95,7 +95,6 @@ let fastjs = {
 let selecter = fastjs.selecter
 let copy = fastjs.copy
 let rand = fastjs.rand
-let install = fastjs.install
 
-export {selecter, copy, rand, install}
+export {selecter, copy, rand}
 export default fastjs
