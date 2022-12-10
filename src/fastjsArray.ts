@@ -12,6 +12,7 @@ interface config {
 
 class fastjsArray {
     private readonly construct: string;
+    #hooks: Array<Function>
 
     constructor(array: Array<any>, config: config = defaultConfig) {
         /*
@@ -44,7 +45,7 @@ class fastjsArray {
                 target[key] = value;
                 effect();
                 // run hooks
-                this._hooks.forEach((e: Function) => {
+                this.#hooks.forEach((e: Function) => {
                     e(this)
                 })
                 return true
@@ -54,7 +55,7 @@ class fastjsArray {
         this._config = config;
 
         // init hooks
-        this._hooks = []
+        this.#hooks = []
 
         // construct
         this.construct = `<${config.type}>FastjsArray`
@@ -69,7 +70,6 @@ class fastjsArray {
     }
     // array = Proxy -> Array
     _array: Array<any>
-    _hooks: Array<Function>
 
     // methods
     [key: string]: any
@@ -147,7 +147,7 @@ class fastjsArray {
     }
 
     addHook(callback: Function): fastjsArray {
-        this._hooks.push(callback);
+        this.#hooks.push(callback);
         return this;
     }
 
@@ -158,12 +158,11 @@ class fastjsArray {
         // check length
         if (cfg.length && this._array.length >= cfg.length) {
             // dev start
-            if (process.env.NODE_ENV !== 'production') {
-                _dev.newError("FastjsArray", `Max length of <${cfg.type}>FastjsArray is ` + cfg.length, [
-                    "check(item)",
-                    "fastjsArray"
-                ]);
-            }
+            _dev.newError("FastjsArray", `Max length of <${cfg.type}>FastjsArray is ` + cfg.length, [
+                "check(item)",
+                "fastjsArray"
+            ]);
+
             // dev end
             return
         }
@@ -171,13 +170,11 @@ class fastjsArray {
         // check type
         const reject = () => {
             // dev start
-            if (process.env.NODE_ENV !== 'production') {
-                _dev.newError("FastjsArray", `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`, [
-                    "reject()",
-                    "check(item)",
-                    "fastjsArray"
-                ]);
-            }
+            _dev.newError("FastjsArray", `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`, [
+                "reject()",
+                "check(item)",
+                "fastjsArray"
+            ]);
             // dev end
             return false
         }
