@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     // output type file
     "declaration": true,
-    "declarationDir": "./dist/types",
+    "declarationDir": "./dist",
     "emitDeclarationOnly": true,
     // lib to es2021
     "lib": ["es2021", "dom"],
