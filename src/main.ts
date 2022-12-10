@@ -9,8 +9,8 @@ import FastjsDomList from "./fastjsDomList";
 
 // main
 import fastjs from "./methods";
-import {selecter, copy, rand, install} from "./methods";
+import {selecter, copy, rand} from "./methods";
 
 // export
-export {FastjsAjax, FastjsDate, FastjsArray, FastjsDom, FastjsDomList, selecter, copy, rand, install};
+export {FastjsAjax, FastjsDate, FastjsArray, FastjsDom, FastjsDomList, selecter, copy, rand};
 export default fastjs;
