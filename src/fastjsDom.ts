@@ -28,50 +28,81 @@ class fastjsDom {
 
     // methods
 
-    get(key: string): any {
-        return this._el[key as keyof Element];
+    get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
+        return this._el[key];
     }
 
-    set(key: string, val: any): fastjsDom {
-        // ts ignore for readonly property
-        // @ts-ignore
-        this._el[key as keyof Element] = val;
+    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom {
+        if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.writable) {
+            this._el[key] = val;
+        } else
+            _dev.newWarn("fastjsDom.set", "key is not writable", [
+                "key: " + key,
+                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom",
+                "FastjsDom"
+            ]);
         return this;
     }
 
-    // if val null -> return string, if val string, number -> return fastjsDom
-    html<T extends string | number>(val: T): T extends undefined ? string : fastjsDom {
-        // if null -> not change || String(val)
-        this._el.innerHTML = val !== undefined ? String(val) : this._el.innerHTML;
-        // @ts-ignore
-        return val !== undefined ? this : this._el.innerHTML;
-    }
+    attr(key: string): string | null
+    attr(key: string, value: string | null): fastjsDom
 
-    // if val null -> return string, if val string, number -> return fastjsDom
-    text<T extends string | number>(val?: T): T extends undefined ? string : fastjsDom {
-        // if null -> not change || String(val)
-        this._el.innerText = val !== undefined ? String(val) : this._el.innerText;
-        // @ts-ignore
-        return val !== undefined ? this : this._el.innerText;
-    }
-
-    next(selecter: string): fastjsDom | fastjsDomList {
-        return _selecter(selecter, this._el);
-    }
-
-    father(): fastjsDom | null {
-        return new fastjsDom(this.el().parentNode as HTMLElement);
-    }
-
-    attr(key: string, value?: string): string | fastjsDom | null {
-        if (value === null)
-            this._el.removeAttribute(key);
-        if (value) {
-            value = value.toString()
-            this._el.setAttribute(key, value);
+    attr(key: string, value?: string | null): string | null | fastjsDom {
+        if (value !== undefined) {
+            return value ? this._el.setAttribute(key, value.toString()) : this._el.removeAttribute(key), this;
         }
-        return value !== undefined ? this : this._el.getAttribute(key);
+        return this._el.getAttribute(key);
     }
+
+    addAfter(el: HTMLElement): fastjsDom {
+        if (!el.parentNode)
+            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+                "addAfter(el: HTMLElement)",
+                "domEdit.ts",
+                "fastjsDom"
+            ]);
+        else
+            // add this._el after el
+            el.parentNode.insertBefore(this._el, el.nextSibling);
+        return this;
+    }
+
+    addBefore(el: HTMLElement): fastjsDom {
+        if (!el.parentNode)
+            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+                "addAfter(el: HTMLElement)",
+                "domEdit.ts",
+                "fastjsDom"
+            ]);
+        else
+            // add this._el before el
+            el.parentNode.insertBefore(this._el, el);
+
+        return this;
+    }
+
+    addFirst(el: HTMLElement): fastjsDom {
+        // add this._el first in el
+        return el.insertBefore(this._el, el.firstChild), this;
+    }
+
+    append(el: HTMLElement): fastjsDom {
+        return this._el.appendChild(el), this;
+    }
+
+    appendTo(el: HTMLElement = _dev._dom.body): fastjsDom {
+        return el.appendChild(this._el), this;
+    }
+
+    bind(bind: string = "text", key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
+        if (bind === "html") bind = "innerHTML";
+        if (bind === "text") bind = "innerText";
+        return new fastjsBind(this, bind, key, object, isAttr);
+    }
+
+    css(): CSSStyleDeclaration
+    css(key: object): fastjsDom
+    css(key: string, value: string, other?: string): fastjsDom
 
     css(key?: string | object, value?: string, other?: string): fastjsDom | CSSStyleDeclaration {
         if (typeof key === "string") {
@@ -88,91 +119,15 @@ class fastjsDom {
         return this;
     }
 
-    appendTo(el: Element = _dev._dom.body): fastjsDom {
-        el.appendChild(this._el);
-        return this;
+    el(): HTMLElement {
+        return this._el;
     }
 
-    push(el: Element = _dev._dom.body): fastjsDom {
-        el.appendChild(this._el);
-        return this;
-    }
-
-    append(el: Element): fastjsDom {
-        this._el.appendChild(el);
-        return this;
-    }
-
-    remove(): null {
-        this._el.remove();
-        return null;
-    }
-
-    addAfter(el: Element): fastjsDom {
-        if (!el.parentNode) {
-            // dev start
-            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
-                "addAfter(el: Element)",
-                "domEdit.ts",
-                "fastjsDom"
-            ]);
-            // dev end
-        } else
-            // add this._el after el
-            el.parentNode.insertBefore(this._el, el.nextSibling);
-        return this;
-    }
-
-    addBefore(el: Element): fastjsDom {
-        if (!el.parentNode) {
-            // dev start
-            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
-                "addAfter(el: Element)",
-                "domEdit.ts",
-                "fastjsDom"
-            ]);
-            // dev end
-        } else
-            // add this._el before el
-            el.parentNode.insertBefore(this._el, el);
-
-        return this;
-    }
-
-    addFirst(el: Element): fastjsDom {
-        // add this._el first in el
-        el.insertBefore(this._el, el.firstChild);
-        return this;
-    }
-
-    val(val: string | boolean | number): string | fastjsDom | null {
-        if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
-            const btn = this._el instanceof HTMLButtonElement;
-            // if val and is button || input || textarea
-            if (val != null) {
-                val = String(val);
-                if (btn)
-                    this._el.innerText = val;
-                else
-                    this._el.value = val;
-            } else {
-                // if button
-                if (btn)
-                    return this._el.innerText;
-                return this._el.value;
-                // <-
-            }
+    each(callback: Function, defaultElement: boolean = true): fastjsDom {
+        // children each
+        for (let i = 0; i < this._el.children.length; i++) {
+            callback(defaultElement ? this._el.children[i] : new fastjsDom(this._el.children[i] as HTMLElement), i);
         }
-        return this;
-    }
-
-    then(callback: Function, time = 0): fastjsDom {
-        if (time)
-            setTimeout(() => {
-                callback(this);
-            }, time);
-        else
-            callback(this);
         return this;
     }
 
@@ -185,38 +140,81 @@ class fastjsDom {
         return this._el.firstElementChild ? new fastjsDom(this._el.firstElementChild as HTMLElement) : null;
     }
 
+    father(): fastjsDom | null {
+        return new fastjsDom(this.el().parentNode as HTMLElement);
+    }
+
+    // if val null -> return string, if val string, number -> return fastjsDom
+    html<T extends string | number>(val: T): T extends undefined ? string : fastjsDom {
+        // if null -> not change || String(val)
+        this._el.innerHTML = val !== undefined ? String(val) : this._el.innerHTML;
+        // @ts-ignore
+        return val !== undefined ? this : this._el.innerHTML;
+    }
+
     last(): fastjsDom | null {
         return this._el.lastElementChild ? new fastjsDom(this._el.lastElementChild as HTMLElement) : null;
     }
 
-    el(): Element {
-        return this._el;
+    next(selecter: string): fastjsDom | fastjsDomList {
+        return _selecter(selecter, this._el);
     }
 
-    each(callback: Function, defaultElement: boolean = true): fastjsDom {
-        // children each
-        for (let i = 0; i < this._el.children.length; i++) {
-            callback(defaultElement ? this._el.children[i] : new fastjsDom(this._el.children[i] as HTMLElement), i);
-        }
-        return this;
+    push(el: HTMLElement = _dev._dom.body): fastjsDom {
+        return el.appendChild(this._el), this;
     }
 
-    on(event: string = "click", callback: Function = () => void 0): fastjsDom {
+    on(event: string = "click", callback: Function): fastjsDom {
         let eventTrig = (...e: any) => void callback(this, ...e);
         this._el.addEventListener(event, eventTrig);
         return this;
     }
 
-    off(event: string = "click", callback: Function = () => void 0): fastjsDom {
+    off(event: string = "click", callback: Function): fastjsDom {
         let eventTrig = () => void callback(this);
         this._el.removeEventListener(event, eventTrig);
         return this;
     }
 
-    bind(bind: string = "text", key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
-        if (bind === "html") bind = "innerHTML";
-        if (bind === "text") bind = "innerText";
-        return new fastjsBind(this, bind, key, object, isAttr);
+    remove(): fastjsDom {
+        return this._el.remove(), this;
+    }
+
+    // if val null -> return string, if val string, number -> return fastjsDom
+    text<T extends string | number>(val?: T): T extends undefined ? string : fastjsDom {
+        // if null -> not change || String(val)
+        this._el.innerText = val !== undefined ? String(val) : this._el.innerText;
+        // @ts-ignore
+        return val !== undefined ? this : this._el.innerText;
+    }
+
+    then(callback: Function, time = 0): fastjsDom {
+        if (time)
+            setTimeout(() => {
+                callback(this);
+            }, time);
+        else
+            callback(this);
+        return this;
+    }
+
+    val(): string
+    val(val: string): fastjsDom
+
+    val(val?: string): fastjsDom | string {
+        const btn = this._el instanceof HTMLButtonElement;
+        if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
+            // if val and is button || input || textarea
+            if (val === undefined) {
+                return btn ? this._el.innerText : this._el.value;
+            } else {
+                if (btn)
+                    this._el.innerText = val;
+                else
+                    this._el.value = val;
+            }
+        }
+        return this;
     }
 }
 
