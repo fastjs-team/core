@@ -28,22 +28,6 @@ class fastjsDom {
 
     // methods
 
-    get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
-        return this._el[key];
-    }
-
-    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom {
-        if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.writable) {
-            this._el[key] = val;
-        } else
-            _dev.newWarn("fastjsDom.set", "key is not writable", [
-                "key: " + key,
-                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom",
-                "FastjsDom"
-            ]);
-        return this;
-    }
-
     attr(key: string): string | null
     attr(key: string, value: string | null): fastjsDom
 
@@ -144,6 +128,10 @@ class fastjsDom {
         return new fastjsDom(this.el().parentNode as HTMLElement);
     }
 
+    get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
+        return this._el[key];
+    }
+
     // if val null -> return string, if val string, number -> return fastjsDom
     html<T extends string | number>(val: T): T extends undefined ? string : fastjsDom {
         // if null -> not change || String(val)
@@ -178,6 +166,18 @@ class fastjsDom {
 
     remove(): fastjsDom {
         return this._el.remove(), this;
+    }
+
+    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom {
+        if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.writable) {
+            this._el[key] = val;
+        } else
+            _dev.newWarn("fastjsDom.set", "key is not writable", [
+                "key: " + key,
+                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom",
+                "FastjsDom"
+            ]);
+        return this;
     }
 
     // if val null -> return string, if val string, number -> return fastjsDom
