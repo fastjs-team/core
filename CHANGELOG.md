@@ -1,3 +1,10 @@
+## 1.1.1
+
+* Typescript check error fix
+* FastjsDomList add function `val(...)`
+* Fix some bug
+* Optimize code
+
 ## 1.1.0
 
 * FastjsDom refactor
