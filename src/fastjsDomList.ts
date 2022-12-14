@@ -59,7 +59,7 @@ class fastjsDomList {
         return this;
     }
 
-    bind(bind: string, key: string | number, object: object = {}, isAttr: boolean = false): object {
+    bind(bind: "text" | "html" | keyof HTMLElement, key: string | number, object: object = {}, isAttr: boolean = false): object {
         this._list.forEach((e: fastjsDom) => {
             object = e.bind(bind, String(key), object, isAttr);
         })
