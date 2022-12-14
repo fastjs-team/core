@@ -21,8 +21,9 @@ let fastjs = {
                 })
             })
         } else {
-            // @ts-ignore
-            dom = place.querySelectorAll(el);
+            place.querySelectorAll(el).forEach((v: Element) =>
+                void dom.push(v as HTMLElement)
+            )
         }
         // if last selecter is id
         let special = el.split(" ")[el.split(" ").length - 1].startsWith("#");
