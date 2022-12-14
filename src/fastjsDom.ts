@@ -78,7 +78,7 @@ class fastjsDom {
         return el.appendChild(this._el), this;
     }
 
-    bind(bind: string = "text", key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
+    bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
         if (bind === "html") bind = "innerHTML";
         if (bind === "text") bind = "innerText";
         return new fastjsBind(this, bind, key, object, isAttr);
