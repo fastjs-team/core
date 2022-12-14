@@ -1,10 +1,5 @@
 import _dev from "./dev";
 
-let defaultConfig = {
-    type: "Any",
-    length: null
-}
-
 interface config {
     type?: string | Array<string>,
     length?: number | null
@@ -14,17 +9,13 @@ class fastjsArray {
     private readonly construct: string;
     #hooks: Array<Function>
 
-    constructor(array: Array<any>, config: config = defaultConfig) {
+    constructor(array: Array<any>, config: config) {
         /*
         config = {
             type: <string>::type / <array>::type,
             length: <number>::max length
         }
         */
-
-        // init config
-        if (config.type === undefined) config.type = defaultConfig.type;
-        if (config.length === undefined) config.length = defaultConfig.length;
 
         const effect = () => {
             this._array.forEach((v: any, k: number) => {
@@ -51,8 +42,11 @@ class fastjsArray {
                 return true
             }
         });
-        // @ts-ignore
-        this._config = config;
+
+        this._config = {
+            type: config.type || "Any",
+            length: config.length || null
+        };
 
         // init hooks
         this.#hooks = []

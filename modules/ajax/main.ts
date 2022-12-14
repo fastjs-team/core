@@ -30,34 +30,24 @@ interface selectConfig {
     keepalive?: boolean;
 }
 
-let defaultConfig: config = {
-    timeout: _config.modules.ajax.timeout,
-    datatype: "auto",
-    headers: {},
-    shutdown: false,
-    wait: 0,
-    failed: () => 0,
-    callback: () => 0,
-    keepalive: false
-}
-
 class fastjsAjax {
     private readonly construct: string;
     private waitid: number;
 
     constructor(url: string, data?: data, config: selectConfig = {}) {
-        // merge config -> defaultConfig
-        for (let key in config) {
-            // @ts-ignore
-            if (defaultConfig[key] !== undefined) {
-                // @ts-ignore
-                defaultConfig[key] = config[key];
-            }
-        }
 
         this.url = url;
         this.data = data || {};
-        this.config = defaultConfig;
+        this.config = {
+            timeout: config.timeout || _config.modules.ajax.timeout,
+            datatype: config.datatype || "auto",
+            headers: config.headers || {},
+            shutdown: config.shutdown || false,
+            wait: config.wait || 0,
+            failed: config.failed || (() => 0),
+            callback: config.callback || (() => 0),
+            keepalive: config.keepalive || false
+        };
         this.response = null;
         this.xhr = null;
         this.waitid = 0;

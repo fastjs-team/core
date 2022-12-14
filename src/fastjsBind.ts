@@ -5,7 +5,7 @@ interface config {
         [key: string]: Array<{
             attr: boolean,
             _el: fastjsDom,
-            bind: string,
+            bind: keyof HTMLElement,
         }>
     }
 
@@ -19,11 +19,11 @@ interface target {
 interface event {
     attr: boolean,
     _el: fastjsDom,
-    bind: string,
+    bind: keyof HTMLElement,
 }
 
 class fastjsBind {
-    constructor(el: fastjsDom, bind: string, key: string | number, object: config = {}, isAttr: boolean = false) {
+    constructor(el: fastjsDom, bind: keyof HTMLElement, key: string | number, object: config = {}, isAttr: boolean = false) {
         let effect = (target: { [key: string]: any }) => {
             return new Proxy(target, {
                 set(target: target, p: string, value: any): boolean {
@@ -33,11 +33,13 @@ class fastjsBind {
                         // do event
                         if (_object._event[key] && key !== "_event") {
                             _object._event[key].forEach((e: event) => {
-                                if (e.attr)
+                                if (e.attr) {
                                     e._el.attr(e.bind, value);
-                                else
+                                }
+                                else if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, e.bind)?.writable) {
                                     // @ts-ignore
-                                    e._el._el[e.bind as keyof HTMLElement] = value;
+                                    e._el._el[e.bind] = value;
+                                }
                             })
                         }
                     }

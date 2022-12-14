@@ -5,24 +5,25 @@ import fastjsArray from "./fastjsArray";
 import config from "./config";
 
 let fastjs = {
-    selecter(el: string, place: Element | Document | fastjsDomList = _dev._dom): fastjsDom | fastjsDomList {
+    selecter(el: string, place: HTMLElement | Document | fastjsDomList = _dev._dom): fastjsDom | fastjsDomList {
         // selecter()
         // select elements
 
         // dom: Element[] :: save elements result
-        let dom: Element[] = []
+        let dom: HTMLElement[] = []
         // if place = fastjsDomList
         if (place instanceof fastjsDomList) {
             place._list.forEach((e: fastjsDom) => {
                 e._el.querySelectorAll(el).forEach((v: Element) => {
                     // check if v is in dom
                     if (!dom.some((v2) => v2 === v))
-                        dom.push(v);
+                        dom.push(v as HTMLElement);
                 })
             })
         } else {
-            // @ts-ignore
-            dom = place.querySelectorAll(el);
+            place.querySelectorAll(el).forEach((v: Element) =>
+                void dom.push(v as HTMLElement)
+            )
         }
         // if last selecter is id
         let special = el.split(" ")[el.split(" ").length - 1].startsWith("#");
@@ -34,7 +35,7 @@ let fastjs = {
             })
         if (special)
             // -> fastjsDom -> element
-            return new fastjsDom(dom[0] as HTMLElement);
+            return new fastjsDom(dom[0]);
         // -> fastjsDomList -> fastjsDom -> element
         return new fastjsDomList(dom);
     },
