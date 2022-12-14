@@ -67,15 +67,14 @@ class fastjsDomList {
     }
 
     css(key: object): fastjsDomList
-    css(key: string, value: string, other?: string): fastjsDomList
+    css(key: string, value?: string, other?: string): fastjsDomList
 
     css(key: string | object, value?: string, other?: string): fastjsDomList {
         this._list.forEach((e: fastjsDom) => {
             if (typeof key === 'object')
                 e.css(key);
             else {
-                // @ts-ignore
-                e.css(key, value, other);
+                e.css(key, value || "", other);
             }
         })
         return this;
@@ -120,10 +119,11 @@ class fastjsDomList {
         return this._list[key || 0];
     }
 
+    html(): string
+    html(val: string): fastjsDomList
+
     html(val?: string): string | fastjsDomList {
         if (val === undefined)
-            // ts ignore for certainly return string
-            // @ts-ignore
             return this._list[0].html();
         this._list.forEach((e: fastjsDom) => {
             e.html(val);
@@ -179,14 +179,15 @@ class fastjsDomList {
         return this;
     }
 
+    text(): string
+    text(val: string): fastjsDomList
+
     text(val?: string): string | fastjsDomList {
         if (val === undefined)
-            // ts ignore for certainly return string
-            // @ts-ignore
-            return this._list[0].text(val);
-        return (this._list.forEach((e: fastjsDom) => {
+            return this._list[0].text();
+        return this._list.forEach((e: fastjsDom) => {
             e.text(val);
-        }), this);
+        }), this;
     }
 
     toArray(): Array<fastjsDom> {
@@ -200,6 +201,25 @@ class fastjsDomList {
             }, time);
         else
             callback(this);
+        return this;
+    }
+
+    val(): string
+    val(val: string): fastjsDomList
+
+    val(val?: string): fastjsDomList | string {
+        const btn = this._el instanceof HTMLButtonElement;
+        if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
+            // if val and is button || input || textarea
+            if (val === undefined) {
+                return btn ? this._list[0].text() : this._el.value;
+            } else {
+                if (btn)
+                    this._el.innerText = val;
+                else
+                    this._el.value = val;
+            }
+        }
         return this;
     }
 }
