@@ -132,10 +132,12 @@ class fastjsDom {
         return this._el[key];
     }
 
-    // if val null -> return string, if val string, number -> return fastjsDom
-    html<T extends string | number>(val: T): T extends undefined ? string : fastjsDom {
+    html(): string
+    html(val: string): fastjsDom
+
+    html(val?: string): string | fastjsDom {
         // if null -> not change || String(val)
-        this._el.innerHTML = val !== undefined ? String(val) : this._el.innerHTML;
+        this._el.innerHTML = val !== undefined ? val : this._el.innerHTML;
         // @ts-ignore
         return val !== undefined ? this : this._el.innerHTML;
     }
@@ -180,10 +182,12 @@ class fastjsDom {
         return this;
     }
 
-    // if val null -> return string, if val string, number -> return fastjsDom
-    text<T extends string | number>(val?: T): T extends undefined ? string : fastjsDom {
+    text(): string
+    text(val: string): fastjsDom
+
+    text(val?: string): string | fastjsDom {
         // if null -> not change || String(val)
-        this._el.innerText = val !== undefined ? String(val) : this._el.innerText;
+        this._el.innerText = val !== undefined ? val : this._el.innerText;
         // @ts-ignore
         return val !== undefined ? this : this._el.innerText;
     }
