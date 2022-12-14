@@ -138,7 +138,6 @@ class fastjsDom {
     html(val?: string): string | fastjsDom {
         // if null -> not change || String(val)
         this._el.innerHTML = val !== undefined ? val : this._el.innerHTML;
-        // @ts-ignore
         return val !== undefined ? this : this._el.innerHTML;
     }
 
@@ -188,7 +187,6 @@ class fastjsDom {
     text(val?: string): string | fastjsDom {
         // if null -> not change || String(val)
         this._el.innerText = val !== undefined ? val : this._el.innerText;
-        // @ts-ignore
         return val !== undefined ? this : this._el.innerText;
     }
 
