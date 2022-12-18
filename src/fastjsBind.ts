@@ -36,9 +36,8 @@ class fastjsBind {
                                 if (e.attr) {
                                     e._el.attr(e.bind, value);
                                 }
-                                else if (Object.getOwnPropertyDescriptor(HTMLElement.prototype, e.bind)?.writable) {
-                                    // @ts-ignore
-                                    e._el._el[e.bind] = value;
+                                else {
+                                    e._el.set(e.bind, value);
                                 }
                             })
                         }
