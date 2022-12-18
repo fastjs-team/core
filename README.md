@@ -17,6 +17,14 @@ Fastjs is a good choice for you to develop your project, Our team are working ha
 npm install fastjs-next
 ```
 
+```javascript
+import { FastjsDom } from 'fastjs-next';
+
+new FastjsDom("iframe")
+  .set(srcdoc, html)
+  .appendTo()
+```
+
 ## Contributors
 
 - dy-xiaodong2022
