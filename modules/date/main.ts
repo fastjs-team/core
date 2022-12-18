@@ -95,6 +95,14 @@ class fastjsDate {
         return this.#date + timeLeft;
     }
 
+    toStringLocal(newFormat?: string): string {
+        return new fastjsDate(newFormat || this.format, this.#date).toString()
+    }
+
+    toNumberLocal(): number {
+        return this.#date;
+    }
+
     format: string;
 }
 
