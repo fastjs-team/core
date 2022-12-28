@@ -13,8 +13,11 @@ class fastjsDate {
          * A = AM/PM
          * a = am/pm
          * h = hour (24)
+         * hh = hour (24) without 0
          * m = minute
+         * mm = minute without 0
          * s = second
+         * ss = second without 0
          * S = millisecond
          *
          * <any> to ignore (eg. "<date>: Y-M-D h:m:s")
@@ -32,13 +35,18 @@ class fastjsDate {
         const year: number = date.getFullYear();
         const month: number = date.getMonth() + 1;
         const day: number = date.getDate();
-        const hour: number = date.getHours();
-        const minute: number = date.getMinutes();
-        const second: number = date.getSeconds();
+        const hourDefault: number = date.getHours();
+        const minuteDefault: number = date.getMinutes();
+        const secondDefault: number = date.getSeconds();
         const millisecond: number = date.getMilliseconds();
-        const ampm: string = hour >= 12 ? "PM" : "AM";
-        const ampm2: string = hour >= 12 ? "pm" : "am";
-        const hour12: number = hour % 12;
+        const ampm: string = hourDefault >= 12 ? "PM" : "AM";
+        const ampm2: string = hourDefault >= 12 ? "pm" : "am";
+        const hour12: number = hourDefault % 12;
+
+        // add 0
+        const hour: string = hourDefault < 10 ? "0" + hourDefault : hourDefault.toString();
+        const minute: string = minuteDefault < 10 ? "0" + minuteDefault : minuteDefault.toString();
+        const second: string = secondDefault < 10 ? "0" + secondDefault : secondDefault.toString();
 
         let string: string = newFormat || this.format;
 
@@ -72,8 +80,11 @@ class fastjsDate {
             ["H", hour12],
             ["A", ampm],
             ["a", ampm2],
+            ["hh", hourDefault],
             ["h", hour],
+            ["mm", minuteDefault],
             ["m", minute],
+            ["ss", secondDefault],
             ["s", second],
             ["S", millisecond]
         ]
