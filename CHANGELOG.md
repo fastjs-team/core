@@ -1,3 +1,9 @@
+## 1.1.2
+
+* Fix #37
+* Update FastjsDate
+* Update FastjsBind
+
 ## 1.1.1
 
 * Typescript check error fix
