@@ -3,7 +3,7 @@
 ## Getting Started
 
 - https://fastjs.cc/
-- https://docs.fastjs.com.cn/
+- https://docs.fastjs.cc/
 
 ## Description
 
@@ -17,11 +17,20 @@ Fastjs is a good choice for you to develop your project, Our team are working ha
 npm install fastjs-next
 ```
 
+```javascript
+import { FastjsDom } from 'fastjs-next';
+
+new FastjsDom("iframe")
+  .set(srcdoc, html)
+  .appendTo()
+```
+
 ## Contributors
 
 - dy-xiaodong2022
+- Ivan-Adam
 
 ## Info
 
 - Author: dy-xiaodong2022
-- Readme version: v1.3.0
+- Readme version: v1.2.0
