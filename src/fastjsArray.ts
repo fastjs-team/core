@@ -11,11 +11,11 @@ class fastjsArray {
 
   constructor(array: Array<any>, config: config) {
     /*
-        config = {
-            type: <string>::type / <array>::type,
-            length: <number>::max length
-        }
-        */
+      config = {
+        type: <string>::type / <array>::type,
+        length: <number>::max length
+      }
+    */
 
     const effect = () => {
       this._array.forEach((v: any, k: number) => {
