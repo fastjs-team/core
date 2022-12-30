@@ -170,7 +170,9 @@ class fastjsDom {
     }
 
     set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom {
-        if (Object.getOwnPropertyDescriptor(this._el, key)?.writable) {
+        if (Object.getOwnPropertyDescriptor(Element.prototype, key)?.writable ||
+            Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.set
+        ) {
             this._el[key] = val;
         } else
             _dev.newWarn("fastjsDom.set", "key is not writable", [

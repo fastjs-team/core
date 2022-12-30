@@ -4,12 +4,15 @@
 
 - https://fastjs.cc/
 - https://docs.fastjs.cc/
+- https://zh.docs.fastjs.cc/ (Beta)
 
 ## Description
 
-Fastjs is a high availability, high performance JavaScript Frame. It is designed to be easy to use. Fastjs can be use like a library with any framework, or it can be used as a framework itself.
+Fastjs is a high availability, high performance JavaScript library.
 
-Fastjs is a good choice for you to develop your project, Our team are working hard to make it better.
+It is designed to be easy to use. Fastjs can be use like a library with any framework.
+
+Fastjs is a good choice for you to develop your project.
 
 ## Install
 
@@ -17,18 +20,18 @@ Fastjs is a good choice for you to develop your project, Our team are working ha
 npm install fastjs-next
 ```
 
-```javascript
-import { FastjsDom } from 'fastjs-next';
+## Cli
 
-new FastjsDom("iframe")
-  .set(srcdoc, html)
-  .appendTo()
+```bash
+npm install -g fastjs-cli
+
+fastjs create <project-name>
 ```
 
 ## Contributors
 
 - dy-xiaodong2022
-- Ivan-Adam
+- Ivan-Adam (Community)
 
 ## Info
 
