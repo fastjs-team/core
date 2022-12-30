@@ -10,6 +10,7 @@ import FastjsDomList from "./fastjsDomList";
 // main
 import fastjs from "./methods";
 import { selector, copy, rand } from "./methods";
+const selecter = selector
 
 // export
 export {
@@ -19,6 +20,7 @@ export {
   FastjsDom,
   FastjsDomList,
   selector,
+  selecter,
   copy,
   rand,
 };
