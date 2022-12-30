@@ -1,6 +1,6 @@
 // modules
-import FastjsAjax from "../modules/ajax/main";
-import FastjsDate from "../modules/date/main";
+import FastjsAjax from "../modules/ajax/index";
+import FastjsDate from "../modules/date/index";
 
 // src
 import FastjsArray from "./fastjsArray";
@@ -9,8 +9,17 @@ import FastjsDomList from "./fastjsDomList";
 
 // main
 import fastjs from "./methods";
-import {selecter, copy, rand} from "./methods";
+import { selector, copy, rand } from "./methods";
 
 // export
-export {FastjsAjax, FastjsDate, FastjsArray, FastjsDom, FastjsDomList, selecter, copy, rand};
+export {
+  FastjsAjax,
+  FastjsDate,
+  FastjsArray,
+  FastjsDom,
+  FastjsDomList,
+  selector,
+  copy,
+  rand,
+};
 export default fastjs;

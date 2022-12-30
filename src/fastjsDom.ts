@@ -1,6 +1,6 @@
 import _dev from "./dev";
 import fastjsBind from "./fastjsBind";
-import {selecter as _selecter} from "./methods";
+import {selector as _selecter} from "./methods";
 import fastjsDomList from "./fastjsDomList";
 
 class fastjsDom {
