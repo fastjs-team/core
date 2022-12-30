@@ -1,6 +1,6 @@
 import fastjsDom from './fastjsDom';
 import _dev from "./dev";
-import {selecter} from "./methods";
+import {selector} from "./methods";
 
 class fastjsDomList {
     readonly #effect: Function;
@@ -132,7 +132,7 @@ class fastjsDomList {
     }
 
     next(el: string): fastjsDom | fastjsDomList {
-        return selecter(el, this);
+        return selector(el, this);
     }
 
     on(event: string = "click", callback: Function) {
