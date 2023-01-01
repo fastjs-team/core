@@ -1,6 +1,11 @@
 export default {
-  _dom: document,
+  _dom: document || null,
   newWarn(send: string, warn: string, file?: Array<string>): void {
+    // if file
+    if (file) {
+      // clear empty strings
+        file = file.filter((e: string) => e);
+    }
     // if in dev
     let output = `[Fastjs warn] ${send}: ${warn}`;
     if (file) {
@@ -12,9 +17,14 @@ export default {
     // new warn
     console.warn(output);
   },
-  newError(send: string, error: string, file?: Array<string>): void {
+  newError(send: string, error: string, file?: Array<string>): Error {
+    // if file
+    if (file) {
+      // clear empty strings
+      file = file.filter((e: string) => e);
+    }
     // if in dev
-    let output = `[Fastjs error] ${send}: ${error}`;
+    let output = `[${send}] ${error}`;
     if (file) {
       output += "\n";
       file.forEach((v) => {
@@ -22,17 +32,9 @@ export default {
       });
     }
     // new error
-    throw new Error(output);
-  },
-  initMethod(_this: any, ...methods: any): object {
-    // arguments[0] -> object
-    // arguments >= 1 -> object need to add
-    // Object.assign(arguments[0], arguments[i]);
-    let obj: object = arguments[0];
-    for (let i = 1; i < arguments.length; i++) {
-      obj = Object.assign(obj, arguments[i](obj));
-    }
-    return obj;
+    const err = new Error(output);
+    err.name = "FastjsError";
+    return err;
   },
   type(arg: any): string {
     let type: string = typeof arg;
