@@ -1,4 +1,4 @@
-class fastjsDate {
+class FastjsDate {
   readonly #date: number;
   readonly #createAt: number;
   private readonly construct: string;
@@ -26,7 +26,7 @@ class fastjsDate {
     this.format = format;
     this.#date = date;
     this.#createAt = new Date().getTime();
-    this.construct = "fastjsDate";
+    this.construct = "FastjsDate";
   }
 
   toString(newFormat?: string): string {
@@ -112,7 +112,7 @@ class fastjsDate {
   }
 
   toStringLocal(newFormat?: string): string {
-    return new fastjsDate(newFormat || this.format, this.#date).toString();
+    return new FastjsDate(newFormat || this.format, this.#date).toString();
   }
 
   toNumberLocal(): number {
@@ -122,4 +122,4 @@ class fastjsDate {
   format: string;
 }
 
-export default fastjsDate;
+export default FastjsDate;
