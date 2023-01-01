@@ -1,5 +1,5 @@
 export default {
-  _dom: document,
+  _dom: document || null,
   newWarn(send: string, warn: string, file?: Array<string>): void {
     // if in dev
     let output = `[Fastjs warn] ${send}: ${warn}`;
