@@ -1,7 +1,7 @@
 import _dev from "./dev";
 import FastjsDom from "./fastjsDom";
 import FastjsDomList from "./fastjsDomList";
-import fastjsArray from "./fastjsArray";
+import FastjsArray from "./fastjsArray";
 import config from "./config";
 
 let fastjs = {
@@ -60,9 +60,9 @@ let fastjs = {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     /*  Beta Feature  */
-    install<T extends "FastjsDom" | "fastjsArray">(
+    install<T extends "FastjsDom" | "FastjsArray">(
         name: T
-    ): T extends "FastjsDom" ? typeof FastjsDom : typeof fastjsArray {
+    ): T extends "FastjsDom" ? typeof FastjsDom : typeof FastjsArray {
         interface module {
             0: string;
             1: Function;

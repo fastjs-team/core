@@ -5,7 +5,7 @@ interface config {
     length?: number | null;
 }
 
-class fastjsArray<T = any> {
+class FastjsArray<T = any> {
     private readonly construct: string;
     #hooks: Array<Function>;
 
@@ -80,12 +80,12 @@ class fastjsArray<T = any> {
     return this._array.length;
     }
 
-    add(val: T, key: number = this._array.length): fastjsArray {
+    add(val: T, key: number = this._array.length): FastjsArray {
     this._array.splice(key, 0, val);
     return this;
     }
 
-    push(...val: Array<T>): fastjsArray {
+    push(...val: Array<T>): FastjsArray {
     // arguments each
     for (let i = 0; i < arguments.length; i++) {
         this.add(arguments[i]);
@@ -93,7 +93,7 @@ class fastjsArray<T = any> {
     return this;
     }
 
-    remove(key: number): fastjsArray {
+    remove(key: number): FastjsArray {
     this._array.splice(key, 1);
     return this;
     }
@@ -102,12 +102,12 @@ class fastjsArray<T = any> {
     return this._array[key];
     }
 
-    set(key: number, val: T): fastjsArray<T> {
+    set(key: number, val: T): FastjsArray<T> {
     this._array[key] = val;
     return this;
     }
 
-    each(callback: Function): fastjsArray<T> {
+    each(callback: Function): FastjsArray<T> {
     this._array.forEach((e: T, key: number) => {
         callback(e, key);
     });
@@ -130,7 +130,7 @@ class fastjsArray<T = any> {
     return this._array;
     }
 
-    then(callback: Function, time = 0): fastjsArray<T> {
+    then(callback: Function, time = 0): FastjsArray<T> {
     if (time)
         setTimeout(() => {
         callback(this);
@@ -139,7 +139,7 @@ class fastjsArray<T = any> {
     return this;
     }
 
-    addHook(callback: Function): fastjsArray<T> {
+    addHook(callback: Function): FastjsArray<T> {
         this.#hooks.push(callback);
         return this;
     }
@@ -154,7 +154,7 @@ class fastjsArray<T = any> {
         _dev.newError(
         "FastjsArray",
         `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
-        ["check(item)", "fastjsArray"]
+        ["check(item)", "FastjsArray"]
         );
 
         // dev end
@@ -167,7 +167,7 @@ class fastjsArray<T = any> {
         _dev.newError(
         "FastjsArray",
         `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`,
-        ["reject()", "check(item)", "fastjsArray"]
+        ["reject()", "check(item)", "FastjsArray"]
         );
         // dev end
         return false;
@@ -191,4 +191,4 @@ class fastjsArray<T = any> {
     }
 }
 
-export default fastjsArray;
+export default FastjsArray;
