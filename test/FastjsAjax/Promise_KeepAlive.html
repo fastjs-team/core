@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fastjs-next Playground</title>
+</head>
+<body>
+<button>Send Request</button>
+<div class="result">
+</div>
+<script type="module">
+  import {selecter, FastjsAjax} from "../../dist/fastjs-next-runtime-esm.js"
+
+  const ajax = new FastjsAjax("./test.json", {}, {
+    keepalive: true,
+    keepaliveWait: 1000
+  })
+  selecter("button").on("click", () => {
+    ajax.get().then(data => {
+      selecter(".result").html(data)
+      console.log(data);
+    })
+  })
+</script>
+</body>
+</html>
