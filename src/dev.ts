@@ -24,16 +24,6 @@ export default {
     // new error
     throw new Error(output);
   },
-  initMethod(_this: any, ...methods: any): object {
-    // arguments[0] -> object
-    // arguments >= 1 -> object need to add
-    // Object.assign(arguments[0], arguments[i]);
-    let obj: object = arguments[0];
-    for (let i = 1; i < arguments.length; i++) {
-      obj = Object.assign(obj, arguments[i](obj));
-    }
-    return obj;
-  },
   type(arg: any): string {
     let type: string = typeof arg;
     if (type === "object") {
