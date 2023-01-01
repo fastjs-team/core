@@ -1,5 +1,5 @@
 import _dev from "./dev";
-import fastjsBind from "./fastjsBind";
+import FastjsBind from "./fastjsBind";
 import {selector as _selecter} from "./methods";
 import FastjsDomList from "./fastjsDomList";
 
@@ -78,10 +78,10 @@ class FastjsDom {
         return el.appendChild(this._el), this;
     }
 
-    bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): fastjsBind {
+    bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): FastjsBind {
         if (bind === "html") bind = "innerHTML";
         if (bind === "text") bind = "innerText";
-        return new fastjsBind(this, bind, key, object, isAttr);
+        return new FastjsBind(this, bind, key, object, isAttr);
     }
 
     css(): CSSStyleDeclaration

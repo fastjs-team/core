@@ -15,7 +15,7 @@ interface event {
     bind: keyof HTMLElement;
 }
 
-class fastjsBind {
+class FastjsBind {
     constructor(
         el: FastjsDom,
         bind: keyof HTMLElement,
@@ -81,4 +81,4 @@ class fastjsBind {
     }
 }
 
-export default fastjsBind
+export default FastjsBind
