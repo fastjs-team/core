@@ -1,4 +1,4 @@
-import fastjsDom from "./fastjsDom";
+import FastjsDom from "./fastjsDom";
 
 interface target {
     _event: {
@@ -11,13 +11,13 @@ interface target {
 
 interface event {
     attr: boolean;
-    _el: fastjsDom;
+    _el: FastjsDom;
     bind: keyof HTMLElement;
 }
 
 class fastjsBind {
     constructor(
-        el: fastjsDom,
+        el: FastjsDom,
         bind: keyof HTMLElement,
         key: string | number,
         object: { [key: string]: any } = {},
@@ -44,8 +44,6 @@ class fastjsBind {
                 }
             })
         }
-
-        let _object = object;
 
         if (!object._event) {
             object._event = {};

@@ -1,9 +1,9 @@
 import _dev from "./dev";
 import fastjsBind from "./fastjsBind";
 import {selector as _selecter} from "./methods";
-import fastjsDomList from "./fastjsDomList";
+import FastjsDomList from "./fastjsDomList";
 
-class fastjsDom {
+class FastjsDom {
     private readonly construct: string;
 
     constructor(el: HTMLElement | string) {
@@ -17,7 +17,7 @@ class fastjsDom {
         this._el = el
 
         // construct
-        this.construct = "fastjsDom";
+        this.construct = "FastjsDom";
 
         return this;
     }
@@ -29,21 +29,21 @@ class fastjsDom {
     // methods
 
     attr(key: string): string | null
-    attr(key: string, value: string | null): fastjsDom
+    attr(key: string, value: string | null): FastjsDom
 
-    attr(key: string, value?: string | null): string | null | fastjsDom {
+    attr(key: string, value?: string | null): string | null | FastjsDom {
         if (value !== undefined) {
             return value ? this._el.setAttribute(key, value.toString()) : this._el.removeAttribute(key), this;
         }
         return this._el.getAttribute(key);
     }
 
-    addAfter(el: HTMLElement): fastjsDom {
+    addAfter(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+            _dev.newWarn("FastjsDom.addAfter", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
-                "fastjsDom"
+                "FastjsDom"
             ]);
         else
             // add this._el after el
@@ -51,12 +51,12 @@ class fastjsDom {
         return this;
     }
 
-    addBefore(el: HTMLElement): fastjsDom {
+    addBefore(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.newWarn("fastjsDom.addAfter", "el.parentNode is null", [
+            _dev.newWarn("FastjsDom.addAfter", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
-                "fastjsDom"
+                "FastjsDom"
             ]);
         else
             // add this._el before el
@@ -65,16 +65,16 @@ class fastjsDom {
         return this;
     }
 
-    addFirst(el: HTMLElement): fastjsDom {
+    addFirst(el: HTMLElement): FastjsDom {
         // add this._el first in el
         return el.insertBefore(this._el, el.firstChild), this;
     }
 
-    append(el: HTMLElement): fastjsDom {
+    append(el: HTMLElement): FastjsDom {
         return this._el.appendChild(el), this;
     }
 
-    appendTo(el: HTMLElement = _dev._dom.body): fastjsDom {
+    appendTo(el: HTMLElement = _dev._dom.body): FastjsDom {
         return el.appendChild(this._el), this;
     }
 
@@ -85,10 +85,10 @@ class fastjsDom {
     }
 
     css(): CSSStyleDeclaration
-    css(key: object): fastjsDom
-    css(key: string, value: string, other?: string): fastjsDom
+    css(key: object): FastjsDom
+    css(key: string, value: string, other?: string): FastjsDom
 
-    css(key?: string | object, value?: string, other?: string): fastjsDom | CSSStyleDeclaration {
+    css(key?: string | object, value?: string, other?: string): FastjsDom | CSSStyleDeclaration {
         if (typeof key === "string") {
             // @ts-ignore
             this._el.style.setProperty(key, value, other);
@@ -107,25 +107,25 @@ class fastjsDom {
         return this._el;
     }
 
-    each(callback: Function, defaultElement: boolean = true): fastjsDom {
+    each(callback: Function, defaultElement: boolean = true): FastjsDom {
         // children each
         for (let i = 0; i < this._el.children.length; i++) {
-            callback(defaultElement ? this._el.children[i] : new fastjsDom(this._el.children[i] as HTMLElement), i);
+            callback(defaultElement ? this._el.children[i] : new FastjsDom(this._el.children[i] as HTMLElement), i);
         }
         return this;
     }
 
-    focus(): fastjsDom {
+    focus(): FastjsDom {
         this._el.focus();
         return this;
     }
 
-    first(): fastjsDom | null {
-        return this._el.firstElementChild ? new fastjsDom(this._el.firstElementChild as HTMLElement) : null;
+    first(): FastjsDom | null {
+        return this._el.firstElementChild ? new FastjsDom(this._el.firstElementChild as HTMLElement) : null;
     }
 
-    father(): fastjsDom | null {
-        return new fastjsDom(this.el().parentNode as HTMLElement);
+    father(): FastjsDom | null {
+        return new FastjsDom(this.el().parentNode as HTMLElement);
     }
 
     get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
@@ -133,66 +133,66 @@ class fastjsDom {
     }
 
     html(): string
-    html(val: string): fastjsDom
+    html(val: string): FastjsDom
 
-    html(val?: string): string | fastjsDom {
+    html(val?: string): string | FastjsDom {
         // if null -> not change || String(val)
         this._el.innerHTML = val !== undefined ? val : this._el.innerHTML;
         return val !== undefined ? this : this._el.innerHTML;
     }
 
-    last(): fastjsDom | null {
-        return this._el.lastElementChild ? new fastjsDom(this._el.lastElementChild as HTMLElement) : null;
+    last(): FastjsDom | null {
+        return this._el.lastElementChild ? new FastjsDom(this._el.lastElementChild as HTMLElement) : null;
     }
 
-    next(selecter: string): fastjsDom | fastjsDomList {
+    next(selecter: string): FastjsDom | FastjsDomList {
         return _selecter(selecter, this._el);
     }
 
-    push(el: HTMLElement = _dev._dom.body): fastjsDom {
+    push(el: HTMLElement = _dev._dom.body): FastjsDom {
         return el.appendChild(this._el), this;
     }
 
-    on(event: string = "click", callback: Function): fastjsDom {
+    on(event: string = "click", callback: Function): FastjsDom {
         let eventTrig = (...e: any) => void callback(this, ...e);
         this._el.addEventListener(event, eventTrig);
         return this;
     }
 
-    off(event: string = "click", callback: Function): fastjsDom {
+    off(event: string = "click", callback: Function): FastjsDom {
         let eventTrig = () => void callback(this);
         this._el.removeEventListener(event, eventTrig);
         return this;
     }
 
-    remove(): fastjsDom {
+    remove(): FastjsDom {
         return this._el.remove(), this;
     }
 
-    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom {
+    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom {
         if (Object.getOwnPropertyDescriptor(Element.prototype, key)?.writable ||
             Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.set
         ) {
             this._el[key] = val;
         } else
-            _dev.newWarn("fastjsDom.set", "key is not writable", [
+            _dev.newWarn("FastjsDom.set", "key is not writable", [
                 "key: " + key,
-                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): fastjsDom",
+                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom",
                 "FastjsDom"
             ]);
         return this;
     }
 
     text(): string
-    text(val: string): fastjsDom
+    text(val: string): FastjsDom
 
-    text(val?: string): string | fastjsDom {
+    text(val?: string): string | FastjsDom {
         // if null -> not change || String(val)
         this._el.innerText = val !== undefined ? val : this._el.innerText;
         return val !== undefined ? this : this._el.innerText;
     }
 
-    then(callback: Function, time = 0): fastjsDom {
+    then(callback: Function, time = 0): FastjsDom {
         if (time)
             setTimeout(() => {
                 callback(this);
@@ -203,9 +203,9 @@ class fastjsDom {
     }
 
     val(): string
-    val(val: string): fastjsDom
+    val(val: string): FastjsDom
 
-    val(val?: string): fastjsDom | string {
+    val(val?: string): FastjsDom | string {
         const btn = this._el instanceof HTMLButtonElement;
         if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
             // if val and is button || input || textarea
@@ -222,4 +222,4 @@ class fastjsDom {
     }
 }
 
-export default fastjsDom
+export default FastjsDom
