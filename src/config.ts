@@ -1,4 +1,4 @@
-import fastjsAjax from "../modules/ajax/index";
+import FastjsAjax from "../modules/ajax/index";
 
 interface config {
   dom: {
@@ -32,14 +32,14 @@ const _config: config = {
       // return false to stop the request
       hooks: {
         // => ajax::Ajax
-        before: (ajax: fastjsAjax) => ajax || true,
+        before: (ajax: FastjsAjax) => ajax || true,
         // => ajax::Ajax
-        success: (ajax: fastjsAjax) => ajax || true,
+        success: (ajax: FastjsAjax) => ajax || true,
         // => ajax::Ajax
-        failed: (ajax: fastjsAjax) => ajax || true,
+        failed: (ajax: FastjsAjax) => ajax || true,
         // => ajax::Ajax, data::Object
         callback: (
-          ajax: fastjsAjax,
+          ajax: FastjsAjax,
           data: {
             [key: string]: any;
           }

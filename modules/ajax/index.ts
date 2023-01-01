@@ -30,7 +30,7 @@ interface selectConfig {
   keepalive?: boolean;
 }
 
-class fastjsAjax {
+class FastjsAjax {
   private readonly construct: string;
   private waitId: number;
 
@@ -52,7 +52,7 @@ class fastjsAjax {
     this.waitId = 0;
 
     // construct
-    this.construct = "fastjsAjax";
+    this.construct = "FastjsAjax";
   }
 
   url: string;
@@ -143,4 +143,4 @@ class fastjsAjax {
   }
 }
 
-export default fastjsAjax;
+export default FastjsAjax;
