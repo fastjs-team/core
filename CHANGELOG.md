@@ -1,3 +1,23 @@
+## 1.2.0
+
+* Update FastjsArray
+* Update #42
+* Update #43
+* Update #45
+* Fix #37
+* Create test for FastjsBind
+* Update methods.ts
+* Update README
+* Update dev - Error output
+* Update dev - Delete func `initMethod()`
+* Update #48
+* Fix #52
+* Update FastjsAjax
+* Update FastjsArray
+* Update test
+* Update #50
+* Update #42
+
 ## 1.1.2
 
 * Fix #37

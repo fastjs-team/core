@@ -130,7 +130,7 @@ class FastjsArray<T = any> {
         return this._array;
     }
 
-    then(callback: Function, time = 0): fastjsArray {
+    then(callback: Function, time = 0): FastjsArray {
         if (time)
             setTimeout(() => {
                 callback(this);
@@ -154,7 +154,7 @@ class FastjsArray<T = any> {
                 _dev.newError(
                     "FastjsArray",
                     `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
-                    ["check(item)", "fastjsArray"]
+                    ["check(item)", "FastjsArray"]
                 )
             )
         }

@@ -36,4 +36,5 @@ fastjs create <project-name>
 ## Info
 
 - Author: dy-xiaodong2022
+- License: MIT
 - Readme version: v1.2.0
