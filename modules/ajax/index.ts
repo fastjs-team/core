@@ -33,9 +33,9 @@ interface selectConfig {
     keepaliveWait?: number;
 }
 
-class fastjsAjax {
-    private readonly construct: string;
-    private waitId: number;
+class FastjsAjax {
+  private readonly construct: string;
+  private waitId: number;
 
     constructor(url: string, data?: data, config: selectConfig = {}) {
         this.url = url;
@@ -55,9 +55,9 @@ class fastjsAjax {
         this.xhr = null;
         this.waitId = 0;
 
-        // construct
-        this.construct = "fastjsAjax";
-    }
+    // construct
+    this.construct = "FastjsAjax";
+  }
 
     url: string;
     data: {
@@ -182,4 +182,4 @@ class fastjsAjax {
     }
 }
 
-export default fastjsAjax;
+export default FastjsAjax;

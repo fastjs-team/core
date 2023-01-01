@@ -1,22 +1,22 @@
 import _dev from "./dev";
-import fastjsDom from "./fastjsDom";
-import fastjsDomList from "./fastjsDomList";
-import fastjsArray from "./fastjsArray";
+import FastjsDom from "./fastjsDom";
+import FastjsDomList from "./fastjsDomList";
+import FastjsArray from "./fastjsArray";
 import config from "./config";
 
 let fastjs = {
     selector(
         el: string,
-        place: HTMLElement | Document | fastjsDomList = _dev._dom
-    ): fastjsDom | fastjsDomList {
+        place: HTMLElement | Document | FastjsDomList = _dev._dom
+    ): FastjsDom | FastjsDomList {
         // selector()
         // select elements
 
         // dom: Element[] :: save elements result
         let dom: HTMLElement[] = [];
-        // if place = fastjsDomList
-        if (place instanceof fastjsDomList) {
-            place._list.forEach((e: fastjsDom) => {
+        // if place = FastjsDomList
+        if (place instanceof FastjsDomList) {
+            place._list.forEach((e: FastjsDom) => {
                 e._el.querySelectorAll(el).forEach((v: Element) => {
                     // check if v is in dom
                     if (!dom.some((v2) => v2 === v)) dom.push(v as HTMLElement);
@@ -35,14 +35,14 @@ let fastjs = {
                 if (el.startsWith(v)) special = true;
             });
         if (special)
-            // -> fastjsDom -> element
-            return new fastjsDom(dom[0]);
-        // -> fastjsDomList -> fastjsDom -> element
-        return new fastjsDomList(dom);
+            // -> FastjsDom -> element
+            return new FastjsDom(dom[0]);
+        // -> FastjsDomList -> FastjsDom -> element
+        return new FastjsDomList(dom);
     },
     copy(text: string): void {
         // copy text to clipboard
-        let input = new fastjsDom("span");
+        let input = new FastjsDom("span");
         input.html(text.replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;")).push();
         // create range to select text
         const range: Range = document.createRange();
@@ -60,9 +60,9 @@ let fastjs = {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     /*  Beta Feature  */
-    install<T extends "fastjsDom" | "fastjsArray">(
+    install<T extends "FastjsDom" | "FastjsArray">(
         name: T
-    ): T extends "fastjsDom" ? typeof fastjsDom : typeof fastjsArray {
+    ): T extends "FastjsDom" ? typeof FastjsDom : typeof FastjsArray {
         interface module {
             0: string;
             1: Function;

@@ -5,32 +5,32 @@ interface config {
     length?: number | null;
 }
 
-class fastjsArray {
+class FastjsArray<T = any> {
     private readonly construct: string;
     #hooks: Array<Function>;
 
-    constructor(array: Array<any>, config: config) {
+    constructor(array: Array<T>, config: config) {
         /*
-          config = {
+            config = {
             type: <string>::type / <array>::type,
             length: <number>::max length
-          }
+            }
         */
 
         const effect = () => {
-            this._array.forEach((v: any, k: number) => {
+            this._array.forEach((v: T, k: number) => {
                 this[k] = v;
-            });
+            })
             // check is there an invalid key
             let i = this._array.length;
             while (this[i] !== undefined) {
                 delete this[i];
                 i++;
             }
-        };
+        }
 
         this._array = new Proxy(array, {
-            set: (target: Array<any>, key: string, value) => {
+            set: (target: Array<T>, key: string, value: T) => {
                 if (!this.#check(value)) return false;
                 // @ts-ignore
                 target[key] = value;
@@ -63,16 +63,16 @@ class fastjsArray {
         length?: number | null;
     };
     // array = Proxy -> Array
-    _array: Array<any>;
+    _array: Array<T>;
 
     // methods
-    [key: string]: any;
+    [key: string]: T | config | Function;
 
-    first(): any {
+    first(): T {
         return this._array[0];
     }
 
-    last(): any {
+    last(): T {
         return this._array[this._array.length - 1];
     }
 
@@ -80,12 +80,12 @@ class fastjsArray {
         return this._array.length;
     }
 
-    add(val: any, key: number = this._array.length): fastjsArray {
+    add(val: T, key: number = this._array.length): FastjsArray {
         this._array.splice(key, 0, val);
         return this;
     }
 
-    push(...val: any): fastjsArray {
+    push(...val: Array<T>): FastjsArray {
         // arguments each
         for (let i = 0; i < arguments.length; i++) {
             this.add(arguments[i]);
@@ -93,35 +93,35 @@ class fastjsArray {
         return this;
     }
 
-    remove(key: number): fastjsArray {
+    remove(key: number): FastjsArray {
         this._array.splice(key, 1);
         return this;
     }
 
-    get(key: number): any {
+    get(key: number): T {
         return this._array[key];
     }
 
-    set(key: number, val: any): fastjsArray {
+    set(key: number, val: T): FastjsArray<T> {
         this._array[key] = val;
         return this;
     }
 
-    each(callback: Function): fastjsArray {
-        this._array.forEach((e: any, key: number) => {
+    each(callback: Function): FastjsArray<T> {
+        this._array.forEach((e: T, key: number) => {
             callback(e, key);
         });
         return this;
     }
 
-    filter(callback: Function): any {
-        return this._array.filter((e: any, key: number) => {
+    filter(callback: Function): Array<T> {
+        return this._array.filter((e: T, key: number) => {
             return callback(e, key);
         });
     }
 
-    map(callback: Function): any {
-        return this._array.map((e: any, key: number) => {
+    map(callback: Function): Array<T> {
+        return this._array.map((e: T, key: number) => {
             return callback(e, key);
         });
     }
@@ -139,14 +139,14 @@ class fastjsArray {
         return this;
     }
 
-    addHook(callback: Function): fastjsArray {
+    addHook(callback: Function): FastjsArray<T> {
         this.#hooks.push(callback);
         return this;
     }
 
     // private methods
 
-    #check(item: any): undefined | boolean {
+    #check(item: T): undefined | boolean {
         let cfg = this._config;
         // check length
         if (cfg.length && this._array.length >= cfg.length) {
@@ -166,9 +166,9 @@ class fastjsArray {
                 _dev.newError(
                     "FastjsArray",
                     `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`,
-                    ["reject()", "check(item)", "fastjsArray"]
+                    ["reject()", "check(item)", "FastjsArray"]
                 )
-            )
+            );
             // dev end
             return false;
         };
@@ -191,4 +191,4 @@ class fastjsArray {
     }
 }
 
-export default fastjsArray;
+export default FastjsArray;
