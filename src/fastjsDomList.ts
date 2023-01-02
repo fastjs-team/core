@@ -204,22 +204,20 @@ class FastjsDomList {
         return this;
     }
 
-    val(): string
-    val(val: string): FastjsDomList
+    val(key?: number): string
+    val(val: string, key?: number): FastjsDomList
 
-    val(val?: string): FastjsDomList | string {
-        const btn = this._el instanceof HTMLButtonElement;
-        if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
-            // if val and is button || input || textarea
-            if (val === undefined) {
-                return btn ? this._list[0].text() : this._el.value;
-            } else {
-                if (btn)
-                    this._el.innerText = val;
-                else
-                    this._el.value = val;
-            }
+    val(val?: string | number, key?: number): FastjsDomList | string {
+        const set = (val: string, el: FastjsDom): void => void el.val(val)
+
+        if (typeof val !== 'string') return this._list[val || 0].val();
+
+        if (key === undefined) {
+            this._list.forEach(el => set(val, el));
+        } else {
+            set(val, this._list[key])
         }
+
         return this;
     }
 }
