@@ -30,7 +30,7 @@ class FastjsDomList {
             // length
             this.length = this._list.length;
         }
-
+        this.#effect();
 
         // construct
         this.construct = 'FastjsDomList';
