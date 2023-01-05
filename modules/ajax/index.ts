@@ -2,7 +2,7 @@ import _config from "../../src/config";
 import _dev from "../../src/dev";
 
 interface data {
-    [key: string]: string | number | boolean | Array<any> | null | data;
+    [key: string]: any;
 }
 
 interface config {
@@ -61,7 +61,7 @@ class FastjsAjax {
 
     url: string;
     data: {
-        [key: string]: string | number | boolean | Array<any> | null | data;
+        [key: string]: any;
     };
     config: config;
     response: any;
@@ -97,7 +97,16 @@ class FastjsAjax {
                 // create xhr
                 let xhr = new XMLHttpRequest();
                 this.xhr = xhr;
-                xhr.open(method, this.url, true);
+                let url = this.url;
+                if (method === "GET" && Object.keys(this.data).length > 0) {
+                    for (const key in this.data) {
+                        if (this.data.hasOwnProperty(key)) {
+                            const value = this.data[key];
+                            url += `${url.includes("?") ? "&" : "?"}${key}=${encodeURIComponent(value)}`;
+                        }
+                    }
+                }
+                xhr.open(method, url, true);
                 // set header
                 for (let key in this.config.headers) {
                     xhr.setRequestHeader(key, this.config.headers[key]);
@@ -155,14 +164,12 @@ class FastjsAjax {
                     }
                     resolve(data);
                 };
-                let query = "";
+                let data = "";
                 if (method === "POST") {
-                    // data to query
-                    for (let key in this.data) {
-                        query += `${key}=${this.data[key]}&`;
-                    }
+                    data = JSON.stringify(this.data);
+                    xhr.setRequestHeader("Content-Type", "application/json");
                 }
-                xhr.send(query || null);
+                xhr.send(data || null);
             };
 
             // if wait

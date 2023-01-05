@@ -1,3 +1,10 @@
+## 1.2.1
+
+* Fix #55: FastjsAjax error when request with data
+* Update test
+* FastjsDomList: Effect when setup
+* FastjsDomList: Add `val()`
+
 ## 1.2.0
 
 * Update FastjsArray
