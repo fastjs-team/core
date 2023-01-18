@@ -9,32 +9,19 @@ class FastjsArray<T = any> {
     private readonly construct: string;
     #hooks: Array<Function>;
 
-    constructor(array: Array<T>, config: config) {
+    constructor(array: Array<T> = [], config: config = {}) {
         /*
             config = {
-            type: <string>::type / <array>::type,
-            length: <number>::max length
+                type: <string>::type / <array>::type,
+                length: <number>::max length
             }
         */
-
-        const effect = () => {
-            this._array.forEach((v: T, k: number) => {
-                this[k] = v;
-            })
-            // check is there an invalid key
-            let i = this._array.length;
-            while (this[i] !== undefined) {
-                delete this[i];
-                i++;
-            }
-        }
 
         this._array = new Proxy(array, {
             set: (target: Array<T>, key: string, value: T) => {
                 if (!this.#check(value)) return false;
                 // @ts-ignore
                 target[key] = value;
-                effect();
                 // run hooks
                 this.#hooks.forEach((e: Function) => {
                     e(this);
@@ -43,7 +30,7 @@ class FastjsArray<T = any> {
             },
         });
 
-        this._config = {
+        config = this._config = {
             type: config.type || "Any",
             length: config.length || null,
         };
@@ -54,8 +41,34 @@ class FastjsArray<T = any> {
         // construct
         this.construct = `<${config.type}>FastjsArray`;
 
-        // init effect
-        effect();
+        return new Proxy(this, {
+            get: (target: FastjsArray<T>, key: string) => {
+                // is number
+                if (!isNaN(Number(key))) {
+                    return target._array[Number(key)];
+                }
+                // FastjsArray.prototype --> Array.prototype --> Object.prototype --> null
+                else if (target[key] === undefined) {
+                    // try find from this._array
+                    if (key in Array.prototype) {
+                        // is func
+                        if (typeof Array.prototype[key as keyof Array<any>] === "function") {
+                            return (...args: Array<any>) => {
+                                return Array.prototype[key as keyof Array<any>].apply(target._array, args);
+                            }
+                        }
+                        return this._array[key as keyof Array<any>];
+                    }
+                } else return target[key];
+            },
+            set: (target: FastjsArray<T>, key: string, value: T) => {
+                // find from array
+                if (!isNaN(Number(key))) {
+                    target._array[Number(key)] = value;
+                }
+                return true;
+            }
+        })
     }
 
     _config: {
@@ -76,34 +89,13 @@ class FastjsArray<T = any> {
         return this._array[this._array.length - 1];
     }
 
-    length(): number {
-        return this._array.length;
-    }
-
     add(val: T, key: number = this._array.length): FastjsArray {
         this._array.splice(key, 0, val);
         return this;
     }
 
-    push(...val: Array<T>): FastjsArray {
-        // arguments each
-        for (let i = 0; i < arguments.length; i++) {
-            this.add(arguments[i]);
-        }
-        return this;
-    }
-
     remove(key: number): FastjsArray {
         this._array.splice(key, 1);
-        return this;
-    }
-
-    get(key: number): T {
-        return this._array[key];
-    }
-
-    set(key: number, val: T): FastjsArray<T> {
-        this._array[key] = val;
         return this;
     }
 
@@ -114,20 +106,9 @@ class FastjsArray<T = any> {
         return this;
     }
 
-    filter(callback: Function): Array<T> {
-        return this._array.filter((e: T, key: number) => {
-            return callback(e, key);
-        });
-    }
-
-    map(callback: Function): Array<T> {
-        return this._array.map((e: T, key: number) => {
-            return callback(e, key);
-        });
-    }
-
     toArray(): Array<any> {
-        return this._array;
+        // throw proxy
+        return Object.assign([], this._array);
     }
 
     then(callback: Function, time = 0): FastjsArray {
