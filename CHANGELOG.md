@@ -1,11 +1,18 @@
-## 1.2.1
+## 1.2
+
+### 1.2.2
+
+* Fix #37: FastjsDom.set writable error
+* Update FastjsAjax
+
+### 1.2.1
 
 * Fix #55: FastjsAjax error when request with data
 * Update test
 * FastjsDomList: Effect when setup
 * FastjsDomList: Add `val()`
 
-## 1.2.0
+### 1.2.0
 
 * Update FastjsArray
 * Update #42
@@ -25,20 +32,22 @@
 * Update #50
 * Update #42
 
-## 1.1.2
+## 1.1
+
+### 1.1.2
 
 * Fix #37
 * Update FastjsDate
 * Update FastjsBind
 
-## 1.1.1
+### 1.1.1
 
 * Typescript check error fix
 * FastjsDomList add function `val(...)`
 * Fix some bug
 * Optimize code
 
-## 1.1.0
+### 1.1.0
 
 * FastjsDom refactor
 * FastjsDomList refactor
@@ -51,6 +60,8 @@
 * Private variable refactor
 * Update FastjsAjax
 * FastjsAjax refactor
+
+## 1.0
 
 ### 1.0.14
 
