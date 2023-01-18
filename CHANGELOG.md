@@ -3,6 +3,7 @@
 ### 1.3.0
 
 * Fix #37: FastjsDom.set writable error
+* Fix #57: FastjsDom.off is not affect
 * Update FastjsAjax
 * Update FastjsArray
 * Update type definition
