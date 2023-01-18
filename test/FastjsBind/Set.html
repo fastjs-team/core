@@ -14,7 +14,7 @@
 <script type="module">
   import {selecter, FastjsDom} from "/dist/fastjs-next-runtime-esm.js"
 
-  let obj = selecter(".timer").bind("text", "time", {time: 0})
+  let obj = selecter(".timer").bind("innerHTML", "time", {time: 0})
   setInterval(() => {
     obj.time++
     console.log(obj);
