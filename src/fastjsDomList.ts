@@ -1,6 +1,9 @@
 import FastjsDom from './fastjsDom';
 import _dev from "./dev";
 import {selector} from "./methods";
+import type {eachCallback, fastjsEventCallback} from "./fastjsDom";
+
+type fastjsThenCallback = (el: FastjsDomList, dom: HTMLElement) => void;
 
 class FastjsDomList {
     readonly #effect: Function;
@@ -86,9 +89,9 @@ class FastjsDomList {
         return this;
     }
 
-    each(callback: Function): FastjsDomList {
-        this._list.forEach((e: FastjsDom) => {
-            callback(e, e.el());
+    each(callback: eachCallback): FastjsDomList {
+        this._list.forEach((e: FastjsDom, index: number) => {
+            callback(e, e.el(), index);
         })
         return this;
     }
@@ -135,14 +138,14 @@ class FastjsDomList {
         return selector(el, this);
     }
 
-    on(event: string = "click", callback: Function) {
+    on(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback) {
         this._list.forEach((e: FastjsDom) => {
             e.on(event, callback);
         })
         return this;
     }
 
-    off(event: string = "click", callback: Function) {
+    off(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback) {
         this._list.forEach((e: FastjsDom) => {
             e.off(event, callback);
         })
@@ -194,13 +197,13 @@ class FastjsDomList {
         return this._list;
     }
 
-    then(callback: Function, time: number = 0): FastjsDomList {
+    then(callback: fastjsThenCallback, time: number = 0): FastjsDomList {
         if (time)
             setTimeout(() => {
-                callback(this);
+                callback(this, this.el());
             }, time);
         else
-            callback(this);
+            callback(this, this.el());
         return this;
     }
 

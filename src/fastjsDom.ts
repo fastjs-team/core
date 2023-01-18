@@ -3,8 +3,17 @@ import FastjsBind from "./fastjsBind";
 import {selector as _selecter} from "./methods";
 import FastjsDomList from "./fastjsDomList";
 
+type fastjsEventCallback = (el: FastjsDom, event: Event) => void;
+type eachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
+type eventMap = Array<{
+    0: Function;
+    1: EventListener | EventListenerObject;
+}>;
+type fastjsThenCallback = (el: FastjsDom, dom: HTMLElement) => void;
+
 class FastjsDom {
     private readonly construct: string;
+    #event: eventMap = [];
 
     constructor(el: HTMLElement | string) {
         // if string
@@ -107,10 +116,10 @@ class FastjsDom {
         return this._el;
     }
 
-    each(callback: Function, defaultElement: boolean = true): FastjsDom {
+    each(callback: eachCallback): FastjsDom {
         // children each
         for (let i = 0; i < this._el.children.length; i++) {
-            callback(defaultElement ? this._el.children[i] : new FastjsDom(this._el.children[i] as HTMLElement), i);
+            callback(new FastjsDom(this._el.children[i] as HTMLElement), this._el.children[i] as HTMLElement, i);
         }
         return this;
     }
@@ -153,15 +162,22 @@ class FastjsDom {
         return el.appendChild(this._el), this;
     }
 
-    on(event: string = "click", callback: Function): FastjsDom {
-        let eventTrig = (...e: any) => void callback(this, ...e);
+    on(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
+        let eventTrig: EventListener | EventListenerObject = (event: Event) => callback(this, event);
+        this.#event.push([callback, eventTrig]);
         this._el.addEventListener(event, eventTrig);
         return this;
     }
 
-    off(event: string = "click", callback: Function): FastjsDom {
-        let eventTrig = () => void callback(this);
-        this._el.removeEventListener(event, eventTrig);
+    off(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
+        let del = null
+        this.#event.forEach((v, k) => {
+            if (v[0] === callback) {
+                this._el.removeEventListener(event, v[1]);
+                del = k;
+            }
+        })
+        if (del !== null) this.#event.splice(del, 1);
         return this;
     }
 
@@ -171,7 +187,7 @@ class FastjsDom {
 
     set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom {
         if (Object.getOwnPropertyDescriptor(Element.prototype, key)?.writable ||
-            Object.getOwnPropertyDescriptor(HTMLElement.prototype, key)?.set
+            Object.getOwnPropertyDescriptor(Element.prototype, key)?.set
         ) {
             this._el[key] = val;
         } else
@@ -192,13 +208,13 @@ class FastjsDom {
         return val !== undefined ? this : this._el.innerText;
     }
 
-    then(callback: Function, time = 0): FastjsDom {
+    then(callback: fastjsThenCallback, time = 0): FastjsDom {
         if (time)
             setTimeout(() => {
-                callback(this);
+                callback(this, this.el());
             }, time);
         else
-            callback(this);
+            callback(this, this.el());
         return this;
     }
 
@@ -223,3 +239,4 @@ class FastjsDom {
 }
 
 export default FastjsDom
+export type {eachCallback, fastjsEventCallback, fastjsThenCallback}
