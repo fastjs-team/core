@@ -4,6 +4,7 @@
 
 * Fix #37: FastjsDom.set writable error
 * Update FastjsAjax
+* Update type definition
 
 ### 1.2.1
 
