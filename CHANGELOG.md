@@ -1,10 +1,13 @@
-## 1.2
+## 1.3
 
-### 1.2.2
+### 1.3.0
 
 * Fix #37: FastjsDom.set writable error
 * Update FastjsAjax
+* Update FastjsArray
 * Update type definition
+
+## 1.2
 
 ### 1.2.1
 
