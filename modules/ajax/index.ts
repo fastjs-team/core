@@ -67,15 +67,15 @@ class FastjsAjax {
     response: any;
     xhr: XMLHttpRequest | null;
 
-    get() {
-        return this.send("GET", "FastjsAjax.get()");
+    get(data: data = {}) {
+        return this.send("GET", data, "FastjsAjax.get()");
     }
 
-    post() {
-        return this.send("POST", "FastjsAjax.post()");
+    post(data: data = {}) {
+        return this.send("POST", data, "FastjsAjax.post()");
     }
 
-    send(method: string, referer: string = "FastjsAjax.send()") {
+    send(method: string, data: data = {}, referer: string = "FastjsAjax.send()") {
         const config = _config.modules.ajax;
 
         return new Promise((resolve, reject) => {
