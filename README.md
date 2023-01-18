@@ -41,4 +41,4 @@ fastjs create <project-name>
 
 - Author: dy-xiaodong2022
 - License: MIT
-- Readme version: v1.2.2
+- Readme version: v1.3.0
