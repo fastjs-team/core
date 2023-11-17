@@ -1,8 +1,8 @@
-import _dev from "./dev";
-import FastjsDom from "./fastjsDom";
-import FastjsDomList from "./fastjsDomList";
-import FastjsArray from "./fastjsArray";
-import config from "./config";
+import _dev from "../dev";
+import FastjsDom from "../dom/fastjsDom";
+import FastjsDomList from "../dom/fastjsDomList";
+import FastjsArray from "../array/fastjsArray";
+import config from "../config";
 
 let fastjs = {
     selector(

@@ -1,6 +1,6 @@
-import _dev from "./dev";
+import _dev from "../dev";
 import FastjsBind from "./fastjsBind";
-import {selector as _selecter} from "./methods";
+import {selector as _selecter} from "../utils/methods";
 import FastjsDomList from "./fastjsDomList";
 
 type fastjsEventCallback = (el: FastjsDom, event: Event) => void;

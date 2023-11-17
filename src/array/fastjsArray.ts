@@ -1,4 +1,4 @@
-import _dev from "./dev";
+import _dev from "../dev";
 
 interface config {
     type?: string | Array<string>;

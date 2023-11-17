@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
-    "target": "es2021",
+    "target": "es6",
     "module": "ESNext",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -10,9 +10,9 @@
     "skipLibCheck": true,
     // output type file
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/types",
     "emitDeclarationOnly": true,
-    // lib to es2021
-    "lib": ["es2021", "dom"],
+    "lib": ["es6", "dom"],
+    "moduleResolution": "node",
   }
 }

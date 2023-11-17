@@ -1,3 +1,5 @@
+// ! Deprecated ! //
+
 import FastjsAjax from "../modules/ajax/index";
 
 interface config {

@@ -1,6 +1,6 @@
 import FastjsDom from './fastjsDom';
-import _dev from "./dev";
-import {selector} from "./methods";
+import _dev from "../dev";
+import {selector} from "../utils/methods";
 import type {eachCallback, fastjsEventCallback} from "./fastjsDom";
 
 type fastjsThenCallback = (el: FastjsDomList, dom: HTMLElement) => void;
