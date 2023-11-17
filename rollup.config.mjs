@@ -20,7 +20,7 @@ for (const key in formatsExport) {
   const format = formatsExport[key]
   const config = generateConfig(format)
 
-  const prodFormat = formatsExport[key]
+  const prodFormat = JSON.parse(JSON.stringify(format))
   prodFormat.file = prodFormat.file.replace(".js", ".prod.js")
   const prodConfig = generateConfig(prodFormat, true)
 
