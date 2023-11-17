@@ -1,5 +1,3 @@
-/** @todo Run test before issue finish */
-
 // typescript support
 import typescript from '@rollup/plugin-typescript';
 import packageInfo from "./package.json" assert { type: "json" };
@@ -21,7 +19,12 @@ const formatsExport = {
 for (const key in formatsExport) {
   const format = formatsExport[key]
   const config = generateConfig(format)
-  packageConfig.push(config)
+
+  const prodFormat = formatsExport[key]
+  prodFormat.file = prodFormat.file.replace(".js", ".prod.js")
+  const prodConfig = generateConfig(prodFormat)
+
+  packageConfig.push(config, prodConfig)
 }
 
 export default packageConfig
@@ -46,10 +49,10 @@ function generateConfig(format) {
   return config
 }
 
-function resolveDefine() {
+function resolveDefine(prodFile = false) {
   const resolves = {
     VERSION: version,
-    DEV: process.env.NODE_ENV === "development"
+    DEV: !prodFile
   }
   return resolves
 }
