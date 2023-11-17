@@ -1,21 +1,53 @@
 // typescript support
 import typescript from '@rollup/plugin-typescript';
 
+ const version = require("./package.json").version;
+const fileBaseName = "fastjs";
+const packageConfig = []
 
-export default {
+const formatsExport = {
+  cjs: {
+    file: `dist/${fileBaseName}.cjs.js`,
+    format: "cjs"
+  },
+  esm: {
+    file: `dist/${fileBaseName}.esm.js`,
+    format: "es"
+  }
+}
+
+for (const key in formatsExport) {
+  const format = formatsExport[key]
+  const config = generateConfig(format)
+  packageConfig.push(config)
+}
+
+export default packageConfig
+
+function generateConfig(format) {
+  const config = {
     input: "src/main.ts",
-    output: [
-        {
-            format: "es",
-            sourcemap: true,
-            file: "dist/fastjs-next-runtime-esm.js",
-        }
-    ],
+    output: {
+      format: format.format,
+      sourcemap: true,
+      file: format.file,
+      globals: resolveDefine()
+    },
     plugins: [
-        typescript({
-            tsconfig: "tsconfig.json",
-            target: "es2015",
-            module: "esnext"
-        })
+      typescript({
+        tsconfig: "tsconfig.json",
+        target: "es6",
+        module: "esnext"
+      })
     ]
+  }
+  return config
+}
+
+function resolveDefine() {
+  const resolves = {
+    VERSION: version,
+    DEV: process.env.NODE_ENV === "development"
+  }
+  return resolves
 }
