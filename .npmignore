@@ -1,4 +1,6 @@
 src/
 modules/
 node_modules/
-types/
+.github/
+.gitignore
+CONTRIBUTE.md
