@@ -22,21 +22,21 @@ for (const key in formatsExport) {
 
   const prodFormat = formatsExport[key]
   prodFormat.file = prodFormat.file.replace(".js", ".prod.js")
-  const prodConfig = generateConfig(prodFormat)
+  const prodConfig = generateConfig(prodFormat, true)
 
   packageConfig.push(config, prodConfig)
 }
 
 export default packageConfig
 
-function generateConfig(format) {
+function generateConfig(format, prodFile = false) {
   const config = {
     input: "src/main.ts",
     output: {
       format: format.format,
       sourcemap: true,
       file: format.file,
-      globals: resolveDefine()
+      globals: resolveDefine(prodFile)
     },
     plugins: [
       typescript({
