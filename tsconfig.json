@@ -9,7 +9,7 @@
     "strict": true,
     "skipLibCheck": true,
     // output type file
-    "declaration": true,
+    "declaration": false,
     "declarationDir": "./dist/types",
     "emitDeclarationOnly": true,
     "lib": ["es6", "dom"],

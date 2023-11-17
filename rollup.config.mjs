@@ -1,7 +1,9 @@
+/** @todo Run test before issue finish */
+
 // typescript support
 import typescript from '@rollup/plugin-typescript';
-
- const version = require("./package.json").version;
+import packageInfo from "./package.json" assert { type: "json" };
+const version = packageInfo.version;
 const fileBaseName = "fastjs";
 const packageConfig = []
 

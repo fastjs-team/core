@@ -1,3 +1,5 @@
+/** @todo Rewrite, and remove some duplicate code */
+
 import _dev from "../dev";
 import FastjsDom from "../dom/fastjsDom";
 import FastjsDomList from "../dom/fastjsDomList";

@@ -7,9 +7,9 @@
   "type": "module",
   "scripts": {
     "dev": "rollup -cw",
-    "build": "rollup -c && npm run types",
-    "types": "tsc",
-    "rm": "rmdir /s/q dist || rm -rf dist",
+    "build": "npm run rm && rollup -c && npm run types",
+    "types": "tsc --declaration",
+    "rm": "rmdir /s/q dist || rm -rf ./dist",
     "setup": "mkdir dist && npm run types && cd dist",
     "init": "npm install && npm run dev",
     "repack": "npm run rm && npm run setup && npm run build"

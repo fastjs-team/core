@@ -1,5 +1,5 @@
-import _config from "../../src/config";
-import _dev from "../../src/dev";
+import _config from "../config";
+import _dev from "../dev";
 
 interface data {
     [key: string]: any;

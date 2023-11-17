@@ -1,6 +1,6 @@
-// ! Deprecated ! //
+/** @todo Remove file if not needed */
 
-import FastjsAjax from "../modules/ajax/index";
+import FastjsAjax from "./ajax";
 
 interface config {
   dom: {
