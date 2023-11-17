@@ -2,13 +2,13 @@
 
 ## Announcement
 
-Hello every body, as you see, fastjs have some inadequacies, I am a 14 years old student, I am trying my best to let this library more stable, please give me(us) some time, you may see a greater version of this library in the future ^v^
+- [Fly again, 2024](https://github.com/fastjs-team/fastjs-next/discussions/59)
 
 ## Getting Started
 
-- https://fastjs.cc/
-- https://docs.fastjs.cc/
-- https://zh.docs.fastjs.cc/ (Beta)
+- https://fastjs.cc/ (In pre release)
+- https://docs.fastjs.cc/ (In maintenance - v2)
+- https://zh.docs.fastjs.cc/ (In maintenance - v2)
 
 ## Description
 
@@ -32,13 +32,13 @@ npm install -g fastjs-cli
 fastjs create <project-name>
 ```
 
-## Contributors
-
-- dy-xiaodong2022
-- Ivan-Adam (Community)
-
 ## Info
 
 - Author: dy-xiaodong2022
 - License: MIT
-- Readme version: v1.3.0
+
+## Contributors
+
+<a href="https://github.com/fastjs-team/fastjs-next/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fastjs-team/fastjs-next" />
+</a>
