@@ -1,5 +1,12 @@
+let _dom = null
+try {
+  _dom = document
+} catch (e) {
+  // ignore
+}
+
 export default {
-  _dom: document || null,
+  _dom,
   newWarn(send: string, warn: string, file?: Array<string>): void {
     // if file
     if (file) {

@@ -4,6 +4,7 @@
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "main": "dist/fastjs-next-runtime-esm.js",
   "types": "dist/src/main.d.ts",
+  "type": "module",
   "scripts": {
     "dev": "rollup -cw",
     "build": "rollup -c",
