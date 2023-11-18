@@ -21,10 +21,15 @@ function error(module: string, message: string, args: Array<string> = []): Error
 function type(arg: any): string {
   let type: string = typeof arg;
   if (type === "object") {
-    if (arg instanceof Element) type = "Element";
+    if (typeof Element !== "undefined" && arg instanceof Element) {
+      type = "Element";
+    }
     // if null
-    else if (arg === null) type = "Null";
-    else type = arg.constructor.name;
+    else if (arg === null) {
+      type = "Null";
+    } else {
+      type = arg.constructor.name;
+    }
   }
   return type;
 }
