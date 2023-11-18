@@ -134,7 +134,7 @@ class FastjsArray<T = any> {
         // check length
         if (cfg.length && this._array.length >= cfg.length) {
             return void console.error(
-                _dev.newError(
+                _dev.error(
                     "FastjsArray",
                     `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
                     ["check(item)", "FastjsArray"]
@@ -146,7 +146,7 @@ class FastjsArray<T = any> {
         const reject = () => {
             // dev start
             console.error(
-                _dev.newError(
+                _dev.error(
                     "FastjsArray",
                     `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`,
                     ["reject()", "check(item)", "FastjsArray"]

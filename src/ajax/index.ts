@@ -34,10 +34,12 @@ interface selectConfig {
 }
 
 class FastjsAjax {
-  private readonly construct: string;
-  private waitId: number;
+    private readonly construct: string;
+    private waitId: number;
 
     constructor(url: string, data?: data, config: selectConfig = {}) {
+        if (__DEV__ && !url) {
+        }
         this.url = url;
         this.data = data || {};
         this.config = {
@@ -55,9 +57,9 @@ class FastjsAjax {
         this.xhr = null;
         this.waitId = 0;
 
-    // construct
-    this.construct = "FastjsAjax";
-  }
+        // construct
+        this.construct = "FastjsAjax";
+    }
 
     url: string;
     data: {
@@ -130,7 +132,7 @@ class FastjsAjax {
                         default:
                             err = `Request failed with status ${this.xhr?.status}`;
                     }
-                    const errOutput = _dev.newError("FastjsAjax", err, [
+                    const errOutput = _dev.error("FastjsAjax", err, [
                         err,
                         "trig -> fail()",
                         from || "",

@@ -19,7 +19,7 @@ class FastjsDom {
         // if string
         if (typeof el === "string") {
             // create element
-            el = _dev._dom.createElement(el);
+            el = document.createElement(el);
         }
 
         // define _el
@@ -49,7 +49,7 @@ class FastjsDom {
 
     addAfter(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.newWarn("FastjsDom.addAfter", "el.parentNode is null", [
+            _dev.warn("FastjsDom.addAfter", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
                 "FastjsDom"
@@ -62,7 +62,7 @@ class FastjsDom {
 
     addBefore(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.newWarn("FastjsDom.addAfter", "el.parentNode is null", [
+            _dev.warn("FastjsDom.addAfter", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
                 "FastjsDom"
@@ -83,7 +83,7 @@ class FastjsDom {
         return this._el.appendChild(el), this;
     }
 
-    appendTo(el: HTMLElement = _dev._dom.body): FastjsDom {
+    appendTo(el: HTMLElement = document.body): FastjsDom {
         return el.appendChild(this._el), this;
     }
 
@@ -158,7 +158,7 @@ class FastjsDom {
         return _selecter(selecter, this._el);
     }
 
-    push(el: HTMLElement = _dev._dom.body): FastjsDom {
+    push(el: HTMLElement = document.body): FastjsDom {
         return el.appendChild(this._el), this;
     }
 
@@ -191,7 +191,7 @@ class FastjsDom {
         ) {
             this._el[key] = val;
         } else
-            _dev.newWarn("FastjsDom.set", "key is not writable", [
+            _dev.warn("FastjsDom.set", "key is not writable", [
                 "key: " + key,
                 "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom",
                 "FastjsDom"

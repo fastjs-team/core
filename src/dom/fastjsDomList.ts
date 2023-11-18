@@ -114,7 +114,7 @@ class FastjsDomList {
     getEl(key: number = 0): FastjsDom {
         // overflow
         if (key >= this._list.length)
-            _dev.newWarn('FastjsDomList', 'key is overflow', [
+            _dev.warn('FastjsDomList', 'key is overflow', [
                 'getEl(key)',
                 'dataEdit.js',
                 'FastjsDomList'

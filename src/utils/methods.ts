@@ -9,12 +9,12 @@ import config from "../config";
 let fastjs = {
     selector(
         el: string,
-        place: HTMLElement | Document | FastjsDomList | null = _dev._dom
+        place: HTMLElement | Document | FastjsDomList | null = document
     ): FastjsDom | FastjsDomList | void {
         // selector()
         // select elements
 
-        if (!place) return void _dev.newError("selector", "place is null");
+        if (!place) return void _dev.error("selector", "place is null");
 
         // dom: Element[] :: save elements result
         let dom: HTMLElement[] = [];
