@@ -4,6 +4,10 @@
 
 - [Fly again, 2024](https://github.com/fastjs-team/fastjs-next/discussions/59)
 
+## Important
+
+**This readme is for v2.x, if you are coming for v1.x, please go to [v1.x branch](https://github.com/fastjs-team/fastjs-next/tree/old-version).**
+
 ## Getting Started
 
 - https://fastjs.cc/ (In pre release)
