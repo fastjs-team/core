@@ -1,6 +1,3 @@
-import _dev from '../dev'
-_dev.browserCheck("fastjs/dom")
-
 import selector from "./selector";
 import FastjsDom from "./fastjsDom";
 import FastjsDomList from "./fastjsDomList";

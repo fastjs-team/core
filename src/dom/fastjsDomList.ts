@@ -8,6 +8,8 @@ class FastjsDomList {
     private readonly construct: string;
 
     constructor(list: Array<HTMLElement> = []) {
+        _dev.browserCheck("fastjs/dom/FastjsDomList")
+
         let domList: Array<FastjsDom> = [];
         list?.forEach((el: HTMLElement) => {
             domList.push(new FastjsDom(el as HTMLElement));

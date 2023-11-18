@@ -16,6 +16,8 @@ class FastjsDom {
     #event: eventMap = [];
 
     constructor(el: HTMLElement | string) {
+        _dev.browserCheck("fastjs/dom/FastjsDom")
+
         // if string
         if (typeof el === "string") {
             // create element
