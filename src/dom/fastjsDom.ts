@@ -1,6 +1,6 @@
 import _dev from "../dev";
-import FastjsBind from "./fastjsBind";
-import {selector as _selecter} from "../utils/methods";
+// import FastjsBind from "./fastjsBind";
+import _selector from "./selector";
 import FastjsDomList from "./fastjsDomList";
 
 type fastjsEventCallback = (el: FastjsDom, event: Event) => void;
@@ -9,7 +9,7 @@ type eventMap = Array<{
     0: Function;
     1: EventListener | EventListenerObject;
 }>;
-type fastjsThenCallback = (el: FastjsDom, dom: HTMLElement) => void;
+// type fastjsThenCallback = (el: FastjsDom, dom: HTMLElement) => void;
 
 class FastjsDom {
     private readonly construct: string;
@@ -41,15 +41,15 @@ class FastjsDom {
     attr(key: string, value: string | null): FastjsDom
 
     attr(key: string, value?: string | null): string | null | FastjsDom {
-        if (value !== undefined) {
-            return value ? this._el.setAttribute(key, value.toString()) : this._el.removeAttribute(key), this;
-        }
-        return this._el.getAttribute(key);
+        if (value === undefined) return this._el.getAttribute(key);
+        if (value) this._el.setAttribute(key, value.toString());
+        else this._el.removeAttribute(key);
+        return this;
     }
 
     addAfter(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.warn("FastjsDom.addAfter", "el.parentNode is null", [
+            _dev.warn("fastjs/dom/addAfter", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
                 "FastjsDom"
@@ -62,7 +62,7 @@ class FastjsDom {
 
     addBefore(el: HTMLElement): FastjsDom {
         if (!el.parentNode)
-            _dev.warn("FastjsDom.addAfter", "el.parentNode is null", [
+            _dev.warn("fastjs/dom/addBefore", "el.parentNode is null", [
                 "addAfter(el: HTMLElement)",
                 "domEdit.ts",
                 "FastjsDom"
@@ -76,22 +76,28 @@ class FastjsDom {
 
     addFirst(el: HTMLElement): FastjsDom {
         // add this._el first in el
-        return el.insertBefore(this._el, el.firstChild), this;
+        el.insertBefore(this._el, el.firstChild);
+        return this;
     }
 
     append(el: HTMLElement): FastjsDom {
-        return this._el.appendChild(el), this;
+        this._el.appendChild(el);
+        return this;
     }
 
     appendTo(el: HTMLElement = document.body): FastjsDom {
-        return el.appendChild(this._el), this;
+        el.appendChild(this._el);
+        return this;
     }
 
-    bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): FastjsBind {
-        if (bind === "html") bind = "innerHTML";
-        if (bind === "text") bind = "innerText";
-        return new FastjsBind(this, bind, key, object, isAttr);
-    }
+    // bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): FastjsBind {
+    //     if (__DEV__) {
+    //         _dev.warn("fastjs/dom/fastjsBind", "This module is deprecated and will be removed in the future");
+    //     }
+    //     if (bind === "html") bind = "innerHTML";
+    //     if (bind === "text") bind = "innerText";
+    //     return new FastjsBind(this, bind, key, object, isAttr);
+    // }
 
     css(): CSSStyleDeclaration
     css(key: object): FastjsDom
@@ -154,12 +160,15 @@ class FastjsDom {
         return this._el.lastElementChild ? new FastjsDom(this._el.lastElementChild as HTMLElement) : null;
     }
 
-    next(selecter: string): FastjsDom | FastjsDomList {
-        return _selecter(selecter, this._el);
+    next(selector: string): FastjsDom | FastjsDomList | null {
+        return _selector(selector, this._el);
     }
 
     push(el: HTMLElement = document.body): FastjsDom {
-        return el.appendChild(this._el), this;
+        if (__DEV__) {
+            _dev.warn("fastjs/dom/push", "This function's return value changed into `FastjsDom(el)` from `this`, you need to change your code manually if you use like .push(el).xxx, or you can use appendTo(el) instead of push(el).");
+        }
+        return new FastjsDom(el.appendChild(this._el));
     }
 
     on(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
@@ -182,7 +191,8 @@ class FastjsDom {
     }
 
     remove(): FastjsDom {
-        return this._el.remove(), this;
+        this._el.remove();
+        return this;
     }
 
     set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom {
@@ -191,7 +201,7 @@ class FastjsDom {
         ) {
             this._el[key] = val;
         } else
-            _dev.warn("FastjsDom.set", "key is not writable", [
+            _dev.warn("fastjs/dom/set", "key is not writable", [
                 "key: " + key,
                 "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom",
                 "FastjsDom"
@@ -208,7 +218,7 @@ class FastjsDom {
         return val !== undefined ? this : this._el.innerText;
     }
 
-    then(callback: fastjsThenCallback, time = 0): FastjsDom {
+    then(callback: (el: FastjsDom, dom: HTMLElement) => void, time = 0): FastjsDom {
         if (time)
             setTimeout(() => {
                 callback(this, this.el());
@@ -233,10 +243,12 @@ class FastjsDom {
                 else
                     this._el.value = val;
             }
+        } else {
+            _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
         }
         return this;
     }
 }
 
 export default FastjsDom
-export type {eachCallback, fastjsEventCallback, fastjsThenCallback}
+export type {eachCallback, fastjsEventCallback}
