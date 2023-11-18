@@ -19,6 +19,49 @@ class FastjsArray<T = any> {
             }
         */
 
+        config = this._config = {
+            type: config.type || "Any",
+            length: config.length || null,
+        };
+
+        // init hooks
+        this.#hooks = [];
+
+        // construct
+        this.construct = `<${config.type}>FastjsArray`;
+
+        if (config.length && config.length < array.length) {
+            if (__DEV__) {
+                console.error(
+                    _dev.error(
+                        "fastjs/array/FastjsArray",
+                        `Max length of <${config.type}>FastjsArray is ` + config.length,
+                        ["constructor(array, config)", "FastjsArray"]
+                    )
+                );
+            }
+            array = array.slice(0, config.length);
+        }
+
+        if (config.type !== "Any") {
+            array = array.filter((e: T) => {
+                if (config.type?.includes(_dev.type(e))) {
+                    return true;
+                }
+                if (__DEV__) {
+                    console.error(
+                        _dev.error(
+                            "fastjs/array/FastjsArray",
+                            `Type of <${config.type}>FastjsArray is ` + _dev.type(e),
+                            ["constructor(array, config)", "FastjsArray"]
+                        )
+                    );
+                }
+                return false;
+            });
+        }
+
+
         this._array = new Proxy(array, {
             set: (target: Array<T>, key: string, value: T) => {
                 if (!this.#check(value)) return false;
@@ -31,17 +74,6 @@ class FastjsArray<T = any> {
                 return true;
             },
         });
-
-        config = this._config = {
-            type: config.type || "Any",
-            length: config.length || null,
-        };
-
-        // init hooks
-        this.#hooks = [];
-
-        // construct
-        this.construct = `<${config.type}>FastjsArray`;
 
         return new Proxy(this, {
             get: (target: FastjsArray<T>, key: string) => {
@@ -136,7 +168,7 @@ class FastjsArray<T = any> {
             if (__DEV__) {
                 console.error(
                     _dev.error(
-                        "FastjsArray",
+                        "fastjs/array/FastjsArray",
                         `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
                         ["check(item)", "FastjsArray"]
                     )
@@ -150,7 +182,7 @@ class FastjsArray<T = any> {
             if (__DEV__) {
                 console.error(
                     _dev.error(
-                        "FastjsArray",
+                        "fastjs/array/FastjsArray",
                         `TypeError: ${type}${item} cannot be an item of <${cfg.type}>FastjsArray`,
                         ["reject()", "check(item)", "FastjsArray"]
                     )
