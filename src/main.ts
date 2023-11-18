@@ -1,6 +1,7 @@
 // modules
 import request from "./request";
 import array from "./array";
+import {FastjsArray} from "./array";
 import date from "./date";
 import {FastjsDate} from "./date";
 import dom from "./dom";
@@ -17,6 +18,7 @@ if (__DEV__) {
 export {
     /** @module array */
     array,
+    FastjsArray,
     /** @module date */
     date,
     FastjsDate,
