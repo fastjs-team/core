@@ -54,6 +54,12 @@ fastjs create <project-name>
 - Author: dy-xiaodong2022
 - License: MIT
 
+## Sponsors
+
+<div align="center">
+  <img src="https://raw.githubusercontent.com/dy-xiaodong2022/sponsors/main/sponsors.wide.svg" />
+</div>
+
 ## Contributors
 
 <a href="https://github.com/fastjs-team/fastjs-next/graphs/contributors">
