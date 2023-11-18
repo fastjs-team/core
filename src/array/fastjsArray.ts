@@ -129,30 +129,33 @@ class FastjsArray<T = any> {
 
     // private methods
 
-    #check(item: T): undefined | boolean {
+    #check(item: T): boolean {
         let cfg = this._config;
         // check length
         if (cfg.length && this._array.length >= cfg.length) {
-            return void console.error(
-                _dev.error(
-                    "FastjsArray",
-                    `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
-                    ["check(item)", "FastjsArray"]
-                )
-            )
+            if (__DEV__) {
+                console.error(
+                    _dev.error(
+                        "FastjsArray",
+                        `Max length of <${cfg.type}>FastjsArray is ` + cfg.length,
+                        ["check(item)", "FastjsArray"]
+                    )
+                );
+            }
+            return false;
         }
 
         // check type
         const reject = () => {
-            // dev start
-            console.error(
-                _dev.error(
-                    "FastjsArray",
-                    `TypeError: ${type}${item} cannot be a item of <${cfg.type}>FastjsArray`,
-                    ["reject()", "check(item)", "FastjsArray"]
-                )
-            );
-            // dev end
+            if (__DEV__) {
+                console.error(
+                    _dev.error(
+                        "FastjsArray",
+                        `TypeError: ${type}${item} cannot be an item of <${cfg.type}>FastjsArray`,
+                        ["reject()", "check(item)", "FastjsArray"]
+                    )
+                );
+            }
             return false;
         };
 
@@ -175,3 +178,4 @@ class FastjsArray<T = any> {
 }
 
 export default FastjsArray;
+export type { config };
