@@ -58,7 +58,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
     plugins: [
       typescript({
         tsconfig: "tsconfig.json",
-        target: "es2021",
+        target: "es2022",
         module: "esnext"
       }),
       resolveReplace(),
