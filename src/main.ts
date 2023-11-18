@@ -2,6 +2,7 @@
 import request from "./request";
 import array from "./array";
 import date from "./date";
+import {FastjsDate} from "./date";
 import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
 import utils from "./utils";
@@ -18,6 +19,7 @@ export {
     array,
     /** @module date */
     date,
+    FastjsDate,
     /** @module dom */
     dom,
     FastjsDom,
