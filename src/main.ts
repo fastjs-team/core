@@ -1,5 +1,5 @@
 // modules
-import ajax from "./ajax";
+import request from "./request";
 import array from "./array";
 import date from "./date";
 import dom from "./dom";
@@ -12,9 +12,9 @@ if (__DEV__) {
 
 // export
 export {
-    ajax,
     array,
     date,
     dom,
-    utils
+    request,
+    utils,
 };
