@@ -4,7 +4,7 @@
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
-  "types": "dist/types/main.d.ts",
+  "types": "dist/types/src/main.d.ts",
   "type": "module",
   "unpkg": "dist/fastjs.global.js",
   "jsdelivr": "dist/fastjs.global.js",
