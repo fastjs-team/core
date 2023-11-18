@@ -18,6 +18,19 @@ It is designed to be easy to use. Fastjs can be used like a library with any fra
 
 Fastjs is a good choice for you to develop your project.
 
+## How to use
+
+We have many versions, including:
+- CommonJS (dist/fastjs.cjs.js)
+- CommonJS Production (dist/fastjs.cjs.prod.js)
+- ES Module (dist/fastjs.esm.js)
+- ES Module Production (dist/fastjs.esm.prod.js)
+- ES Module Browser (dist/fastjs.esm.browser.js)
+- ES Module Browser Production (dist/fastjs.esm.browser.prod.js)
+- Bundler (dist/fastjs.esm-bundler.js)
+- Global (dist/fastjs.global.js)
+- Global Production (dist/fastjs.global.prod.js)
+
 ## Install
 
 ```bash
