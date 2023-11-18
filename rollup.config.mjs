@@ -1,5 +1,6 @@
-// typescript support
 import typescript from '@rollup/plugin-typescript';
+import replace from '@rollup/plugin-replace';
+import { terser } from "rollup-plugin-terser";
 import packageInfo from "./package.json" assert { type: "json" };
 const version = packageInfo.version;
 const fileBaseName = "fastjs";
@@ -13,46 +14,118 @@ const formatsExport = {
   esm: {
     file: `dist/${fileBaseName}.esm.js`,
     format: "es"
+  },
+  'esm-bundler': {
+    file: `dist/${fileBaseName}.esm-bundler.js`,
+    format: "es"
+  },
+  'esm-browser': {
+    file: `dist/${fileBaseName}.esm-browser.js`,
+    format: "es"
+  },
+  global: {
+    file: `dist/${fileBaseName}.global.js`,
+    format: "iife",
   }
 }
 
-for (const key in formatsExport) {
-  const format = formatsExport[key]
-  const config = generateConfig(format)
-
-  const prodFormat = JSON.parse(JSON.stringify(format))
-  prodFormat.file = prodFormat.file.replace(".js", ".prod.js")
-  const prodConfig = generateConfig(prodFormat, true)
-
-  packageConfig.push(config, prodConfig)
-}
+Object.keys(formatsExport).forEach(formatName => {
+  const format = formatsExport[formatName]
+  packageConfig.push(generateConfig(formatName, format))
+  if (['global', 'cjs'].includes(formatName)) {
+    packageConfig.push(generateMinifiedConfig(formatName))
+  } else if (formatName !== 'esm-bundler') {
+    packageConfig.push(generateProductionConfig(formatName))
+  }
+})
 
 export default packageConfig
 
-function generateConfig(format, prodFile = false) {
-  const config = {
+function generateConfig(formatName, rollupOutput, plugins = []) {
+  console.log(formatName, rollupOutput, plugins)
+  const isBundlerESMBuild = /esm-bundler/.test(formatsExport[formatName].file)
+  const isBrowserESMBuild = /esm-browser/.test(formatsExport[formatName].file)
+  const isProductionBuild = process.env.__DEV__ === 'false' || /\.prod\.js$/.test(rollupOutput.file)
+  const isGlobalBuild = /global/.test(rollupOutput.file)
+  const isCJSBuild = /cjs/.test(rollupOutput.file)
+
+  if (isGlobalBuild || isBrowserESMBuild) {
+    rollupOutput.name = "fastjs"
+  }
+
+  return {
     input: "src/main.ts",
-    output: {
-      format: format.format,
-      sourcemap: true,
-      file: format.file,
-      globals: resolveDefine(prodFile)
-    },
     plugins: [
       typescript({
         tsconfig: "tsconfig.json",
-        target: "es6",
+        target: "es2021",
         module: "esnext"
-      })
-    ]
+      }),
+      resolveReplace(),
+      ...plugins
+    ],
+    output: rollupOutput,
+    treeShake: {
+      moduleSideEffects: false
+    }
   }
-  return config
+
+  function resolveReplace() {
+    const resolves = {
+      __VERSION__: version,
+      __BROWSER__: isBrowserESMBuild,
+      __GLOBAL__: isGlobalBuild,
+      __ESM_BUNDLER__: isBundlerESMBuild,
+      __ESM_BROWSER__: isBrowserESMBuild,
+      __NODE_JS__: isCJSBuild
+    }
+
+    if (isBundlerESMBuild) {
+      Object.assign(resolves, {
+        // preserve to be handled by bundlers
+        __DEV__: `!!(process.env.NODE_ENV !== 'production')`
+      })
+    }
+    if (!isBundlerESMBuild) {
+      resolves.__DEV__ = String(!isProductionBuild)
+    }
+
+    // for compiler-sfc browser build inlined deps
+    if (isBrowserESMBuild) {
+      Object.assign(resolves, {
+        'process.env': '({})',
+        'process.platform': '""',
+        'process.stdout': 'null'
+      })
+    }
+
+    return replace({
+      preventAssignment: true,
+      values: resolves
+    })
+  }
 }
 
-function resolveDefine(prodFile = false) {
-  const resolves = {
-    VERSION: version,
-    DEV: !prodFile
-  }
-  return resolves
+/** @param format {string} */
+function generateProductionConfig(format) {
+  return generateConfig(format, {
+    file: formatsExport[format].file.replace(/\.js$/, '.prod.js'),
+    format: formatsExport[format].format
+  })
+}
+
+/** @param format {string} */
+function generateMinifiedConfig(format) {
+  return generateConfig(format, {
+    file: formatsExport[format].file.replace(/\.js$/, '.prod.js'),
+    format: formatsExport[format].format
+  },[
+    terser({
+      module: true,
+      compress: {
+        ecma: 2021,
+        pure_getters: true
+      }
+    })
+  ])
 }

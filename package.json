@@ -2,13 +2,16 @@
   "name": "fastjs-next",
   "version": "2.0.0-alpha.0",
   "description": "Fastjs-next replaces the previous architecture, full support with npm project. Try it, you will not be disappointed.",
-  "main": "dist/fastjs-next-runtime-esm.js",
-  "types": "dist/src/main.d.ts",
+  "main": "index.js",
+  "module": "dist/fastjs.esm-bundler.js",
+  "types": "dist/types/main.d.ts",
   "type": "module",
+  "unpkg": "dist/fastjs.global.js",
+  "jsdelivr": "dist/fastjs.global.js",
   "scripts": {
     "dev": "rollup -cw",
     "build": "npm run rm && rollup -c && npm run types",
-    "types": "tsc --declaration",
+    "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
     "rm": "rmdir /s/q dist || rm -rf ./dist",
     "setup": "mkdir dist && npm run types && cd dist",
     "init": "npm install && npm run dev",
@@ -29,9 +32,12 @@
   "author": "dy-xiaodong",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^18.11.7"
+    "@types/node": "^18.11.7",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.6.2"
   },
   "dependencies": {
+    "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-typescript": "^9.0.2"
   }
 }
