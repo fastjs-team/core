@@ -10,7 +10,9 @@
   "jsdelivr": "dist/fastjs.global.js",
   "scripts": {
     "dev": "rollup -cw",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.js",
     "build": "npm run rm && rollup -c && npm run types",
+    "prod": "npm run build && npm run test",
     "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
     "rm": "rmdir /s/q dist || rm -rf ./dist",
     "setup": "mkdir dist && npm run types && cd dist",
@@ -35,6 +37,7 @@
     "@types/jest": "^29.5.8",
     "@types/node": "^18.11.7",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.2",
