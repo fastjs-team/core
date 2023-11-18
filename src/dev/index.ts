@@ -10,10 +10,12 @@ function warn(module: string, message: string, args: Array<string> = []): void {
   console.warn(...outputArgs);
 }
 
-function error(module: string, message: string): Error {
-  // const outputArgs = [`[Fastjs error] ${module}: ${message}`, ...args];
-  // console.error(...outputArgs);
-  return new Error(`[Fastjs error] ${module}: ${message}`);
+function error(module: string, message: string, args: Array<string> = []): Error {
+  let msg = `[Fastjs error] ${module}: ${message}`;
+  if (args.length > 0) {
+    msg += `\n${args.join("\n")}`;
+  }
+  return new Error(msg);
 }
 
 function type(arg: any): string {
