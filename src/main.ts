@@ -1,4 +1,4 @@
-// modules
+// all modules
 import request from "./request";
 import array from "./array";
 import {FastjsArray} from "./array";
