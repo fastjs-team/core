@@ -91,6 +91,7 @@ const moduleConfig: moduleConfig = {
 class FastjsRequest {
     // private readonly construct: string;
     private waitId: number;
+    readonly construct: string;
 
     constructor(url: string, data?: data, config: Partial<requestConfig> = {}) {
         if (__DEV__ && !url) {
@@ -133,7 +134,7 @@ class FastjsRequest {
         this.waitId = 0;
 
         // construct
-        // this.construct = "FastjsRequest";
+        this.construct = "FastjsRequest";
     }
 
     url: string;
