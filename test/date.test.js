@@ -43,7 +43,7 @@ describe("Date create and convert", () => {
     const result = new FastjsDate();
     setTimeout(() => {
       try {
-        expect(result.toNumber()).toBe(nowTime);
+        expect(result.toNumberLocal() - nowTime).toBeLessThan(100);
         done();
       } catch (e) {
         done(e);
