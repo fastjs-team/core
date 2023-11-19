@@ -15,17 +15,28 @@ class FastjsDom {
     private readonly construct: string;
     #event: eventMap = [];
 
-    constructor(el: HTMLElement | string) {
-        _dev.browserCheck("fastjs/dom/FastjsDom")
+    constructor(el: HTMLElement | string, properties?: Partial<HTMLElement>) {
+        if (__DEV__)
+            _dev.browserCheck("fastjs/dom/FastjsDom")
 
         // if string
         if (typeof el === "string") {
             // create element
-            el = document.createElement(el);
-        }
-
-        // define _el
-        this._el = el
+            this._el = document.createElement(el);
+            if (properties) {
+                let key: keyof HTMLElement;
+                for (key in properties) {
+                    this.set(key, properties[key]);
+                }
+            }
+        } else if (el instanceof HTMLElement) {
+            this._el = el
+        } else if (__DEV__) {
+            throw _dev.error("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
+                "constructor(el: HTMLElement | string)",
+                "FastjsDom"
+            ]);
+        } else throw ""
 
         // construct
         this.construct = "FastjsDom";
