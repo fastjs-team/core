@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import packageInfo from "./package.json" assert { type: "json" };
 const version = packageInfo.version;
 const fileBaseName = "fastjs";
@@ -65,7 +65,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
       ...plugins
     ],
     output: rollupOutput,
-    treeShake: {
+    treeshake: {
       moduleSideEffects: false
     }
   }
