@@ -10,6 +10,6 @@ export {
 
 export default {
     select: selector,
-    newEl: (el: HTMLElement | string) => new FastjsDom(el),
+    newEl: (el: HTMLElement | string, properties?: Partial<HTMLElement>) => new FastjsDom(el, properties),
     newElList: (list: Array<HTMLElement>) => new FastjsDomList(list)
 }
