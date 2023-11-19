@@ -9,8 +9,8 @@
     "strict": true,
     "skipLibCheck": true,
     // output type file
-    "declaration": false,
-    "emitDeclarationOnly": true,
+//    "declaration": false,
+//    "emitDeclarationOnly": true,
     "lib": ["ES6", "dom"],
     "moduleResolution": "node",
   }
