@@ -3,7 +3,7 @@ class FastjsDate {
     readonly #createAt: number;
     private readonly construct: string;
 
-    constructor(public format: string, date: number = Date.now()) {
+    constructor(public format: string = "Y-M-D h:m:s", date: number = Date.now()) {
         this.#date = date;
         this.#createAt = Date.now();
         this.construct = "FastjsDate";
@@ -61,7 +61,7 @@ class FastjsDate {
         }
 
         ignoreTokens.forEach((token, index) => {
-            result = result.replace(`{{*${index}}}`, token);
+            result = result.replace(`{{*${index}}}`, `<${token}>`);
         });
 
         return result;
