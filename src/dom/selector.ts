@@ -3,7 +3,8 @@ import fastjsDomList from "./fastjsDomList";
 import _dev from "../dev";
 
 function selector(selector: string, parent: HTMLElement | HTMLElement[] = document.body) {
-    _dev.browserCheck("fastjs/dom/selector")
+    if (__DEV__)
+        _dev.browserCheck("fastjs/dom/selector")
 
     const result = []
     Array.isArray(parent) ? parent.forEach((e: HTMLElement) => {
