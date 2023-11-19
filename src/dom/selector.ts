@@ -10,7 +10,7 @@ function selector(selector: string, parent: HTMLElement | HTMLElement[] = docume
         result.push(...queryResultToArray(e.querySelectorAll(selector)));
     }) : result.push(...queryResultToArray(parent.querySelectorAll(selector)));
     if (result.length === 0) return null;
-    if (result.length === 1) return new fastjsDom(result[0] as HTMLElement);
+    if (selector.includes(`#${result[0].id}`)) return new fastjsDom(result[0] as HTMLElement);
     const list: HTMLElement[] = [];
     result.forEach((e: Element) => {
         list.push(e as HTMLElement);
