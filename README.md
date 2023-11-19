@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-- https://fastjs.cc/ (In pre release)
+- https://fastjs.cc/
 - https://docs.fastjs.cc/ (In maintenance - v2)
 - https://zh.docs.fastjs.cc/ (In maintenance - v2)
 
@@ -35,13 +35,36 @@ We have many versions, including:
 - Global (dist/fastjs.global.js)
 - Global Production (dist/fastjs.global.prod.js)
 
-## Install
+## Start Using
+
+### Bundler/CommonJS
 
 ```bash
 npm install fastjs-next
 ```
 
+```js
+import { dom } from 'fastjs-next' // esm
+const { request } = require('fastjs-next') // cjs
+```
+
+### CDN (Global)
+
+```html
+<script src="https://unpkg.com/fastjs-next/dist/fastjs.global.js"></script>
+```
+
+### Browser (ES Module)
+
+```html
+<script type="module">
+  import { dom } from 'https://unpkg.com/fastjs-next/dist/fastjs.esm.browser.js'
+</script>
+```
+
 ## Cli
+
+**Warning: Fastjs-cli is in maintenance cause of updating to v2, we don't suggest use it for now.**
 
 ```bash
 npm install -g fastjs-cli
