@@ -8,6 +8,17 @@
   "type": "module",
   "unpkg": "dist/fastjs.global.js",
   "jsdelivr": "dist/fastjs.global.js",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/fastjs.esm-bundler.js",
+        "node": "./index.mjs"
+      },
+      "require": {
+        "default": "./index.js"
+      }
+    }
+  },
   "scripts": {
     "dev": "rollup -cw",
     "build-test": "rollup -c",
