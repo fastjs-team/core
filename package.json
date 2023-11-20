@@ -19,6 +19,13 @@
       }
     }
   },
+  "files": [
+    "dist",
+    "index.js",
+    "index.mjs",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "rollup -cw",
     "build-test": "rollup -c",
