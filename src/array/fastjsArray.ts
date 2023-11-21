@@ -1,5 +1,3 @@
-/** @todo Rewrite this file */
-
 import _dev from "../dev";
 
 interface config {
@@ -142,7 +140,7 @@ class FastjsArray<T = any> {
 
     toArray(): Array<any> {
         // throw proxy
-        return Object.assign([], this._array);
+        return [...this._array]
     }
 
     then(callback: Function, time = 0): FastjsArray {
