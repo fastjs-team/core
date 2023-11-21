@@ -14,19 +14,12 @@ class FastjsDate {
     }
 
     private extractIgnoreTokens(formatString: string): [string, string[]] {
-        let tokenIndex = 0;
-        const ignoreTokens: string[] = [];
         let processedString = formatString;
+        const ignoreTokens: string[] = formatString.match(/<.*?>/g)?.map(match => match.slice(1, -1)) || [];
 
-        while (/<.*?>/.test(processedString)) {
-            const match = processedString.match(/<.*?>/);
-            if (!match) break;
-
-            ignoreTokens[tokenIndex] = match[0].slice(1, -1);
-            processedString = processedString.replace(/<.*?>/, `{{*${tokenIndex}}}`);
-
-            tokenIndex++;
-        }
+        ignoreTokens.forEach((_, index) => {
+            processedString = processedString.replace(/<.*?>/, `{{*${index}}}`);
+        })
 
         return [processedString, ignoreTokens];
     }
