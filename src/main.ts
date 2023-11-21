@@ -7,7 +7,7 @@ import {FastjsDate} from "./date";
 import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
 import utils from "./utils";
-import {rand, copy} from "./utils/methods";
+import {rand, copy} from "./utils";
 
 if (__DEV__) {
     console.info("You are running fastjs in development mode.\n" +
