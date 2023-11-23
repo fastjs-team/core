@@ -30,13 +30,12 @@
     "dev": "rollup -cw",
     "build-test": "rollup -c",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.js",
-    "build": "npm run rm && rollup -c && npm run types",
+    "build": "npm run rm || rollup -c && npm run types",
     "prod": "npm run build && npm run test",
     "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
-    "rm": "rmdir /s/q dist || rm -rf ./dist",
-    "setup": "mkdir dist && npm run types && cd dist",
-    "init": "npm install && npm run dev",
-    "repack": "npm run rm && npm run setup && npm run build"
+    "rm": "rm -rf ./dist",
+    "test:windows": "cross-env-shell NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.js",
+    "prod:windows": "npm run build && npm run test:windows"
   },
   "bugs": {
     "url": "https://github.com/fastjs-team/fastjs-next/issues",
@@ -64,5 +63,8 @@
     "rollup": "^4.5.0",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
   }
 }
