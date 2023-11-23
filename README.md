@@ -8,19 +8,19 @@
 
 **This readme is for v2.x, if you are coming for v1.x, please go to [v1.x branch](https://github.com/fastjs-team/fastjs-next/tree/old-version).**
 
+**This project is in maintenance, we are working on v2. This version(v2) is still in development, so it doesn't publish to npm or have a release yet.**
+
 ## Getting Started
 
 - https://fastjs.cc/
-- https://docs.fastjs.cc/ (In maintenance - v2)
-- https://zh.docs.fastjs.cc/ (In maintenance - v2)
+- https://docs.fastjs.cc/ (In maintenance - v2 - not ready yet)
+- https://zh.docs.fastjs.cc/ (In maintenance - v2 - not ready yet)
 
 ## Description
 
-Fastjs is a high availability, high performance JavaScript library.
+Fastjs-next is a useful, lightweight JavaScript library for any types of project.
 
-It is designed to be easy to use. Fastjs can be used like a library with any framework.
-
-Fastjs is a good choice for you to develop your project.
+It is designed to be easy to use. Fastjs can be with any framework or just pure JavaScript.
 
 ## How to use
 
