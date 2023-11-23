@@ -30,7 +30,7 @@
     "dev": "rollup -cw",
     "build-test": "rollup -c",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.js",
-    "build": "npm run rm || rollup -c && npm run types",
+    "build": "npm run rm && rollup -c && npm run types",
     "prod": "npm run build && npm run test",
     "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
     "rm": "rm -rf ./dist || rmdir /s/q dist",
