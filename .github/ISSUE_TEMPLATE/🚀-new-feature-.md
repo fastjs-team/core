@@ -1,9 +1,9 @@
 ---
 name: "\U0001F680 New feature "
 about: Suggest an idea for fastjs-next
-title: 'Idea: '
-labels: enhancement
-assignees: ''
+title: 'Feature: '
+labels: 'Status: Needs Triage'
+assignees: 'dy-xiaodong2022'
 
 ---
 

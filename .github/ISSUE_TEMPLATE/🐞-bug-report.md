@@ -2,8 +2,8 @@
 name: "\U0001F41E Bug report"
 about: Report a bug with fastjs-next
 title: 'Bug: '
-labels: bug
-assignees: ''
+labels: 'Status: Needs Triage'
+assignees: 'dy-xiaodong2022'
 
 ---
 
@@ -23,11 +23,13 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Playground**
-A code playground that can show your problem can let us solve more quickly.
-
 **Additional context**
 Add any other context about the problem here.
 
 **Version**
 On version [SHA]
+
+**Checks**
+[ ] I am using latest version of fastjs-next
+[ ] I have read the [Contributing Guide](https://github.com/fastjs-team/fastjs-next/blob/main/CONTRIBUTE.md)
+[ ] I have searched for other [issues](https://github.com/fastjs-team/fastjs-next/issues) and this is not a duplicate
