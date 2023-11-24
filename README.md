@@ -2,7 +2,7 @@
 
 ## Announcement
 
-- [Fly again, 2024](https://github.com/fastjs-team/@fastjs/core/discussions/59)
+- [Fly again, 2024](https://github.com/fastjs-team/core/discussions/59)
 
 ## Important
 
@@ -85,6 +85,6 @@ fastjs create <project-name>
 
 ## Contributors
 
-<a href="https://github.com/fastjs-team/@fastjs/core/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fastjs-team/@fastjs/core" />
+<a href="https://github.com/fastjs-team/core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fastjs-team/core" />
 </a>
