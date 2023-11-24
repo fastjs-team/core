@@ -1,6 +1,6 @@
 {
-  "name": "fastjs-next",
-  "version": "2.0.0-alpha.0",
+  "name": "@fastjs/core",
+  "version": "v1.0.0-alpha.1",
   "description": "Fastjs-next is a useful, lightweight JavaScript library for any types of project.",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
