@@ -8,7 +8,7 @@
 
 **This project is in maintenance, we are working new version of fastjs. This version(@fastjs/core) is still in development, so it doesn't publish to npm or have a release yet.**
 
-**The package name will be changed to @fastjs/core, and the package name @fastjs/core will not be used anymore.**
+**The package name will be changed to @fastjs/core, and the package name fastjs-next will not be used anymore.**
 
 ## Getting Started
 
