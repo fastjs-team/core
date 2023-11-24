@@ -1,24 +1,24 @@
-# Fastjs-next
+# @fastjs/core
 
 ## Announcement
 
-- [Fly again, 2024](https://github.com/fastjs-team/fastjs-next/discussions/59)
+- [Fly again, 2024](https://github.com/fastjs-team/@fastjs/core/discussions/59)
 
 ## Important
 
-**This readme is for v2.x, if you are coming for v1.x, please go to [v1.x branch](https://github.com/fastjs-team/fastjs-next/tree/old-version).**
+**This project is in maintenance, we are working new version of fastjs. This version(@fastjs/core) is still in development, so it doesn't publish to npm or have a release yet.**
 
-**This project is in maintenance, we are working on v2. This version(v2) is still in development, so it doesn't publish to npm or have a release yet.**
+**The package name will be changed to @fastjs/core, and the package name @fastjs/core will not be used anymore.**
 
 ## Getting Started
 
 - https://fastjs.cc/
-- https://docs.fastjs.cc/ (In maintenance - v2 - not ready yet)
-- https://zh.docs.fastjs.cc/ (In maintenance - v2 - not ready yet)
+- https://docs.fastjs.cc/ (In maintenance - not ready yet)
+- https://zh.docs.fastjs.cc/ (In maintenance - not ready yet)
 
 ## Description
 
-Fastjs-next is a useful, lightweight JavaScript library for any types of project.
+@fastjs/core is a useful, lightweight JavaScript library for any types of project.
 
 It is designed to be easy to use. Fastjs can be with any framework or just pure JavaScript.
 
@@ -40,25 +40,25 @@ We have many versions, including:
 ### Bundler/CommonJS
 
 ```bash
-npm install fastjs-next
+npm install @fastjs/core
 ```
 
 ```js
-import { dom } from 'fastjs-next' // esm
-const { request } = require('fastjs-next') // cjs
+import { dom } from '@fastjs/core' // esm
+const { request } = require('@fastjs/core') // cjs
 ```
 
 ### CDN (Global)
 
 ```html
-<script src="https://unpkg.com/fastjs-next/dist/fastjs.global.js"></script>
+<script src="https://unpkg.com/@fastjs/core/dist/fastjs.global.js"></script>
 ```
 
 ### Browser (ES Module)
 
 ```html
 <script type="module">
-  import { dom } from 'https://unpkg.com/fastjs-next/dist/fastjs.esm.browser.js'
+  import { dom } from 'https://unpkg.com/@fastjs/core/dist/fastjs.esm.browser.js'
 </script>
 ```
 
@@ -85,6 +85,6 @@ fastjs create <project-name>
 
 ## Contributors
 
-<a href="https://github.com/fastjs-team/fastjs-next/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fastjs-team/fastjs-next" />
+<a href="https://github.com/fastjs-team/@fastjs/core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fastjs-team/@fastjs/core" />
 </a>
