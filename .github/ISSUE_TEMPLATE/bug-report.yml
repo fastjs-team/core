@@ -1,0 +1,70 @@
+name: "\U0001F41E Bug report"
+description: Report a bug with fastjs-next
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before you start**
+        
+        Please make sure you have read these guidelines:
+        
+        - [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html)
+        - [Issue Reporting Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#issue-reporting-guidelines)
+        - [Pull Request Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#pull-request-guidelines)
+        
+        Also try to search for your issue, it may have already been answered or even fixed or maybe it's not a bug.
+        
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: What is the current behavior?
+      description: Describe the current behavior.
+      placeholder: Describe the current behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What is the expected behavior?
+      description: Describe the expected behavior.
+      placeholder: Describe the expected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce the problem
+      description: Describe the steps to reproduce the problem.
+      placeholder: Describe the steps to reproduce the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Output of `npx envinfo --system --binaries --browsers`
+      render: Shell
+      placeholder: System, Binaries, Browsers
+
+  - type: textarea
+    id: additional-comments
+    attributes:
+      label: Any additional comments?
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      description: Please check the following boxes after submitting your issue.
+      options:
+        - label: I have read the [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html)
+          required: true
+        - label: I have read the [Issue Reporting Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#issue-reporting)
+          required: true
+        - label: I have searched for similar issues in both open and closed tickets and cannot find a duplicate
+          required: true
+        - label: I know that any inappropriate content may cause the maintainer to take action base on the [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html)
+          required: true
