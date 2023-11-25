@@ -19,14 +19,12 @@ body:
     attributes:
       label: What is the feature?
       description: Describe the feature.
-      placeholder: Describe the feature.
 
   - type: textarea
     id: feature-rationale
     attributes:
       label: Why is this feature needed?
       description: Describe why this feature is needed.
-      placeholder: Describe why this feature is needed.
 
   - type: textarea
     id: additional-comments

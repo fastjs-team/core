@@ -21,7 +21,6 @@ body:
     attributes:
       label: What is the current behavior?
       description: Describe the current behavior.
-      placeholder: Describe the current behavior.
     validations:
       required: true
 
@@ -30,7 +29,6 @@ body:
     attributes:
       label: What is the expected behavior?
       description: Describe the expected behavior.
-      placeholder: Describe the expected behavior.
     validations:
       required: true
 
@@ -39,7 +37,6 @@ body:
     attributes:
       label: Steps to reproduce the problem
       description: Describe the steps to reproduce the problem.
-      placeholder: Describe the steps to reproduce the problem.
     validations:
       required: true
 
