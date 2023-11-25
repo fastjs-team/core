@@ -1,5 +1,7 @@
 name: "\U0001F41E Bug report"
 description: Report a bug with fastjs-next
+labels:
+  - 'Status: Needs Triage'
 body:
   - type: markdown
     attributes:
