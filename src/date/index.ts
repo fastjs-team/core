@@ -2,8 +2,10 @@ import FastjsDate from "./fastjsDate";
 
 interface parseReturn {
     timestamp: number;
+    utcTimestamp: number;
     format: string;
     dateString: string;
+    utcDateString: string;
     date: Date;
 }
 
@@ -13,8 +15,10 @@ const parse = (format: string, time: string | number): parseReturn => {
     const timestamp = fastjsDateObject.toNumber();
     return {
         timestamp,
+        utcTimestamp: timestamp - (new Date().getTimezoneOffset() * 60 * 1000),
         format,
         dateString,
+        utcDateString: new FastjsDate(format, timestamp - (new Date().getTimezoneOffset() * 60 * 1000)).toString(),
         date: new Date(timestamp)
     }
 }
