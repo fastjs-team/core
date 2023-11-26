@@ -1,13 +1,13 @@
 name: Pull Request Labeled
 
 on:
-  pull_request:
+  pull_request_target:
     types: [labeled]
 
 permissions:
-    contents: read
-    issues: write
-    pull-requests: write
+  contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
   invalid:
@@ -15,22 +15,24 @@ jobs:
     steps:
       - name: Reply to Pull Request
         uses: peter-evans/create-or-update-comment@v3
+        if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.number }}
           body: |
-            We are happy to see you're contributing to fastjs, but we are unable to merge this pull request for now, because:
+            We are happy to see you're contributing to fastjs, but we are unable to merge this pull request for now, because of:
             - This pull request does not fix a bug.
             - This pull request need to have some changes.
             - This pull request doesn't have a valid issue.
             - You did not follow our [Contributing Guidelines](https://docs.fastjs.cc/other/contributing.html).
             - This pull request violates our [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html).
+            - Other reasons.
 
       - name: Close Pull Request
         uses: actions/github-script@v7
         with:
           script: |
             const pr = context.payload.pull_request;
-            const label = github.context.payload.label;
+            const label = context.payload.label;
             if (label.name === 'Resolution: Invalid') {
               github.rest.pulls.update({
                 pull_number: pr.number,
