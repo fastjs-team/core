@@ -27,7 +27,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "rollup -cw",
+    "dev": "npm run rm && rollup -cw",
     "build-test": "rollup -c",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.js",
     "build": "npm run rm && rollup -c && npm run types",
