@@ -6,15 +6,14 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 jobs:
-  issue-labeled:
-    permissions:
-      issues: write
-      pull-requests: write
+  cannot-replicate:
     runs-on: ubuntu-latest
     steps:
-      - name: Cannot Replicate
+      - name: Reply Issue
         if: "${{ github.event.label.name == 'Resolution: Cannot Replicate'}}"
         uses: actions-cool/issues-helper@v3
         with:
@@ -25,3 +24,31 @@ jobs:
             Thanks for reporting this issue. But we're unable to replicate your issue, if you are able to create a reproducer or add details to provide more context, please reply to this issue.
             
             **We will close this issue in 15 days if no further information is provided**.
+
+  invalid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reply Issue
+        if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            We are happy to see you're contributing to fastjs, but we are unable to work on this issue for now, because:
+            - It's not a bug.
+            - This feature is not in our roadmap.
+            - It's not a valid issue.
+            - It's a duplicate issue.
+            - This issue violates our [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html).
+            - Other reasons.
+      - name: Close Issue
+        if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issues'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'Resolution: Invalid'
+          comment: 'This issue is closed because it is invalid.'
