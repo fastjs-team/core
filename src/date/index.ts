@@ -1,91 +1,52 @@
-class FastjsDate {
-    readonly #date: number;
-    readonly #createAt: number;
-    private readonly construct: string;
+import FastjsDate from "./fastjsDate";
 
-    constructor(public format: string = "Y-M-D h:m:s", date: number = Date.now()) {
-        this.#date = date;
-        this.#createAt = Date.now();
-        this.construct = "FastjsDate";
+interface parseReturn {
+    timestamp: number;
+    format: string;
+    dateString: string;
+    date: Date;
+}
+
+const parse = (format: string, time: string | number): parseReturn => {
+    const fastjsDateObject = new FastjsDate(format, time);
+    const dateString = fastjsDateObject.toString();
+    const timestamp = fastjsDateObject.toNumber();
+    return {
+        timestamp,
+        format,
+        dateString,
+        date: new Date(timestamp)
     }
+}
 
-    private padZero(number: number): string {
-        return number < 10 ? "0" + number : number.toString();
-    }
+const parseTime = (format: string, time: string): parseReturn => {
+    return parse(format, time);
+}
 
-    private extractIgnoreTokens(formatString: string): [string, string[]] {
-        let processedString = formatString;
-        const ignoreTokens: string[] = formatString.match(/<.*?>/g)?.map(match => match.slice(1, -1)) || [];
-
-        ignoreTokens.forEach((_, index) => {
-            processedString = processedString.replace(/<.*?>/, `{{*${index}}}`);
-        })
-
-        return [processedString, ignoreTokens];
-    }
-
-    toString(newFormat?: string): string {
-        const timestamp = this.toNumber();
-        const date = new Date(timestamp);
-
-        const [formatString, ignoreTokens] = this.extractIgnoreTokens(
-            newFormat || this.format
-        );
-
-        const replacements = new Map<string, string | number>([
-            ["Y", date.getFullYear()],
-            ["M", date.getMonth() + 1],
-            ["D", date.getDate()],
-            ["H", date.getHours() % 12],
-            ["A", date.getHours() >= 12 ? "PM" : "AM"],
-            ["a", date.getHours() >= 12 ? "pm" : "am"],
-            ["hh", date.getHours()],
-            ["h", this.padZero(date.getHours())],
-            ["mm", date.getMinutes()],
-            ["m", this.padZero(date.getMinutes())],
-            ["ss", date.getSeconds()],
-            ["s", this.padZero(date.getSeconds())],
-            ["S", date.getMilliseconds()],
-        ]);
-
-        let result = formatString;
-        for (const [format, replacement] of replacements) {
-            result = result.replace(new RegExp(format, "g"), String(replacement));
-        }
-
-        ignoreTokens.forEach((token, index) => {
-            result = result.replace(`{{*${index}}}`, `<${token}>`);
-        });
-
-        return result;
-    }
-
-    toNumber(): number {
-        const timeLeft = Date.now() - this.#createAt;
-        return this.#date + timeLeft;
-    }
-
-    toStringLocal(newFormat?: string): string {
-        return new FastjsDate(newFormat || this.format, this.#date).toString();
-    }
-
-    toNumberLocal(): number {
-        return this.#date;
-    }
+const parseDate = (format: string, date: string): parseReturn => {
+    return parse(format, date);
 }
 
 const string = (format: string, date: number = Date.now()): string => {
-    return new FastjsDate(format, date).toString();
+    return parse(format, date).dateString;
 }
 
-const timestamp = (format: string, date: number = Date.now()): number => {
-    return new FastjsDate(format, date).toNumber();
+const date = (format: string, date: string): Date => {
+    return parse(format, date).date;
 }
 
+const reformat = (format: string, date: string, newFormat: string = "Y-M-D h:m:s"): string => {
+    return new FastjsDate(format, date).toString(newFormat);
+}
+
+export default {
+    parse,
+    parseDate,
+    parseTime,
+    string,
+    date,
+    reformat
+}
 export {
     FastjsDate
-};
-export default {
-    string,
-    timestamp
 }
