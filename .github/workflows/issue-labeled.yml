@@ -1,0 +1,27 @@
+name: Issue Labeled
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  issue-labeled:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cannot Replicate
+        if: "${{ github.event.label.name == 'Resolution: Cannot Replicate'}}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thanks for reporting this issue. But we're unable to replicate your issue, if you are able to create a reproducer or add details to provide more context, please reply to this issue.
+            
+            **We will close this issue in 15 days if no further information is provided**.
