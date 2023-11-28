@@ -52,3 +52,16 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: 'Resolution: Invalid'
           comment: 'This issue is closed because it is invalid.'
+
+  to-be-discuss:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reply Issue
+        if: "${{ github.event.label.name == 'Resolution: To Be Discuss'}}"
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thanks for reporting this issue! We need to discuss this issue with the team, we will update the status of this issue as soon as possible.
