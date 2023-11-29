@@ -1,19 +1,19 @@
 import _dev from "../dev";
-// import FastjsBind from "./fastjsBind";
 import _selector from "./selector";
 import FastjsDomList from "./fastjsDomList";
 
 type fastjsEventCallback = (el: FastjsDom, event: Event) => void;
 type eachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
-type eventMap = Array<{
-    0: Function;
-    1: EventListener | EventListenerObject;
+type eventList = Array<{
+    type: keyof HTMLElementEventMap
+    callback: fastjsEventCallback
+    trigger: EventListener
+    remove: () => void
 }>;
-// type fastjsThenCallback = (el: FastjsDom, dom: HTMLElement) => void;
 
 class FastjsDom {
     private readonly construct: string;
-    #event: eventMap = [];
+    _events: eventList = [];
 
     constructor(el: HTMLElement | string, properties?: Partial<HTMLElement>) {
         if (__DEV__)
@@ -37,6 +37,8 @@ class FastjsDom {
                 "FastjsDom"
             ]);
         } else throw ""
+
+        this.elClass = new Proxy(this, {})
 
         // construct
         this.construct = "FastjsDom";
@@ -102,15 +104,6 @@ class FastjsDom {
         el.appendChild(this._el);
         return this;
     }
-
-    // bind(bind: "text" | "html" | keyof HTMLElement, key: string, object: object = {}, isAttr: boolean = false): FastjsBind {
-    //     if (__DEV__) {
-    //         _dev.warn("fastjs/dom/fastjsBind", "This module is deprecated and will be removed in the future");
-    //     }
-    //     if (bind === "html") bind = "innerHTML";
-    //     if (bind === "text") bind = "innerText";
-    //     return new FastjsBind(this, bind, key, object, isAttr);
-    // }
 
     css(): CSSStyleDeclaration
     css(key: object): FastjsDom
@@ -184,24 +177,90 @@ class FastjsDom {
         return new FastjsDom(el.appendChild(this._el));
     }
 
-    on(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
+    addEvent(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
         let eventTrig: EventListener | EventListenerObject = (event: Event) => callback(this, event);
-        this.#event.push([callback, eventTrig]);
+        this._events.push({
+            type: event,
+            callback: callback,
+            trigger: eventTrig,
+            remove: () => {
+                this.removeEvent(callback)
+            }
+        });
+        console.log("add", eventTrig)
         this._el.addEventListener(event, eventTrig);
         return this;
     }
 
-    off(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback): FastjsDom {
-        let del = null
-        this.#event.forEach((v, k) => {
-            if (v[0] === callback) {
-                this._el.removeEventListener(event, v[1]);
-                del = k;
-            }
-        })
-        if (del !== null) this.#event.splice(del, 1);
+    getEvent(): eventList
+    getEvent(type: keyof HTMLElementEventMap): fastjsEventCallback | null
+    getEvent(callback: (eventList: eventList) => void): FastjsDom
+    getEvent(type: keyof HTMLElementEventMap, callback: (event: fastjsEventCallback | null) => void): FastjsDom
+
+    getEvent(typeOrCallback?: keyof HTMLElementEventMap | ((eventList: eventList) => void), callback?: (event: fastjsEventCallback | null) => void): eventList | fastjsEventCallback | null | FastjsDom {
+        if (typeof typeOrCallback === "string")
+            if (callback)
+                callback(this._events.find((v) => v.type === typeOrCallback)?.callback || null);
+            else
+                return this._events.find((v) => v.type === typeOrCallback)?.callback || null;
+        else if (typeof typeOrCallback === "function")
+            typeOrCallback(this._events);
+        else
+            return this._events;
+
         return this;
     }
+
+    removeEvent(): FastjsDom
+    removeEvent(type: keyof HTMLElementEventMap): FastjsDom
+    removeEvent(key: number): FastjsDom
+    removeEvent(type: keyof HTMLElementEventMap, key: number): FastjsDom
+    removeEvent(callback: fastjsEventCallback): FastjsDom
+
+    removeEvent(typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | fastjsEventCallback, key?: number): FastjsDom {
+        if (__DEV__) {
+            if (typeOrKeyOrCallback === undefined) {
+                _dev.warn("fastjs/dom/removeEvent", "You are removing all events, make sure you want to do this.", [
+                    "removeEvent(typeOrKey?: keyof HTMLElementEventMap | number, key?: number)",
+                    "FastjsDom:", this._el
+                ]);
+            }
+            if (typeof typeOrKeyOrCallback === "string" && key === undefined) {
+                _dev.warn("fastjs/dom/removeEvent", "You are removing all events with type " + typeOrKeyOrCallback + ", make sure you want to do this.", [
+                    "removeEvent(typeOrKey?: keyof HTMLElementEventMap | number, key?: number)",
+                    "FastjsDom:", this._el
+                ]);
+            }
+        }
+
+        if (typeof typeOrKeyOrCallback === "string")
+            if (key !== undefined) {
+                this._el.removeEventListener(typeOrKeyOrCallback, this._events.filter((v) => v.type === typeOrKeyOrCallback)[key].trigger as Function as EventListener);
+                this._events.splice(key, 1);
+            } else
+                this._events.filter((v) => v.type === typeOrKeyOrCallback).forEach((v) => {
+                    this._el.removeEventListener(v.type, v.trigger as Function as EventListener);
+                    this._events.splice(this._events.indexOf(v), 1);
+                });
+        else if (typeof typeOrKeyOrCallback === "number") {
+            this._el.removeEventListener(this._events[typeOrKeyOrCallback].type, this._events[typeOrKeyOrCallback].trigger as Function as EventListener);
+            this._events.splice(typeOrKeyOrCallback, 1);
+        } else if (typeof typeOrKeyOrCallback === "function") {
+            this._events.filter((v) => v.callback === typeOrKeyOrCallback).forEach((v) => {
+                console.log("find", v)
+                this._el.removeEventListener(v.type, v.trigger as Function as EventListener);
+            });
+            this._events = this._events.filter((v) => v.callback !== typeOrKeyOrCallback);
+        } else {
+            this._events.forEach((v) => {
+                v.remove();
+            });
+            this._events = [];
+        }
+
+        return this;
+    }
+
 
     remove(): FastjsDom {
         this._el.remove();
@@ -259,6 +318,58 @@ class FastjsDom {
         } else {
             _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
         }
+        return this;
+    }
+
+    addClass(...className: string[]): FastjsDom {
+        return this.setClass(className);
+    }
+
+    removeClass(...className: string[]): FastjsDom {
+        const obj: { [key: string]: boolean } = {};
+        className.forEach((v) => {
+            obj[v] = false;
+        });
+        return this.setClass(obj);
+    }
+
+    setClass(): FastjsDom
+    setClass(className: string, value?: boolean): FastjsDom
+    setClass(classNames: string[]): FastjsDom
+    setClass(classNames: { [key: string]: boolean }): FastjsDom
+
+    setClass(classNames?: string | string[] | { [key: string]: boolean }, value: boolean = true): FastjsDom {
+        if (typeof classNames === "string")
+            this._el.classList[value ? "add" : "remove"](classNames);
+        else if (Array.isArray(classNames))
+            classNames.forEach((v) => {
+                this._el.classList.add(v);
+            })
+        else if (typeof classNames === "object")
+            Object.entries(classNames).forEach((v) => {
+                this._el.classList[v[1] ? "add" : "remove"](v[0]);
+            })
+        else this._el.classList.remove(...this._el.classList);
+
+        return this;
+    }
+
+    getClass(): DOMTokenList
+    getClass(className: string): boolean
+    getClass(callback: (classNames: DOMTokenList) => void): FastjsDom
+    getClass(className: string, callback: (value: boolean) => void): FastjsDom
+
+    getClass(classNameOrCallback?: string | ((classNames: DOMTokenList) => void), callback?: (value: boolean) => void): DOMTokenList | boolean | FastjsDom {
+        if (typeof classNameOrCallback === "string")
+            if (callback)
+                callback(this._el.classList.contains(classNameOrCallback));
+            else
+                return this._el.classList.contains(classNameOrCallback);
+        else if (typeof classNameOrCallback === "function")
+            classNameOrCallback(this._el.classList);
+        else
+            return this._el.classList;
+
         return this;
     }
 }
