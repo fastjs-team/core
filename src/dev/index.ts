@@ -5,7 +5,8 @@ function browserCheck(module: string): void {
   }
 }
 
-function warn(module: string, message: string, args: Array<string> = []): void {
+function warn(module: string, message: string, args: Array<any> = []): void {
+  args = args.map((arg) => typeof arg === "string" ? "\n    > " + arg : arg)
   const outputArgs = [`[Fastjs warn] ${module}: ${message}`, ...args];
   console.warn(...outputArgs);
 }
@@ -13,7 +14,7 @@ function warn(module: string, message: string, args: Array<string> = []): void {
 function error(module: string, message: string, args: Array<string> = []): Error {
   let msg = `[Fastjs error] ${module}: ${message}`;
   if (args.length > 0) {
-    msg += `\n${args.join("\n")}`;
+    msg += args.map((arg) => "\n    > " + arg).join("");
   }
   return new Error(msg);
 }
