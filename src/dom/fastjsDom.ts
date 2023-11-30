@@ -1,6 +1,7 @@
 import _dev from "../dev";
 import _selector from "./selector";
 import FastjsDomList from "./fastjsDomList";
+import {styleObj, styleObjKeys} from "./css";
 
 type fastjsEventCallback = (el: FastjsDom, event: Event) => void;
 type eachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
@@ -105,21 +106,20 @@ class FastjsDom {
         return this;
     }
 
-    css(): CSSStyleDeclaration
-    css(key: object): FastjsDom
-    css(key: string, value: string, other?: string): FastjsDom
+    css(): styleObj
+    css(key: styleObj): FastjsDom
+    css<T extends styleObjKeys>(key: T, value: styleObj[T], other?: string): FastjsDom
 
-    css(key?: string | object, value?: string, other?: string): FastjsDom | CSSStyleDeclaration {
-        if (typeof key === "string") {
-            // @ts-ignore
+    css<T extends styleObjKeys>(key?: T | styleObj, value?: styleObj[T], other?: string): FastjsDom | styleObj {
+        if (!key) return this._el.style;
+        if (typeof key === "object") {
+            let k: styleObjKeys;
+            for (k in key) {
+                this._el.style.setProperty(k as string, key[k]);
+            }
+        }
+        if (typeof key === "string" && value) {
             this._el.style.setProperty(key, value, other);
-        } else if (!key) {
-            return this._el.style;
-        } else {
-            Object.entries(key).forEach((v) => {
-                // @ts-ignore
-                this._el.style[v[0] as keyof CSSStyleDeclaration] = v[1];
-            })
         }
         return this;
     }
@@ -141,8 +141,12 @@ class FastjsDom {
         return this;
     }
 
-    first(): FastjsDom | null {
+    firstChild(): FastjsDom | null {
         return this._el.firstElementChild ? new FastjsDom(this._el.firstElementChild as HTMLElement) : null;
+    }
+
+    lastChild(): FastjsDom | null {
+        return this._el.lastElementChild ? new FastjsDom(this._el.lastElementChild as HTMLElement) : null;
     }
 
     father(): FastjsDom | null {
@@ -321,16 +325,28 @@ class FastjsDom {
         return this;
     }
 
-    addClass(...className: string[]): FastjsDom {
-        return this.setClass(className);
+    /** @description Class Functions */
+
+    addClass(className: string[]): FastjsDom
+    addClass(...className: string[]): FastjsDom
+
+    addClass(className: string | string[]): FastjsDom {
+        return this.setClass(Array.isArray(className) ? className : [...arguments]);
     }
 
-    removeClass(...className: string[]): FastjsDom {
-        const obj: { [key: string]: boolean } = {};
-        className.forEach((v) => {
-            obj[v] = false;
+    clearClass(): FastjsDom {
+       return this.removeClass(...this._el.classList);
+    }
+
+    removeClass(className: string[]): FastjsDom
+    removeClass(...className: string[]): FastjsDom
+
+    removeClass(className: string | string[]): FastjsDom {
+        const classList: string[] = Array.isArray(className) ? className : [...arguments];
+        classList.forEach((v) => {
+            this.setClass(v, false);
         });
-        return this.setClass(obj);
+        return this;
     }
 
     setClass(): FastjsDom
