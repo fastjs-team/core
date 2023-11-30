@@ -2,6 +2,7 @@ import _dev from "../dev";
 import _selector from "./selector";
 import FastjsDomList from "./fastjsDomList";
 import {styleObj, styleObjKeys} from "./css";
+import {ArrayProxyHandler} from "../proxy";
 
 type fastjsEventCallback = (el: FastjsDom, event: Event) => void;
 type eachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
@@ -370,21 +371,34 @@ class FastjsDom {
         return this;
     }
 
-    getClass(): DOMTokenList
+    getClass(): string[]
     getClass(className: string): boolean
-    getClass(callback: (classNames: DOMTokenList) => void): FastjsDom
+    getClass(callback: (classNames: string[]) => void): FastjsDom
     getClass(className: string, callback: (value: boolean) => void): FastjsDom
 
-    getClass(classNameOrCallback?: string | ((classNames: DOMTokenList) => void), callback?: (value: boolean) => void): DOMTokenList | boolean | FastjsDom {
+    getClass(classNameOrCallback?: string | ((classNames: string[]) => void), callback?: (value: boolean) => void): string[] | boolean | FastjsDom {
+        const getClassProxy = (): string[] => {
+            const handler: ArrayProxyHandler<string> = {
+                get: (target, key: PropertyKey) => {
+                    return Reflect.get(target, key);
+                },
+                set: (target, key: PropertyKey, value) => {
+                    if (!Number.isNaN(Number(key))) this.setClass(value);
+                    return Reflect.set(target, key, value);
+                }
+            }
+            return new Proxy([...this._el.classList], handler)
+        }
+
         if (typeof classNameOrCallback === "string")
             if (callback)
                 callback(this._el.classList.contains(classNameOrCallback));
             else
                 return this._el.classList.contains(classNameOrCallback);
         else if (typeof classNameOrCallback === "function")
-            classNameOrCallback(this._el.classList);
+            classNameOrCallback(getClassProxy());
         else
-            return this._el.classList;
+            return getClassProxy()
 
         return this;
     }
