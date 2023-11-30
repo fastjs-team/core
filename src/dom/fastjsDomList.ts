@@ -2,6 +2,7 @@ import FastjsDom from './fastjsDom';
 import _dev from "../dev";
 import selector from "./selector";
 import type {eachCallback, fastjsEventCallback} from "./fastjsDom";
+import {styleObj, styleObjKeys} from "./css";
 
 class FastjsDomList {
     readonly #effect: Function;
@@ -70,16 +71,13 @@ class FastjsDomList {
         return object;
     }
 
-    css(key: object): FastjsDomList
-    css(key: string, value?: string, other?: string): FastjsDomList
+    css(key: styleObj): FastjsDomList
+    css(key: styleObjKeys, value?: string, other?: string): FastjsDomList
 
-    css(key: string | object, value?: string, other?: string): FastjsDomList {
+    css(key: styleObj | styleObjKeys, value?: string, other?: string): FastjsDomList {
         this._list.forEach((e: FastjsDom) => {
-            if (typeof key === 'object')
-                e.css(key);
-            else {
-                e.css(key, value || "", other);
-            }
+            if (typeof key === 'object') e.css(key);
+            else e.css(key, value || "", other);
         })
         return this;
     }
