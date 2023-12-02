@@ -16,7 +16,7 @@ export type PushReturn<T> = {
     index: number;
     /** @description FastjsDom point to the new element */
     el: FastjsDom;
-    origin: HTMLElement;
+    /** @description FastjsDom point to the origin element when you call(this) */
+    origin: FastjsDom;
     father: FastjsDom;
-    _this: FastjsDom;
 }

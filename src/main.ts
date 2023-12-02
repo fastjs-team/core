@@ -9,6 +9,8 @@ import {FastjsDom, FastjsDomList} from "./dom";
 import utils from "./utils";
 import {rand, copy} from "./utils";
 
+import {PushTarget} from "./dom/elop";
+
 if (__DEV__) {
     console.info("You are running fastjs in development mode.\n" +
         "Make sure to use the production build (*.prod.js) when deploying for production.");
@@ -31,5 +33,7 @@ export {
     /** @module utils */
     utils,
     rand,
-    copy
+    copy,
+    /** @description enums */
+    PushTarget
 };
