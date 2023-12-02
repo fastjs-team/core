@@ -73,7 +73,7 @@ class FastjsDom {
                         case "attr": {
                             let attrKey: string;
                             for (attrKey in p[key]) {
-                                this.attr(attrKey, p[key][attrKey]);
+                                this.setAttr(attrKey, p[key][attrKey]);
                             }
                         }
                             break;
@@ -105,8 +105,6 @@ class FastjsDom {
         return this;
     }
 
-    [key: string]: any;
-
     _el: HTMLElement
 
     // methods
@@ -125,7 +123,7 @@ class FastjsDom {
             })
             return new Proxy(obj, {
                 set: (target, key: string, value) => {
-                    this.attr(key, value);
+                    this.setAttr(key, value);
                     return Reflect.set(target, key, value);
                 }
             })
