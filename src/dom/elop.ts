@@ -5,7 +5,7 @@ export enum PushTarget {
     lastElementChild = "lastElementChild",
     beforeElement = "beforeElement",
     afterElement = "afterElement",
-    replaceElement = "replaceElement",
+    replaceElement = "replaceElement"
 }
 
 export type PushReturn<T> = {
@@ -19,4 +19,19 @@ export type PushReturn<T> = {
     /** @description FastjsDom point to the origin element when you call(this) */
     origin: FastjsDom;
     father: FastjsDom;
+}
+
+export enum InsertTarget {
+    first = "first",
+    last = "last",
+    random = "random"
+}
+
+export type InsertReturn = {
+    /** @description index to parent -> children, start with 0 */
+    index: number;
+    /** @description FastjsDom point to the new element */
+    added: FastjsDom;
+    /** @description FastjsDom point to the origin element when you call(this) */
+    origin: FastjsDom;
 }
