@@ -9,7 +9,7 @@ import {FastjsDom, FastjsDomList} from "./dom";
 import utils from "./utils";
 import {rand, copy} from "./utils";
 
-import {PushTarget} from "./dom/elop";
+import {PushTarget, InsertTarget} from "./dom/elop";
 
 if (__DEV__) {
     console.info("You are running fastjs in development mode.\n" +
@@ -35,5 +35,6 @@ export {
     rand,
     copy,
     /** @description enums */
-    PushTarget
+    PushTarget,
+    InsertTarget
 };
