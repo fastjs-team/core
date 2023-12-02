@@ -1,7 +1,1 @@
-'use strict'
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = require('./dist/fastjs.cjs.prod.js')
-} else {
-  module.exports = require('./dist/fastjs.cjs.js')
-}
+export * from "./index.js"

@@ -4,26 +4,30 @@
   "description": "Fastjs-next is a useful, lightweight JavaScript library for any types of project.",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
-  "types": "dist/types/src/main.d.ts",
+  "types": "dist/types/main.d.ts",
   "type": "module",
   "unpkg": "dist/fastjs.global.js",
   "jsdelivr": "dist/fastjs.global.js",
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/fastjs.esm-bundler.js",
-        "node": "./index.mjs"
+        "types": "./dist/types/main.d.ts",
+        "node": "./index.js",
+        "default": "./dist/fastjs.esm-bundler.js"
       },
       "require": {
-        "default": "./index.js"
+        "types": "./dist/types/main.d.ts",
+        "node": "./index.cjs",
+        "default": "./index.cjs"
       }
     }
   },
   "files": [
     "dist",
+    "index.cjs",
     "index.js",
-    "index.mjs",
     "README.md",
+    "package.json",
     "LICENSE"
   ],
   "scripts": {
@@ -33,7 +37,7 @@
     "build": "npm run rm && rollup -c && npm run types",
     "prod": "npm run build && npm run test",
     "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
-    "rm": "rm -rf ./dist || rmdir /s/q dist",
+    "rm": "rm -rf ./dist || if exist dist rmdir /s/q dist",
     "test:windows": "cross-env-shell NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.js",
     "prod:windows": "npm run build && npm run test:windows"
   },
