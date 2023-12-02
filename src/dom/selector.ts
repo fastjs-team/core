@@ -1,8 +1,10 @@
 import fastjsDom from "./fastjsDom";
 import fastjsDomList from "./fastjsDomList";
 import _dev from "../dev";
+import FastjsDom from "./fastjsDom";
+import FastjsDomList from "./fastjsDomList";
 
-function selector(selector: string, parent: HTMLElement | HTMLElement[] = document.body) {
+function selector(selector: string, parent: HTMLElement | HTMLElement[] = document.body): FastjsDom | FastjsDomList | null {
     if (__DEV__)
         _dev.browserCheck("fastjs/dom/selector")
 
