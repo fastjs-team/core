@@ -1,21 +1,22 @@
 import FastjsDom from './fastjsDom';
 import _dev from "../dev";
 import selector from "./selector";
-import type {eachCallback, fastjsEventCallback} from "./fastjsDom";
+import type {EachCallback, EventCallback} from "./fastjsDom";
 import {styleObj, styleObjKeys} from "./css";
 
 class FastjsDomList {
     readonly #effect: Function;
-    private readonly construct: string;
+    readonly construct: "FastjsDomList";
 
-    constructor(list: Array<HTMLElement> = []) {
+    constructor(list: Array<HTMLElement | Element> = []) {
         if (__DEV__)
             _dev.browserCheck("fastjs/dom/FastjsDomList")
 
         let domList: Array<FastjsDom> = [];
-        list?.forEach((el: HTMLElement) => {
-            domList.push(new FastjsDom(el as HTMLElement));
-        })
+        let el;
+        for (el of list) {
+            domList.push(new FastjsDom(el));
+        }
 
         this._list = new Proxy(domList, {
             set: (target, key, value) => {
@@ -57,13 +58,6 @@ class FastjsDomList {
         return this;
     }
 
-    attr(key: string, value: string | null): any {
-        this._list.forEach((e: FastjsDom) => {
-            e.attr(key, value);
-        })
-        return this;
-    }
-
     bind(bind: "text" | "html" | keyof HTMLElement, key: string | number, object: object = {}, isAttr: boolean = false): object {
         this._list.forEach((e: FastjsDom) => {
             object = e.bind(bind, String(key), object, isAttr);
@@ -88,7 +82,7 @@ class FastjsDomList {
         return this;
     }
 
-    each(callback: eachCallback): FastjsDomList {
+    each(callback: EachCallback): FastjsDomList {
         this._list.forEach((e: FastjsDom, index: number) => {
             callback(e, e.el(), index);
         })
@@ -137,14 +131,14 @@ class FastjsDomList {
         return selector(el, this.toArray().map((e: FastjsDom) => e.el()));
     }
 
-    on(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback) {
+    on(event: keyof HTMLElementEventMap = "click", callback: EventCallback) {
         this._list.forEach((e: FastjsDom) => {
             e.on(event, callback);
         })
         return this;
     }
 
-    off(event: keyof HTMLElementEventMap = "click", callback: fastjsEventCallback) {
+    off(event: keyof HTMLElementEventMap = "click", callback: EventCallback) {
         this._list.forEach((e: FastjsDom) => {
             e.off(event, callback);
         })
