@@ -16,19 +16,19 @@ type EventList = Array<{
 }>;
 
 type CustomProps = {
-    html: string | never;
-    text: string | never;
-    css: styleObj | never;
-    class: string[] | string | never;
-    attr: { [key: string]: string | null } | never;
-    value: string | never;
+    html?: string;
+    text?: string;
+    css?: styleObj;
+    class?: string[] | string;
+    attr?: { [key: string]: string | null };
+    value?: string;
 }
 type FastjsDomProps = CustomProps & {
     [K in keyof HTMLElement]?: HTMLElement[K]
 }
 
 class FastjsDom {
-    public readonly construct: string;
+    public readonly construct: "FastjsDom";
     _events: EventList = [];
 
     constructor(el: FastjsDom | HTMLElement | Element | string, p?: FastjsDomProps) {
@@ -57,13 +57,13 @@ class FastjsDom {
 
                     switch (key) {
                         case "html":
-                            this.html(p[key]);
+                            this.html(p[key] as string);
                             break;
                         case "text":
-                            this.text(p[key]);
+                            this.text(p[key] as string);
                             break;
                         case "css":
-                            this.css(p[key]);
+                            this.css(p[key] as styleObj);
                             break;
                         case "class": {
                             if (typeof value === "string") this.setClass(value.split(" "));
@@ -73,12 +73,12 @@ class FastjsDom {
                         case "attr": {
                             let attrKey: string;
                             for (attrKey in p[key]) {
-                                this.setAttr(attrKey, p[key][attrKey]);
+                                this.setAttr(attrKey, p[key]?.[attrKey] as string);
                             }
                         }
                             break;
                         case "value":
-                            this.val(p[key]);
+                            this.val(p[key] as string);
                             break;
                         default:
                             this.set(key, p[key]);
