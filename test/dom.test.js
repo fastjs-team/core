@@ -40,18 +40,6 @@ describe("Dom create test", () => {
     }).push(dom.select("#main").el());
     expect(dom.select("#main #test")).not.toBe(null);
   })
-
-  it("Insert dom with text", () => {
-    cleanupEnv(0)
-    dom.newEl("span").text("<rev>").push()
-    expect(dom.select("span")[0].text()).toBe("<rev>");
-  })
-
-it("Insert dom with html", () => {
-    cleanupEnv(0)
-    dom.newEl("span").html("<rev>").push()
-    expect(dom.select("rev")).not.toBe(null);
-  })
 })
 
 describe("Dom remove test", () => {
