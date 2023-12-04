@@ -1,4 +1,14 @@
-# @fastjs/core
+<div align="center">
+    <img src="https://avatars.githubusercontent.com/u/112574826" />
+</div>
+<h2 align="center">Fastjs / Powerful JavaScript Library</h2>
+<p align="center">
+    <img alt="Stars" src="https://img.shields.io/github/stars/fastjs-team?style=flat-square&logo=github&cacheSeconds=600&color=yellow&label=Team%20Stars">
+    <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/w/fastjs-team/core?style=flat-square&logo=github&cacheSeconds=600&label=Commit%20Activity">
+    <img alt="Last Action Status" src="https://img.shields.io/github/actions/workflow/status/fastjs-team/core/ci.yml?style=flat-square&logo=githubactions&cacheSeconds=60&logoColor=white&label=CI Check">
+    <img alt="Sponsors" src="https://img.shields.io/github/sponsors/dy-xiaodong2022?style=flat-square&logo=githubsponsors&cacheSeconds=600&label=Sponsors&color=ea4aaa&labelColor=d1beca">
+</p>
+
 
 ## Announcement
 
@@ -75,7 +85,7 @@ fastjs create <project-name>
 ## Info
 
 - Author: dy-xiaodong2022
-- License: MIT
+- License: [MIT](https://opensource.org/licenses/MIT)
 
 ## Sponsors
 
