@@ -1,7 +1,7 @@
 <div align="center">
-    <img src="https://avatars.githubusercontent.com/u/112574826" />
+    <img src="./logoDisplay.svg" style="clip-path: inset(0% 0 15% 0);" width="400" />
 </div>
-<h2 align="center">Fastjs / Powerful JavaScript Library</h2>
+<h3 align="center"><b>Fastjs / Powerful JavaScript Library</b></h3>
 <p align="center">
     <img alt="Stars" src="https://img.shields.io/github/stars/fastjs-team?style=flat-square&logo=github&cacheSeconds=600&color=yellow&label=Team%20Stars">
     <img alt="GitHub commit activity (branch)" src="https://img.shields.io/github/commit-activity/w/fastjs-team/core?style=flat-square&logo=github&cacheSeconds=600&label=Commit%20Activity">
