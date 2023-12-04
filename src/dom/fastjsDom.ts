@@ -284,7 +284,15 @@ class FastjsDom {
 
         const _target: T = typeof callbackOrTarget === "function" ? target as T : callbackOrTarget;
         el = el instanceof HTMLElement ? el : el.el();
-        const node = (typeof target === "boolean" ? target : clone) ? this._el.cloneNode(true) as HTMLElement : this._el;
+        // const node = (typeof target === "boolean" ? target : clone) ? this._el.cloneNode(true) as HTMLElement : this._el;
+        let node: HTMLElement;
+        if (typeof target === "boolean" ? target : clone) {
+            node = this._el.cloneNode(true) as HTMLElement;
+            // copy events
+            this._events.forEach((v) => {
+                node.addEventListener(v.type, v.trigger);
+            })
+        } else node = this._el;
         if (el.parentElement === null) {
             if (__DEV__) {
                 _dev.warn("fastjs/dom/push", "el.parentElement is null", [
@@ -465,17 +473,26 @@ class FastjsDom {
     }
 
     set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom {
-        if (Object.getOwnPropertyDescriptor(Element.prototype, key)?.writable ||
-            Object.getOwnPropertyDescriptor(Element.prototype, key)?.set
+        if (findPropInChain(this._el.constructor.prototype, key)?.writable ||
+            findPropInChain(this._el.constructor.prototype, key)?.set
         ) {
             this._el[key] = val;
         } else
-            _dev.warn("fastjs/dom/set", "key is not writable", [
+            _dev.warn("fastjs/dom/set", "key  is not writable", [
                 "key: " + key,
                 "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom",
                 "FastjsDom"
             ]);
         return this;
+
+        function findPropInChain(obj: object, prop: string): PropertyDescriptor | null {
+            while (obj !== null) {
+                const desc = Object.getOwnPropertyDescriptor(obj, prop);
+                if (desc) return desc;
+                obj = Object.getPrototypeOf(obj);
+            }
+            return null;
+        }
     }
 
     text(): string
