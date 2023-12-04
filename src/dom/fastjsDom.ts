@@ -18,13 +18,13 @@ type EventList = Array<{
 type CustomProps = {
     html?: string;
     text?: string;
-    css?: styleObj;
+    css?: styleObj | string;
     class?: string[] | string;
     attr?: { [key: string]: string | null };
     value?: string;
 }
 type FastjsDomProps = CustomProps & {
-    [K in keyof HTMLElement]?: HTMLElement[K]
+    [K in keyof HTMLElement]?: HTMLElement[K] | HTMLInputElement[K] | HTMLTextAreaElement[K] | HTMLButtonElement[K];
 }
 
 class FastjsDom {
@@ -63,7 +63,7 @@ class FastjsDom {
                             this.text(p[key] as string);
                             break;
                         case "css":
-                            this.css(p[key] as styleObj);
+                            this.setStyle(p[key] as styleObj);
                             break;
                         case "class": {
                             if (typeof value === "string") this.setClass(value.split(" "));
@@ -108,6 +108,17 @@ class FastjsDom {
     _el: HTMLElement
 
     // methods
+
+    [key: string]: any;
+
+    setCustomProp(name: string, value: any): FastjsDom {
+        this[name] = value;
+        return this;
+    }
+
+    getCustomProp(name: string): any {
+        return this[name];
+    }
 
     getAttr(): { [key: string]: string }
     getAttr(key: string): string | null
@@ -160,21 +171,50 @@ class FastjsDom {
         return this;
     }
 
-    css(): styleObj
-    css(key: styleObj): FastjsDom
-    css<T extends styleObjKeys>(key: T, value: styleObj[T], other?: string): FastjsDom
+    getStyle(): styleObj
+    getStyle(key: styleObjKeys): string
+    getStyle(callback: (style: styleObj) => void): FastjsDom
+    getStyle(key: styleObjKeys, callback: (value: string) => void): FastjsDom
 
-    css<T extends styleObjKeys>(key?: T | styleObj, value?: styleObj[T], other?: string): FastjsDom | styleObj {
-        const style = this.get("style") as CSSStyleDeclaration;
-        if (!key) return style as styleObj;
-        if (typeof key === "object") {
-            let k: styleObjKeys;
-            for (k in key) {
-                style.setProperty(k as string, key[k]);
+    getStyle(keyOrCallback?: styleObjKeys | ((style: styleObj) => void), callback?: (value: string) => void): styleObj | string | FastjsDom {
+        const getStyleProxy = (): styleObj => {
+            const handler: ProxyHandler<CSSStyleDeclaration> = {
+                set: (target, key: PropertyKey, value) => {
+                    if (!Number.isNaN(Number(key))) this.setStyle(key as styleObjKeys, value);
+                    return Reflect.set(target, key, value);
+                }
             }
+            return new Proxy(this._el.style, handler)
         }
-        if (typeof key === "string" && value) {
-            style.setProperty(key, value, other);
+
+        if (typeof keyOrCallback === "string")
+            if (callback)
+                callback(this._el.style.getPropertyValue(keyOrCallback));
+            else
+                return this._el.style.getPropertyValue(keyOrCallback);
+        else if (typeof keyOrCallback === "function")
+            keyOrCallback(getStyleProxy());
+        else
+            return getStyleProxy()
+
+        return this;
+    }
+
+    setStyle(css: string): FastjsDom
+    setStyle(map: styleObj): FastjsDom
+    setStyle(key: styleObjKeys, value: string, important?: boolean): FastjsDom
+
+    setStyle(keyOrMapOrString: styleObjKeys | styleObj | string, value?: string, other: boolean = false): FastjsDom {
+        if (typeof keyOrMapOrString === "object") {
+            let k: styleObjKeys;
+            for (k in keyOrMapOrString) {
+                this.setStyle(k, keyOrMapOrString[k]);
+            }
+        } else if (!value) {
+            this._el.style.cssText = keyOrMapOrString as string;
+        } else {
+            const key = keyOrMapOrString as keyof styleObj;
+            this.get("style").setProperty(key as string, value, other ? "important" : "");
         }
         return this;
     }
@@ -483,7 +523,14 @@ class FastjsDom {
     addClass(...className: string[]): FastjsDom
 
     addClass(className: string | string[]): FastjsDom {
-        return this.setClass(Array.isArray(className) ? className : [...arguments]);
+        if (typeof className === "string") {
+            [...arguments].forEach((v: string) => {
+                v.split(" ").forEach((v) => {
+                    this.setClass(v, true);
+                })
+            })
+        } else this.setClass(className);
+        return this;
     }
 
     clearClass(): FastjsDom {
@@ -508,7 +555,7 @@ class FastjsDom {
 
     setClass(classNames?: string | string[] | { [key: string]: boolean }, value: boolean = true): FastjsDom {
         if (typeof classNames === "string")
-            this._el.classList[value ? "add" : "remove"](classNames);
+            this._el.classList[value === false ? "remove" : "add"](classNames);
         else if (Array.isArray(classNames))
             classNames.forEach((v) => {
                 this._el.classList.add(v);
