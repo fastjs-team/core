@@ -1,5 +1,7 @@
+<br/>
+<br/>
 <div align="center">
-    <img src="./logoDisplay.svg" style="clip-path: inset(0% 0 15% 0);" width="400" />
+    <img src="./logoDisplay.svg" width="190" />
 </div>
 <h3 align="center"><b>Fastjs / Powerful JavaScript Library</b></h3>
 <p align="center">
