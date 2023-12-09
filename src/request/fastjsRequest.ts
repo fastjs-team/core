@@ -11,7 +11,6 @@ interface requestConfig {
     headers: {
         [key: string]: string;
     };
-    /** @deprecated */
     shutdown: boolean;
     wait: number;
     failed: Function;
@@ -55,6 +54,7 @@ interface moduleConfig {
         responseCode: (code: number, request: FastjsRequest) => boolean;
     }
     ignoreFormatWarning: boolean;
+    returnFullResponse: boolean;
 }
 
 const moduleConfig: moduleConfig = {
@@ -72,11 +72,16 @@ const moduleConfig: moduleConfig = {
             } catch (e) {
                 if (__DEV__ && !moduleConfig.ignoreFormatWarning) {
                     _dev.warn("fastjs/request", "Failed to parse JSON, do you sure you send a request correctly? Set request.config.ignoreFormatWarning to true to ignore this warning.", [
-                        `Received data: ${data}`,
-                        `string url: ${request.url}`,
-                        `data Data: ${request.data}`,
-                        `Partial<config> Config: ${request.config}`
-                    ]);
+                        `*Received data:`, {
+                            data: data,
+                            length: data.length,
+                            // headers to object
+                            headers: getHeaders(request.xhr as XMLHttpRequest),
+                        },
+                        `url: ${request.url}`,
+                        `config:`, request.config,
+                        "super:", request
+                    ], ["fastjs.warn"])
                 }
                 return data;
             }
@@ -86,6 +91,15 @@ const moduleConfig: moduleConfig = {
         }
     },
     ignoreFormatWarning: false,
+    returnFullResponse: false
+}
+
+function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
+    const headers: { [key: string]: string } = {}
+    xhr.getAllResponseHeaders()?.split("\n").forEach((e) => {
+        e && (headers[e.split(": ")[0]] = e.split(": ")[1]);
+    })
+    return headers;
 }
 
 class FastjsRequest {
@@ -94,28 +108,28 @@ class FastjsRequest {
 
     constructor(url: string, data?: data, config: Partial<requestConfig> = {}) {
         if (__DEV__ && !url) {
-            throw _dev.error("fastjs/request", "URL is required.", [
-                `string url: ${url}`,
-                `data Data: ${data}`,
-                `Partial<config> Config: ${config}`,
+            _dev.warn("fastjs/request", "A correct url is **required**.", [
+                `***url: ${url}`,
+                "data:", data,
+                "config:", config,
+                "super:", this
+            ], ["fastjs.wrong"])
+            throw _dev.error("fastjs/request", "A correct url is required.", [
+                "constructor(url: string, data?: data, config: Partial<requestConfig> = {})",
+                "FastjsRequest.constructor"
             ]);
         }
         this.url = url;
         this.data = data || {};
 
         if (__DEV__) {
-            if (config.shutdown)
-                _dev.warn("fastjs/request", "Shutdown is deprecated and will be removed in the future.", [
-                    `string url: ${url}`,
-                    `data Data: ${data}`,
-                    `Partial<config> Config: ${config}`,
-                ]);
             if (config.datatype)
-                _dev.warn("fastjs/request", "Datatype is deprecated and already doesn't effect on anything, it will be removed in the future, Try to use `request.config.hooks.callback` instead.", [
-                    `string url: ${url}`,
-                    `data Data: ${data}`,
-                    `Partial<config> Config: ${config}`,
-                ]);
+                _dev.warn("fastjs/request", "Datatype is **deprecated** and already **doesn't effect on anything**, it will be **removed** in the future, Try to use `request.config.hooks.callback` instead.", [
+                    `url: ${this.url}`,
+                    "data:", this.data,
+                    "*config:", config,
+                    "super:", this
+                ], ["fastjs.warn", "fastjs.warn", "fastjs.wrong", "fastjs.warn"])
         }
         this.config = {
             timeout: config.timeout || moduleConfig.timeout,
@@ -194,11 +208,11 @@ class FastjsRequest {
                 }
 
                 if (__DEV__ && method === "GET") {
-                    _dev.warn("fastjs/request", "Sending a body data with GET method should be avoided. (HTTP 1.1)", [
-                        `string url: ${this.url}`,
-                        `data Data: ${data}`,
-                        `Partial<config> Config: ${this.config}`,
-                    ]);
+                    _dev.warn("fastjs/request", "Sending a body data with **GET** method should be **avoided**. (HTTP 1.1)", [
+                        `url: ${this.url}`,
+                        `data: ${data}`,
+                        `*config: ${this.config}`,
+                    ], ["fastjs.warn"]);
                 }
             }
 
@@ -211,13 +225,6 @@ class FastjsRequest {
 
             const sendRequest = () => {
                 if (this.xhr !== null && this.config.shutdown) {
-                    if (__DEV__) {
-                        _dev.warn("fastjs/request", "You've already sent a request with shutdown mode, create a new request or set request.config.shutdown to false.", [
-                            `string url: ${this.url}`,
-                            `data Data: ${this.data}`,
-                            `Partial<config> Config: ${this.config}`,
-                        ]);
-                    }
                     return
                 }
 
@@ -288,12 +295,25 @@ class FastjsRequest {
                     const data = moduleConfig.handler.parseData(xhr.response, this);
                     if (!hooks.success(this, moduleConfig)) return;
                     if (!hooks.callback(this, data, moduleConfig)) return;
-                    this.config.callback(data, this);
+                    const response = {
+                        status: xhr.status,
+                        statusText: xhr.statusText,
+                        headers: getHeaders(xhr),
+                        body: xhr.response,
+                        data: data,
+                        xhr: xhr,
+                        request: this,
+                        resend: () => {
+                        // @ts-ignore
+                        return this.send(method, data, referer);
+                    }
+                }
+                    this.config.callback(response);
                     // if keepalive
                     if (this.config.keepalive) {
                         setTimeout(sendRequest, this.config.keepaliveWait);
                     }
-                    resolve(data);
+                    resolve(response);
                 };
 
                 if (!hooks.before(this, moduleConfig)) return;
