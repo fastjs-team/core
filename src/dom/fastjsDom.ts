@@ -89,12 +89,12 @@ class FastjsDom {
         } else if (el instanceof HTMLElement) {
             this._el = el
         } else if (__DEV__) {
-            _dev.warn("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
+            _dev.warn("fastjs/dom/FastjsDom", `el is not **HTMLElement or string**, instead of **${typeof el}**`, [
                 "*el: ", el,
                 "properties: ", p,
                 "constructor(**el: FastjsDom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
                 "super: ", this
-            ], ["fastjs.wrong", "fastjs.wrong"]);
+            ], ["fastjs.right", "fastjs.wrong"]);
             throw _dev.error("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
                 "constructor(el: FastjsDom | HTMLElement | Element | string, properties?: FastjsDomProps)",
                 "FastjsDom.constructor",
@@ -537,12 +537,12 @@ class FastjsDom {
             }
         } else {
             // _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
-            _dev.warn("fastjs/dom/val", `This element is not a input or textarea or button, instanceof **${this._el.constructor.name}**`, [
+            _dev.warn("fastjs/dom/val", `This element is not a **input or textarea or button**, instanceof **${this._el.constructor.name}**`, [
                 "*super._el: ", this._el,
                 "val(): string",
                 "val(val: string): FastjsDom",
                 "super:", this
-            ], ["fastjs.warn"]);
+            ], ["fastjs.right", "fastjs.warn"]);
         }
         return this;
     }
