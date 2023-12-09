@@ -28,7 +28,7 @@ type FastjsDomProps = CustomProps & {
 }
 
 class FastjsDom {
-    public readonly construct: "FastjsDom";
+    public readonly construct: string = "FastjsDom";
     _events: EventList = [];
 
     constructor(el: FastjsDom | HTMLElement | Element | string, p?: FastjsDomProps) {
@@ -37,10 +37,10 @@ class FastjsDom {
 
         if (__DEV__ && el instanceof FastjsDom) {
             _dev.warn("fastjs/dom/FastjsDom", "wtf are you doing? el is already a FastjsDom", [
-                "el:", el,
-                "constructor(el: FastjsDom | HTMLElement | Element | string)",
-                "FastjsDom"
-            ]);
+                "*el:", el,
+                "constructor(**el: FastjsDom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
+                "super:", this
+            ], ["fastjs.wrong"]);
         }
 
         el = el instanceof FastjsDom ? el.el() : el;
@@ -90,9 +90,11 @@ class FastjsDom {
             this._el = el
         } else if (__DEV__) {
             _dev.warn("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
-                "el:", el,
-                "properties:", p,
-            ]);
+                "*el: ", el,
+                "properties: ", p,
+                "constructor(**el: FastjsDom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
+                "super: ", this
+            ], ["fastjs.wrong", "fastjs.wrong"]);
             throw _dev.error("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
                 "constructor(el: FastjsDom | HTMLElement | Element | string, properties?: FastjsDomProps)",
                 "FastjsDom.constructor",
@@ -283,7 +285,7 @@ class FastjsDom {
         }
 
         const _target: T = typeof callbackOrTarget === "function" ? target as T : callbackOrTarget;
-        el = el instanceof HTMLElement ? el : el.el();
+        el = el instanceof FastjsDom || el instanceof FastjsDomList ? el.el() : el;
         // const node = (typeof target === "boolean" ? target : clone) ? this._el.cloneNode(true) as HTMLElement : this._el;
         let node: HTMLElement;
         if (typeof target === "boolean" ? target : clone) {
@@ -295,14 +297,17 @@ class FastjsDom {
         } else node = this._el;
         if (el.parentElement === null) {
             if (__DEV__) {
-                _dev.warn("fastjs/dom/push", "el.parentElement is null", [
-                    "el:", el,
-                    "target: " + target,
-                    "FastjsDom.push(el, target)",
-                ]);
+                let callback = typeof callbackOrTarget === "function" ? callbackOrTarget : undefined;
+                _dev.warn("fastjs/dom/push", "el.parentElement is null, did you pass the **document object** or is this element **exist in document**?", [
+                    "*el:", el,
+                    "target: Fastjs.PushTarget." + target,
+                    "clone: " + clone,
+                    "callback: " + callback,
+                    "push<T extends PushTarget>(**el?: HTMLElement | FastjsDomList | FastjsDom**, target?: T, clone?: boolean): PushReturn<T>",
+                ], ["fastjs.warn", "fastjs.warn", "fastjs.wrong"]);
                 throw _dev.error("fastjs/dom/push", "el.parentElement can't be null", [
-                    "Serious Warning -> Error",
-                    "FastjsDom.push(el, target)"
+                    "push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, target?: T, clone?: boolean): PushReturn<T>",
+                    "FastjsDom.push",
                 ])
             }
             throw ""
@@ -426,16 +431,18 @@ class FastjsDom {
     removeEvent(typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | EventCallback, key?: number): FastjsDom {
         if (__DEV__) {
             if (typeOrKeyOrCallback === undefined) {
-                _dev.warn("fastjs/dom/removeEvent", "You are removing all events, make sure you want to do this.", [
-                    "removeEvent(typeOrKey?: keyof HTMLElementEventMap | number, key?: number)",
-                    "FastjsDom:", this._el
-                ]);
+                _dev.warn("fastjs/dom/removeEvent", "You are removing **all events**, make sure you want to do this.", [
+                    "***No Any Argument",
+                    "*removeEvent(): FastjsDom",
+                    "super:", this
+                ], ["fastjs.warn"]);
             }
             if (typeof typeOrKeyOrCallback === "string" && key === undefined) {
-                _dev.warn("fastjs/dom/removeEvent", "You are removing all events with type " + typeOrKeyOrCallback + ", make sure you want to do this.", [
-                    "removeEvent(typeOrKey?: keyof HTMLElementEventMap | number, key?: number)",
-                    "FastjsDom:", this._el
-                ]);
+                _dev.warn("fastjs/dom/removeEvent", "You are removing **all events** with type " + typeOrKeyOrCallback + ", make sure you want to do this.", [
+                    "*type: " + typeOrKeyOrCallback,
+                    "*removeEvent(key: keyof HTMLElementEventMap): FastjsDom",
+                    "super:", this
+                ], ["fastjs.warn"]);
             }
         }
 
@@ -478,11 +485,11 @@ class FastjsDom {
         ) {
             this._el[key] = val;
         } else
-            _dev.warn("fastjs/dom/set", "key  is not writable", [
-                "key: " + key,
-                "set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom",
-                "FastjsDom"
-            ]);
+            _dev.warn("fastjs/dom/set", `key **${key}** is not writable`, [
+                "*key: " + key,
+                "set<T extends keyof HTMLElement>**(key: T**, val: HTMLElement[T]): FastjsDom",
+                "super:", this
+            ], ["fastjs.warn"]);
         return this;
 
         function findPropInChain(obj: object, prop: string): PropertyDescriptor | null {
@@ -529,7 +536,13 @@ class FastjsDom {
                     this._el.value = val;
             }
         } else {
-            _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
+            // _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
+            _dev.warn("fastjs/dom/val", `This element is not a input or textarea or button, instanceof **${this._el.constructor.name}**`, [
+                "*super._el: ", this._el,
+                "val(): string",
+                "val(val: string): FastjsDom",
+                "super:", this
+            ], ["fastjs.warn"]);
         }
         return this;
     }
