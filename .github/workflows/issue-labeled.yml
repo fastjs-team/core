@@ -41,7 +41,7 @@ jobs:
             - This feature is not in our roadmap.
             - It's not a valid issue.
             - It's a duplicate issue.
-            - This issue violates our [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html).
+            - This issue violates our [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html).
             - Other reasons.
       - name: Close Issue
         if: "${{ github.event.label.name == 'Resolution: Invalid'}}"

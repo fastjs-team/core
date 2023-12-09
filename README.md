@@ -24,9 +24,9 @@
 
 ## Getting Started
 
-- https://fastjs.cc/
-- https://docs.fastjs.cc/ (In maintenance - not ready yet)
-- https://zh.docs.fastjs.cc/ (In maintenance - not ready yet)
+- https://fastjs.dev/
+- https://docs.fastjs.dev/ (In maintenance - not ready yet)
+- https://zh.docs.fastjs.dev/ (In maintenance - not ready yet)
 
 ## Description
 

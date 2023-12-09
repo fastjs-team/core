@@ -23,8 +23,8 @@ jobs:
             - This pull request does not fix a bug.
             - This pull request need to have some changes.
             - This pull request doesn't have a valid issue.
-            - You did not follow our [Contributing Guidelines](https://docs.fastjs.cc/other/contributing.html).
-            - This pull request violates our [Code of Conduct](https://docs.fastjs.cc/other/code-of-conduct.html).
+            - You did not follow our [Contributing Guidelines](https://docs.fastjs.dev/other/contributing.html).
+            - This pull request violates our [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html).
             - Other reasons.
 
       - name: Close Pull Request
