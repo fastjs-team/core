@@ -99,7 +99,7 @@ class FastjsDom {
                 "constructor(el: FastjsDom | HTMLElement | Element | string, properties?: FastjsDomProps)",
                 "FastjsDom.constructor",
             ]);
-        } else throw ""
+        } else throw "6e2s"
 
         // construct
         this.construct = "FastjsDom";
@@ -310,7 +310,7 @@ class FastjsDom {
                     "FastjsDom.push",
                 ])
             }
-            throw ""
+            throw "hg42"
         }
         // if replace
         if (_target === PushTarget.replaceElement) {
