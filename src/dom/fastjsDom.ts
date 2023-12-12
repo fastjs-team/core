@@ -5,6 +5,7 @@ import type {styleObj, styleObjKeys} from "./css";
 import {ArrayProxyHandler} from "../proxy";
 import {InsertReturn, InsertTarget, PushTarget} from "./elop";
 import type {PushReturn} from "./elop";
+import FastjsBaseModule from "../base";
 
 type EventCallback = (el: FastjsDom, event: Event) => void;
 type EachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
@@ -27,11 +28,13 @@ type FastjsDomProps = CustomProps & {
     [K in keyof HTMLElement]?: HTMLElement[K] | HTMLInputElement[K] | HTMLTextAreaElement[K] | HTMLButtonElement[K];
 }
 
-class FastjsDom {
+class FastjsDom extends FastjsBaseModule<FastjsDom>{
     public readonly construct: string = "FastjsDom";
     _events: EventList = [];
 
     constructor(el: FastjsDom | HTMLElement | Element | string, p?: FastjsDomProps) {
+        super()
+        
         if (__DEV__)
             _dev.browserCheck("fastjs/dom/FastjsDom")
 
@@ -110,17 +113,6 @@ class FastjsDom {
     _el: HTMLElement
 
     // methods
-
-    [key: string]: any;
-
-    setCustomProp(name: string, value: any): FastjsDom {
-        this[name] = value;
-        return this;
-    }
-
-    getCustomProp(name: string): any {
-        return this[name];
-    }
 
     getAttr(): { [key: string]: string }
     getAttr(key: string): string | null
@@ -585,7 +577,7 @@ class FastjsDom {
 
     setClass(classNames?: string | string[] | { [key: string]: boolean }, value: boolean = true): FastjsDom {
         if (typeof classNames === "string")
-            this._el.classList[value === false ? "remove" : "add"](classNames);
+            this._el.classList[value ? "add" : "remove"](classNames);
         else if (Array.isArray(classNames))
             classNames.forEach((v) => {
                 this._el.classList.add(v);
