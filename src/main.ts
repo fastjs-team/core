@@ -8,6 +8,7 @@ import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
 import utils from "./utils";
 import {rand, copy} from "./utils";
+import {FastjsExpression} from "./base";
 
 import {PushTarget, InsertTarget} from "./dom/elop";
 
@@ -36,5 +37,6 @@ export {
     copy,
     /** @description enums */
     PushTarget,
-    InsertTarget
+    InsertTarget,
+    FastjsExpression
 };
