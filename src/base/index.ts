@@ -19,6 +19,36 @@ type FastjsExpressionResult = {
 }
 
 class FastjsBaseModule<T extends FastjsBaseModule<any>> {
+
+    [key: string]: any;
+
+    setCustomProp(name: string, value: any): T {
+        this[name] = value;
+        return this as unknown as T;
+    }
+
+    setCustomProps(props: {[key: string]: any}): T {
+        for (const key in props) {
+            this[key] = props[key];
+        }
+        return this as unknown as T;
+    }
+
+    getCustomProp(name: string): any {
+        return this[name];
+    }
+
+    setCustomEvent(name: string, func: (module: T, ...args: any[]) => void, setup: boolean = false): T {
+        this[name] = func;
+        if (setup) func(this as unknown as T);
+        return this as unknown as T;
+    }
+
+    callCustomEvent(name: string, ...args: any[]): T {
+        this[name](this as unknown as T, ...args);
+        return this as unknown as T;
+    }
+
     then(func: (e: T) => void, time: number = 0): T {
         const callback = () => func(this as unknown as T);
         time === 0 ? callback() : setTimeout(callback, time);
@@ -67,8 +97,7 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
 }
 
 export {
-    FastjsExpression,
-    FastjsExpressionResult
+    FastjsExpression
 }
 
 export default FastjsBaseModule;
