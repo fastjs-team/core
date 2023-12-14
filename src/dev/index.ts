@@ -5,55 +5,31 @@ function browserCheck(module: string): void {
     }
 }
 
-type style =
-    "fastjs.bold"
-    | "fastjs.reverse"
-    | "fastjs.red"
-    | "fastjs.green"
-    | "fastjs.yellow"
-    | "fastjs.blue"
-    | "fastjs.magenta"
-    | "fastjs.cyan"
-    | "fastjs.white"
-    | "fastjs.gray"
-    | "fastjs.bgRed"
-    | "fastjs.bgGreen"
-    | "fastjs.bgYellow"
-    | "fastjs.bgBlue"
-    | "fastjs.bgMagenta"
-    | "fastjs.bgCyan"
-    | "fastjs.bgWhite"
-    | "fastjs.bgGray"
-    | "fastjs.wrong"
-    | "fastjs.right"
-    | "fastjs.warn";
+enum style {
+    "fastjs.bold" = "\u001b[1m",
+    "fastjs.reverse" = "\u001b[7m",
+    "fastjs.red" = "\u001b[31m",
+    "fastjs.green" = "\u001b[32m",
+    "fastjs.yellow" = "\u001b[33m",
+    "fastjs.blue" = "\u001b[34m",
+    "fastjs.magenta" = "\u001b[35m",
+    "fastjs.cyan" = "\u001b[36m",
+    "fastjs.white" = "\u001b[37m",
+    "fastjs.gray" = "\u001b[90m",
+    "fastjs.bgRed" = "\u001b[41m",
+    "fastjs.bgGreen" = "\u001b[42m",
+    "fastjs.bgYellow" = "\u001b[43m",
+    "fastjs.bgBlue" = "\u001b[44m",
+    "fastjs.bgMagenta" = "\u001b[45m",
+    "fastjs.bgCyan" = "\u001b[46m",
+    "fastjs.bgWhite" = "\u001b[47m",
+    "fastjs.bgGray" = "\u001b[100m",
+    "fastjs.wrong" = "\u001b[41m\u001b[37m\u001b[1m",
+    "fastjs.right" = "\u001b[42m\u001b[37m\u001b[1m",
+    "fastjs.warn" = "\u001b[43m\u001b[90m\u001b[1m",
+}
 
-function warn(module: string, message: string, args: Array<any> = [], styleArgs: Array<style | style[]> = []): void {
-    // Define a style list
-    const styleList = {
-        "fastjs.bold": "\u001b[1m",
-        "fastjs.reverse": "\u001b[7m",
-        "fastjs.red": "\u001b[31m",
-        "fastjs.green": "\u001b[32m",
-        "fastjs.yellow": "\u001b[33m",
-        "fastjs.blue": "\u001b[34m",
-        "fastjs.magenta": "\u001b[35m",
-        "fastjs.cyan": "\u001b[36m",
-        "fastjs.white": "\u001b[37m",
-        "fastjs.gray": "\u001b[90m",
-        "fastjs.bgRed": "\u001b[41m",
-        "fastjs.bgGreen": "\u001b[42m",
-        "fastjs.bgYellow": "\u001b[43m",
-        "fastjs.bgBlue": "\u001b[44m",
-        "fastjs.bgMagenta": "\u001b[45m",
-        "fastjs.bgCyan": "\u001b[46m",
-        "fastjs.bgWhite": "\u001b[47m",
-        "fastjs.bgGray": "\u001b[100m",
-        "fastjs.wrong": "\u001b[41m\u001b[37m\u001b[1m",
-        "fastjs.right": "\u001b[42m\u001b[37m\u001b[1m",
-        "fastjs.warn": "\u001b[43m\u001b[90m\u001b[1m",
-    };
-
+function warn(module: string, message: string, args: Array<any> = [], styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []): void {
     args = args.map((arg) => typeof arg === "string" ? "\n    > " + arg : arg)
 
     let styleKey = 0
@@ -90,13 +66,12 @@ function warn(module: string, message: string, args: Array<any> = [], styleArgs:
     })
     console.warn(outputMessage, ...outputObjects)
 
-    function getStyle(key: style | style[]): string {
-        // if no, return last style
+    function getStyle(key: keyof typeof style | Array<keyof typeof style>): string {
         if (!key) return lastStyle
         if (Array.isArray(key)) {
-            return key.map((style) => styleList[style] || "").join("");
+            return key.map((e) => style[e]).join("");
         }
-        return styleList[key] || "";
+        return style[key] || "";
     }
 }
 
@@ -108,26 +83,9 @@ function error(module: string, message: string, args: Array<string> = []): Error
     return new Error(msg);
 }
 
-function type(arg: any): string {
-    let type: string = typeof arg;
-    if (type === "object") {
-        if (typeof Element !== "undefined" && arg instanceof Element) {
-            type = "Element";
-        }
-        // if null
-        else if (arg === null) {
-            type = "Null";
-        } else {
-            type = arg.constructor.name;
-        }
-    }
-    return type;
-}
-
 
 export default {
     browserCheck,
     warn,
-    error,
-    type,
+    error
 };
