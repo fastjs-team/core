@@ -3,30 +3,10 @@ import _selector from "./selector";
 import FastjsDomList from "./fastjsDomList";
 import type {styleObj, styleObjKeys} from "./css";
 import {ArrayProxyHandler} from "../proxy";
-import {InsertReturn, InsertTarget, PushTarget} from "./elop";
-import type {PushReturn} from "./elop";
+import type {EventCallback, EventList, InsertReturn, PushReturn, FastjsDomProps, EachCallback} from "./dom-base";
 import FastjsBaseModule from "../base";
+import {InsertTarget, PushTarget} from "./dom-base";
 
-type EventCallback = (el: FastjsDom, event: Event) => void;
-type EachCallback = (el: FastjsDom, dom: HTMLElement, index: number) => void;
-type EventList = Array<{
-    type: keyof HTMLElementEventMap
-    callback: EventCallback
-    trigger: EventListener
-    remove: () => void
-}>;
-
-type CustomProps = {
-    html?: string;
-    text?: string;
-    css?: styleObj | string;
-    class?: string[] | string;
-    attr?: { [key: string]: string | null };
-    value?: string;
-}
-type FastjsDomProps = CustomProps & {
-    [K in keyof HTMLElement]?: HTMLElement[K] | HTMLInputElement[K] | HTMLTextAreaElement[K] | HTMLButtonElement[K];
-}
 
 class FastjsDom extends FastjsBaseModule<FastjsDom>{
     public readonly construct: string = "FastjsDom";
@@ -217,11 +197,15 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this._el;
     }
 
-    each(callback: EachCallback): FastjsDom {
-        // children each
-        for (let i = 0; i < this._el.children.length; i++) {
-            callback(new FastjsDom(this._el.children[i] as HTMLElement), this._el.children[i] as HTMLElement, i);
+    each(callback: EachCallback, deep: boolean = false): FastjsDom {
+        const each = (el: HTMLElement, index: number) => {
+            callback(new FastjsDom(el), el, index);
+            if (deep)
+                for (let i = 0; i < el.children.length; i++) {
+                    each(el.children[i] as HTMLElement, i);
+                }
         }
+        each(this._el, 0);
         return this;
     }
 
@@ -476,10 +460,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
             findPropInChain(this._el.constructor.prototype, key)?.set
         ) {
             this._el[key] = val;
-        } else
+        } else if (__DEV__)
             _dev.warn("fastjs/dom/set", `key **${key}** is not writable`, [
                 "*key: " + key,
-                "set<T extends keyof HTMLElement>**(key: T**, val: HTMLElement[T]): FastjsDom",
+                "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): FastjsDom",
                 "super:", this
             ], ["fastjs.warn"]);
         return this;
@@ -502,16 +486,6 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return val === undefined ? this.get("innerText") : this.set("innerText", val);
     }
 
-    then(callback: (el: FastjsDom, dom: HTMLElement) => void, time = 0): FastjsDom {
-        if (time)
-            setTimeout(() => {
-                callback(this, this.el());
-            }, time);
-        else
-            callback(this, this.el());
-        return this;
-    }
-
     val(): string
     val(val: string): FastjsDom
 
@@ -527,8 +501,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
                 else
                     this._el.value = val;
             }
-        } else {
-            // _dev.warn("fastjs/dom/val", "This element is not a input or textarea or button, instanceof " + this._el.constructor.name);
+        } else if (__DEV__) {
             _dev.warn("fastjs/dom/val", `This element is not a **input or textarea or button**, instanceof **${this._el.constructor.name}**`, [
                 "*super._el: ", this._el,
                 "val(): string",
@@ -622,4 +595,3 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 }
 
 export default FastjsDom
-export type {EachCallback, EventCallback, FastjsDomProps}
