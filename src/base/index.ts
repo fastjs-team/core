@@ -90,7 +90,7 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
                         "FastjsBaseModule.determine",
                     ]);
                 }
-                throw ""
+                throw "t33q";
         }
         return result as FastjsExpressionResult[T];
     }
