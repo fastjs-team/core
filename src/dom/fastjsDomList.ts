@@ -1,7 +1,7 @@
 import FastjsDom from './fastjsDom';
 import _dev from "../dev";
 import selector from "./selector";
-import type {EachCallback, EventCallback} from "./fastjsDom";
+import type {EachCallback, EventCallback} from "./dom-base";
 import {styleObj, styleObjKeys} from "./css";
 
 class FastjsDomList {
@@ -107,11 +107,13 @@ class FastjsDomList {
     getEl(key: number = 0): FastjsDom {
         // overflow
         if (key >= this._list.length)
-            _dev.warn('FastjsDomList', 'key is overflow', [
-                'getEl(key)',
-                'dataEdit.js',
-                'FastjsDomList'
-            ]);
+            if (__DEV__)
+                _dev.warn('FastjsDomList', 'key is overflow', [
+                    "*key: " + key,
+                    "*length: " + this._list.length,
+                    "getEl(key: number): FastjsDom",
+                    "super", this
+                ], ["fastjs.warn"])
         return this._list[key || 0];
     }
 
@@ -190,18 +192,9 @@ class FastjsDomList {
     toArray(): Array<FastjsDom> {
         return this._list;
     }
+
     toElArray(): Array<HTMLElement> {
         return this._list.map((e: FastjsDom) => e.el());
-    }
-
-    then(callback: (el: FastjsDomList, dom: HTMLElement) => void, time: number = 0): FastjsDomList {
-        if (time)
-            setTimeout(() => {
-                callback(this, this.el());
-            }, time);
-        else
-            callback(this, this.el());
-        return this;
     }
 
     val(key?: number): string
