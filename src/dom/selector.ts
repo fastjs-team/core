@@ -4,7 +4,7 @@ import _dev from "../dev";
 import FastjsDom from "./fastjsDom";
 import FastjsDomList from "./fastjsDomList";
 
-function selector(selector: string, parent: Document | HTMLElement | HTMLElement[] = document): FastjsDom | FastjsDomList | null {
+function selector(selector: string = "body", parent: Document | HTMLElement | HTMLElement[] = document): FastjsDom | FastjsDomList | null {
     if (__DEV__)
         _dev.browserCheck("fastjs/dom/selector")
 

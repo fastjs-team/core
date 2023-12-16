@@ -265,9 +265,18 @@ class FastjsRequest {
                             default:
                                 err = `Request failed with status ${this.xhr?.status}`;
                         }
+
+                        console.log(from)
+                        _dev.warn("fastjs/request", err, [
+                            "*status: **" + (this.xhr?.status || "Unable to send request") + "**",
+                            from ? ("*" + from) : "",
+                            referer ? `${referer} -> send()` : "",
+                            "url: " + this.url,
+                            "global config:", moduleConfig,
+                            "super:", this,
+                        ], ["fastjs.wrong"]);
+
                         const errOutput = _dev.error("fastjs/request", err, [
-                            err,
-                            "trig -> fail()",
                             from || "",
                             referer ? `${referer} -> send()` : "",
                             "url: " + this.url,
@@ -304,10 +313,10 @@ class FastjsRequest {
                         xhr: xhr,
                         request: this,
                         resend: () => {
-                        // @ts-ignore
-                        return this.send(method, data, referer);
+                            // @ts-ignore
+                            return this.send(method, data, referer);
+                        }
                     }
-                }
                     this.config.callback(response);
                     // if keepalive
                     if (this.config.keepalive) {
