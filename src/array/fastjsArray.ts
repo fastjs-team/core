@@ -43,14 +43,14 @@ class FastjsArray<T = any> {
 
         if (config.type !== "Any") {
             array = array.filter((e: T) => {
-                if (config.type?.includes(_dev.type(e))) {
+                if (config.type?.includes(this._type(e))) {
                     return true;
                 }
                 if (__DEV__) {
                     console.error(
                         _dev.error(
                             "fastjs/array/FastjsArray",
-                            `Type of <${config.type}>FastjsArray is ` + _dev.type(e),
+                            `Type of <${config.type}>FastjsArray is ` + this._type(e),
                             ["constructor(array, config)", "FastjsArray"]
                         )
                     );
@@ -103,6 +103,22 @@ class FastjsArray<T = any> {
         })
     }
 
+    _type(arg: any): string {
+        let type: string = typeof arg;
+        if (type === "object") {
+            if (typeof Element !== "undefined" && arg instanceof Element) {
+                type = "Element";
+            }
+            // if null
+            else if (arg === null) {
+                type = "Null";
+            } else {
+                type = arg.constructor.name;
+            }
+        }
+        return type;
+    }
+
     _config: {
         type: string | Array<string>;
         length?: number | null;
@@ -143,15 +159,6 @@ class FastjsArray<T = any> {
         return [...this._array]
     }
 
-    then(callback: Function, time = 0): FastjsArray {
-        if (time)
-            setTimeout(() => {
-                callback(this);
-            }, time);
-        else callback(this);
-        return this;
-    }
-
     addHook(callback: Function): FastjsArray<T> {
         this.#hooks.push(callback);
         return this;
@@ -189,7 +196,7 @@ class FastjsArray<T = any> {
             return false;
         };
 
-        let type = _dev.type(item);
+        let type = this._type(item);
         if (cfg.type !== "Any") {
             // if cfg.type is array -> multi type
             if (Array.isArray(cfg.type)) {
