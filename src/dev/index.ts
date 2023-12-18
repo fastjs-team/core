@@ -44,7 +44,7 @@ function warn(module: string, message: string, args: Array<any> = [], styleArgs:
             outputObjects.push(arg)
             return;
         }
-        if (arg.includes("*") && !arg.includes("**")) {
+        if (arg.includes("> *") && !arg.includes("> **")) {
             let style = styleArgs[styleKey]
             arg = arg.replace("*", "")
             arg = arg.replace("  >", getStyle(style) + "-->\u001b[0m")
@@ -53,7 +53,7 @@ function warn(module: string, message: string, args: Array<any> = [], styleArgs:
         if (arg.includes("***")) {
             let style = styleArgs[styleKey]
             arg = arg.replace("***", "")
-            arg = arg.split("> ")[0] + "> " + getStyle(style) + arg.split("> ")[1] + "\u001b[0m"
+            arg = arg.split("> ")[0] + "> " + getStyle(style) + arg.split("> ").slice(1).join("> ") + "\u001b[0m"
             styleKey++
         }
         while (arg.includes(`**`)) {
