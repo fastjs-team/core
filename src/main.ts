@@ -10,7 +10,7 @@ import utils from "./utils";
 import {rand, copy} from "./utils";
 import {FastjsExpression} from "./base";
 
-import {PushTarget, InsertTarget} from "./dom/dom-base";
+import {PushTarget, InsertTarget} from "./dom/def";
 
 if (__DEV__) {
     console.info("You are running fastjs in development mode.\n" +
