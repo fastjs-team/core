@@ -1,22 +1,22 @@
-import type {data, requestConfig} from './fastjsRequest';
-import {request, moduleConfig} from './fastjsRequest';
+import type {data, xhrRequestConfig} from './def';
+import {request, moduleConfig} from './xhr';
 
-const create = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const create = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config);
 }
-const get = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const get = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config).get();
 }
-const post = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const post = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config).post();
 }
-const put = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const put = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config).put();
 }
-const del = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const del = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config).delete();
 }
-const patch = (url: string, data?: data, config?: Partial<requestConfig>) => {
+const patch = (url: string, data?: data, config?: Partial<xhrRequestConfig>) => {
     return new request(url, data, config).patch();
 }
 
