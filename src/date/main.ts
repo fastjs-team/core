@@ -160,6 +160,7 @@ class FastjsDate {
             ["ss", date.getSeconds()],
             ["s", date.getSeconds()],
             ["S", date.getMilliseconds()],
+            // A and a should be the last one because it will affect the result of replacement
             ["A", date.getHours() >= 12 ? "PM" : "AM"],
             ["a", date.getHours() >= 12 ? "pm" : "am"],
         ]

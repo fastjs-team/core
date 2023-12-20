@@ -1,4 +1,4 @@
-import FastjsDate from "./fastjsDate";
+import FastjsDate from "./main";
 import type {parseReturn} from "./def";
 
 /**
