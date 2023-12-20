@@ -17,6 +17,13 @@ class FastjsArray<T = any> {
             }
         */
 
+        if (__DEV__) {
+            _dev.warn("fastjs/array/FastjsArray", "This class is only for trial, it will be removed soon.", [
+                "constructor(array, config)",
+                "***FastjsArray"
+            ], ["fastjs.warn"]);
+        }
+
         config = this._config = {
             type: config.type || "Any",
             length: config.length || null,
@@ -215,4 +222,4 @@ class FastjsArray<T = any> {
 }
 
 export default FastjsArray;
-export type { config };
+export type {config};
