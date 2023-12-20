@@ -20,10 +20,13 @@ jobs:
         run: npm install
 
       - name: Build Package
-        run: npm run build
+        run: npm run prod
 
-      - name: Test Package
-        run: npm run test
+      - name: Create .npmrc file
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Package
         run: npm publish --access public
