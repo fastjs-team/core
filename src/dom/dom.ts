@@ -1,32 +1,32 @@
 import _dev from "../dev";
 import _selector from "./selector";
-import FastjsDomList from "./fastjsDomList";
+import FastjsDomList from "./dom-list";
 import type {styleObj, styleObjKeys} from "./css";
-import {ArrayProxyHandler} from "../proxy";
-import type {EventCallback, EventList, InsertReturn, PushReturn, FastjsDomProps, EachCallback} from "./dom-base";
+import {ArrayProxyHandler} from "./proxy";
+import type {EventCallback, EventList, InsertReturn, PushReturn, FastjsDomProps, EachCallback} from "./def";
 import FastjsBaseModule from "../base";
-import {InsertTarget, PushTarget} from "./dom-base";
+import {InsertTarget, PushTarget} from "./def";
 
 
-class FastjsDom extends FastjsBaseModule<FastjsDom>{
-    public readonly construct: string = "FastjsDom";
+class Dom extends FastjsBaseModule<Dom>{
+    public readonly construct: string = "Dom";
     _events: EventList = [];
 
-    constructor(el: FastjsDom | HTMLElement | Element | string, p?: FastjsDomProps) {
+    constructor(el: Dom | HTMLElement | Element | string, p?: FastjsDomProps) {
         super()
         
         if (__DEV__)
-            _dev.browserCheck("fastjs/dom/FastjsDom")
+            _dev.browserCheck("fastjs/dom/Dom")
 
-        if (__DEV__ && el instanceof FastjsDom) {
-            _dev.warn("fastjs/dom/FastjsDom", "wtf are you doing? el is already a FastjsDom", [
+        if (__DEV__ && el instanceof Dom) {
+            _dev.warn("fastjs/dom/Dom", "wtf are you doing? el is already a Dom", [
                 "*el:", el,
-                "constructor(**el: FastjsDom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
+                "constructor(**el: Dom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
                 "super:", this
             ], ["fastjs.wrong"]);
         }
 
-        el = el instanceof FastjsDom ? el.el() : el;
+        el = el instanceof Dom ? el.el() : el;
         // if string
         if (typeof el === "string") {
             // create element
@@ -72,20 +72,20 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         } else if (el instanceof HTMLElement) {
             this._el = el
         } else if (__DEV__) {
-            _dev.warn("fastjs/dom/FastjsDom", `el is not **HTMLElement or string**, instead of **${typeof el}**`, [
+            _dev.warn("fastjs/dom/Dom", `el is not **HTMLElement or string**, instead of **${typeof el}**`, [
                 "*el: ", el,
                 "properties: ", p,
-                "constructor(**el: FastjsDom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
+                "constructor(**el: Dom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
                 "super: ", this
             ], ["fastjs.right", "fastjs.wrong"]);
-            throw _dev.error("fastjs/dom/FastjsDom", "el is not HTMLElement or string, instead of " + typeof el, [
-                "constructor(el: FastjsDom | HTMLElement | Element | string, properties?: FastjsDomProps)",
-                "FastjsDom.constructor",
+            throw _dev.error("fastjs/dom/Dom", "el is not HTMLElement or string, instead of " + typeof el, [
+                "constructor(el: Dom | HTMLElement | Element | string, properties?: FastjsDomProps)",
+                "Dom.constructor",
             ]);
         } else throw "6e2s"
 
         // construct
-        this.construct = "FastjsDom";
+        this.construct = "Dom";
 
         return this;
     }
@@ -96,10 +96,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     getAttr(): { [key: string]: string }
     getAttr(key: string): string | null
-    getAttr(callback: (attr: { [key: string]: string }) => void): FastjsDom
-    getAttr(key: string, callback: (value: string | null) => void): FastjsDom
+    getAttr(callback: (attr: { [key: string]: string }) => void): Dom
+    getAttr(key: string, callback: (value: string | null) => void): Dom
 
-    getAttr(keyOrCallback?: string | ((attr: { [key: string]: string }) => void), callback?: (value: string | null) => void): { [key: string]: string } | string | null | FastjsDom {
+    getAttr(keyOrCallback?: string | ((attr: { [key: string]: string }) => void), callback?: (value: string | null) => void): { [key: string]: string } | string | null | Dom {
         const getAttrProxy = (): { [key: string]: string } => {
             const arr = [...this._el.attributes];
             const obj: { [key: string]: string } = {};
@@ -127,12 +127,12 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    setAttr(map: { [key: string]: string | null }): FastjsDom
-    setAttr(key: string, value: string): FastjsDom
-    setAttr(key: string, value: null): FastjsDom
-    setAttr(key: string, value: string | null): FastjsDom
+    setAttr(map: { [key: string]: string | null }): Dom
+    setAttr(key: string, value: string): Dom
+    setAttr(key: string, value: null): Dom
+    setAttr(key: string, value: string | null): Dom
 
-    setAttr(keyOrMap: string | { [key: string]: string | null }, value?: string | null): FastjsDom {
+    setAttr(keyOrMap: string | { [key: string]: string | null }, value?: string | null): Dom {
         if (typeof keyOrMap === "object") {
             for (let key in keyOrMap) {
                 this.setAttr(key, keyOrMap[key]);
@@ -147,10 +147,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     getStyle(): styleObj
     getStyle(key: styleObjKeys): string
-    getStyle(callback: (style: styleObj) => void): FastjsDom
-    getStyle(key: styleObjKeys, callback: (value: string) => void): FastjsDom
+    getStyle(callback: (style: styleObj) => void): Dom
+    getStyle(key: styleObjKeys, callback: (value: string) => void): Dom
 
-    getStyle(keyOrCallback?: styleObjKeys | ((style: styleObj) => void), callback?: (value: string) => void): styleObj | string | FastjsDom {
+    getStyle(keyOrCallback?: styleObjKeys | ((style: styleObj) => void), callback?: (value: string) => void): styleObj | string | Dom {
         const getStyleProxy = (): styleObj => {
             const handler: ProxyHandler<CSSStyleDeclaration> = {
                 set: (target, key: PropertyKey, value) => {
@@ -174,11 +174,11 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    setStyle(css: string): FastjsDom
-    setStyle(map: styleObj): FastjsDom
-    setStyle(key: styleObjKeys, value: string, important?: boolean): FastjsDom
+    setStyle(css: string): Dom
+    setStyle(map: styleObj): Dom
+    setStyle(key: styleObjKeys, value: string, important?: boolean): Dom
 
-    setStyle(keyOrMapOrString: styleObjKeys | styleObj | string, value?: string, other: boolean = false): FastjsDom {
+    setStyle(keyOrMapOrString: styleObjKeys | styleObj | string, value?: string, other: boolean = false): Dom {
         if (typeof keyOrMapOrString === "object") {
             let k: styleObjKeys;
             for (k in keyOrMapOrString) {
@@ -197,9 +197,9 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this._el;
     }
 
-    each(callback: EachCallback, deep: boolean = false): FastjsDom {
+    each(callback: EachCallback, deep: boolean = false): Dom {
         const each = (el: HTMLElement, index: number) => {
-            callback(new FastjsDom(el), el, index);
+            callback(new Dom(el), el, index);
             if (deep)
                 for (let i = 0; i < el.children.length; i++) {
                     each(el.children[i] as HTMLElement, i);
@@ -209,25 +209,25 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    focus(): FastjsDom {
+    focus(): Dom {
         this._el.focus();
         return this;
     }
 
-    firstChild(): FastjsDom | null {
-        return this._el.firstElementChild ? new FastjsDom(this._el.firstElementChild as HTMLElement) : null;
+    firstChild(): Dom | null {
+        return this._el.firstElementChild ? new Dom(this._el.firstElementChild as HTMLElement) : null;
     }
 
-    lastChild(): FastjsDom | null {
-        return this._el.lastElementChild ? new FastjsDom(this._el.lastElementChild as HTMLElement) : null;
+    lastChild(): Dom | null {
+        return this._el.lastElementChild ? new Dom(this._el.lastElementChild as HTMLElement) : null;
     }
 
     children(): FastjsDomList {
         return new FastjsDomList([...this._el.children]);
     }
 
-    father(): FastjsDom | null {
-        return new FastjsDom(this.get("parentElement") as HTMLElement);
+    father(): Dom | null {
+        return new Dom(this.get("parentElement") as HTMLElement);
     }
 
     get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
@@ -235,33 +235,33 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     }
 
     html(): string
-    html(val: string): FastjsDom
+    html(val: string): Dom
 
-    html(val?: string): string | FastjsDom {
+    html(val?: string): string | Dom {
         // if null -> not change || String(val)
         return val === undefined ? this.get("innerHTML") : this.set("innerHTML", val);
     }
 
-    last(): FastjsDom | null {
-        return this._el.lastElementChild ? new FastjsDom(this._el.lastElementChild as HTMLElement) : null;
+    last(): Dom | null {
+        return this._el.lastElementChild ? new Dom(this._el.lastElementChild as HTMLElement) : null;
     }
 
-    next(selector: string): FastjsDom | FastjsDomList | null {
+    next(selector: string): Dom | FastjsDomList | null {
         return _selector(selector, this._el);
     }
 
-    push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, target?: T, clone?: boolean): PushReturn<T>
-    push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, callback?: (pushReturn: PushReturn<T>) => void, target?: T, clone?: boolean): FastjsDom
+    push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | Dom, target?: T, clone?: boolean): PushReturn<T>
+    push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | Dom, callback?: (pushReturn: PushReturn<T>) => void, target?: T, clone?: boolean): Dom
 
-    push<T extends PushTarget>(el: HTMLElement | FastjsDomList | FastjsDom = document.body, callbackOrTarget: ((pushReturn: PushReturn<T>) => void) | T = PushTarget.lastElementChild as T, target: T | boolean = PushTarget.lastElementChild as T, clone: boolean = false): PushReturn<T> | FastjsDom {
-        const solve = (result: PushReturn<T>): FastjsDom | PushReturn<T> => {
+    push<T extends PushTarget>(el: HTMLElement | FastjsDomList | Dom = document.body, callbackOrTarget: ((pushReturn: PushReturn<T>) => void) | T = PushTarget.lastElementChild as T, target: T | boolean = PushTarget.lastElementChild as T, clone: boolean = false): PushReturn<T> | Dom {
+        const solve = (result: PushReturn<T>): Dom | PushReturn<T> => {
             if (typeof callbackOrTarget !== "function") return result;
             callbackOrTarget(result);
             return this;
         }
 
         const _target: T = typeof callbackOrTarget === "function" ? target as T : callbackOrTarget;
-        el = el instanceof FastjsDom || el instanceof FastjsDomList ? el.el() : el;
+        el = el instanceof Dom || el instanceof FastjsDomList ? el.el() : el;
         // const node = (typeof target === "boolean" ? target : clone) ? this._el.cloneNode(true) as HTMLElement : this._el;
         let node: HTMLElement;
         if (typeof target === "boolean" ? target : clone) {
@@ -279,11 +279,11 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
                     "target: Fastjs.PushTarget." + target,
                     "clone: " + clone,
                     "callback: " + callback,
-                    "push<T extends PushTarget>(**el?: HTMLElement | FastjsDomList | FastjsDom**, target?: T, clone?: boolean): PushReturn<T>",
+                    "push<T extends PushTarget>(**el?: HTMLElement | FastjsDomList | Dom**, target?: T, clone?: boolean): PushReturn<T>",
                 ], ["fastjs.warn", "fastjs.warn", "fastjs.wrong"]);
                 throw _dev.error("fastjs/dom/push", "el.parentElement can't be null", [
-                    "push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, target?: T, clone?: boolean): PushReturn<T>",
-                    "FastjsDom.push",
+                    "push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | Dom, target?: T, clone?: boolean): PushReturn<T>",
+                    "Dom.push",
                 ])
             }
             throw "hg42"
@@ -291,12 +291,12 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         // if replace
         if (_target === PushTarget.replaceElement) {
             const replaced = el.parentElement.replaceChild(node, el);
-            const newEl = new FastjsDom(node as HTMLElement);
+            const newEl = new Dom(node as HTMLElement);
 
             return solve({
                 isReplace: true,
                 newElement: newEl,
-                oldElement: new FastjsDom(replaced),
+                oldElement: new Dom(replaced),
                 index: newEl.father()?.children().toElArray().indexOf(node),
                 el: newEl,
                 origin: this,
@@ -318,7 +318,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
                     added = el.parentElement.insertBefore(node, el.nextSibling);
                     break;
             }
-            const newEl = new FastjsDom(added as HTMLElement);
+            const newEl = new Dom(added as HTMLElement);
             return solve({
                 isReplace: false,
                 index: newEl.father()?.children().toElArray().indexOf(added as HTMLElement),
@@ -329,11 +329,11 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         }
     }
 
-    insert<T extends InsertTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, target?: T, clone?: boolean): InsertReturn
-    insert<T extends InsertTarget>(el?: HTMLElement | FastjsDomList | FastjsDom, callback?: (insertReturn: InsertReturn) => void, target?: T, clone?: boolean): FastjsDom
+    insert<T extends InsertTarget>(el?: HTMLElement | FastjsDomList | Dom, target?: T, clone?: boolean): InsertReturn
+    insert<T extends InsertTarget>(el?: HTMLElement | FastjsDomList | Dom, callback?: (insertReturn: InsertReturn) => void, target?: T, clone?: boolean): Dom
 
-    insert<T extends InsertTarget>(el: HTMLElement | FastjsDomList | FastjsDom = document.body, callbackOrTarget: ((insertReturn: InsertReturn) => void) | T = InsertTarget.last as T, target: T | boolean = InsertTarget.last as T, clone: boolean = true): InsertReturn | FastjsDom {
-        const solve = (result: InsertReturn): FastjsDom | InsertReturn => {
+    insert<T extends InsertTarget>(el: HTMLElement | FastjsDomList | Dom = document.body, callbackOrTarget: ((insertReturn: InsertReturn) => void) | T = InsertTarget.last as T, target: T | boolean = InsertTarget.last as T, clone: boolean = true): InsertReturn | Dom {
+        const solve = (result: InsertReturn): Dom | InsertReturn => {
             if (typeof callbackOrTarget !== "function") return result;
             callbackOrTarget(result);
             return this;
@@ -355,7 +355,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
                 added = this._el.insertBefore(node, this._el.children[Math.floor(Math.random() * this._el.children.length)]);
                 break;
         }
-        const newEl = new FastjsDom(added as HTMLElement);
+        const newEl = new Dom(added as HTMLElement);
         return solve({
             index: this.children().toElArray().indexOf(added as HTMLElement),
             added: newEl,
@@ -364,7 +364,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     }
 
 
-    addEvent(event: keyof HTMLElementEventMap = "click", callback: EventCallback): FastjsDom {
+    addEvent(event: keyof HTMLElementEventMap = "click", callback: EventCallback): Dom {
         let eventTrig: EventListener | EventListenerObject = (event: Event) => callback(this, event);
         this._events.push({
             type: event,
@@ -381,10 +381,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     getEvent(): EventList
     getEvent(type: keyof HTMLElementEventMap): EventCallback | null
-    getEvent(callback: (eventList: EventList) => void): FastjsDom
-    getEvent(type: keyof HTMLElementEventMap, callback: (event: EventCallback | null) => void): FastjsDom
+    getEvent(callback: (eventList: EventList) => void): Dom
+    getEvent(type: keyof HTMLElementEventMap, callback: (event: EventCallback | null) => void): Dom
 
-    getEvent(typeOrCallback?: keyof HTMLElementEventMap | ((eventList: EventList) => void), callback?: (event: EventCallback | null) => void): EventList | EventCallback | null | FastjsDom {
+    getEvent(typeOrCallback?: keyof HTMLElementEventMap | ((eventList: EventList) => void), callback?: (event: EventCallback | null) => void): EventList | EventCallback | null | Dom {
         if (typeof typeOrCallback === "string")
             if (callback)
                 callback(this._events.find((v) => v.type === typeOrCallback)?.callback || null);
@@ -398,25 +398,25 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    removeEvent(): FastjsDom
-    removeEvent(type: keyof HTMLElementEventMap): FastjsDom
-    removeEvent(key: number): FastjsDom
-    removeEvent(type: keyof HTMLElementEventMap, key: number): FastjsDom
-    removeEvent(callback: EventCallback): FastjsDom
+    removeEvent(): Dom
+    removeEvent(type: keyof HTMLElementEventMap): Dom
+    removeEvent(key: number): Dom
+    removeEvent(type: keyof HTMLElementEventMap, key: number): Dom
+    removeEvent(callback: EventCallback): Dom
 
-    removeEvent(typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | EventCallback, key?: number): FastjsDom {
+    removeEvent(typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | EventCallback, key?: number): Dom {
         if (__DEV__) {
             if (typeOrKeyOrCallback === undefined) {
                 _dev.warn("fastjs/dom/removeEvent", "You are removing **all events**, make sure you want to do this.", [
                     "***No Any Argument",
-                    "*removeEvent(): FastjsDom",
+                    "*removeEvent(): Dom",
                     "super:", this
                 ], ["fastjs.warn"]);
             }
             if (typeof typeOrKeyOrCallback === "string" && key === undefined) {
                 _dev.warn("fastjs/dom/removeEvent", "You are removing **all events** with type " + typeOrKeyOrCallback + ", make sure you want to do this.", [
                     "*type: " + typeOrKeyOrCallback,
-                    "*removeEvent(key: keyof HTMLElementEventMap): FastjsDom",
+                    "*removeEvent(key: keyof HTMLElementEventMap): Dom",
                     "super:", this
                 ], ["fastjs.warn"]);
             }
@@ -450,12 +450,12 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     }
 
 
-    remove(): FastjsDom {
+    remove(): Dom {
         this._el.remove();
         return this;
     }
 
-    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom {
+    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): Dom {
         if (findPropInChain(this._el.constructor.prototype, key)?.writable ||
             findPropInChain(this._el.constructor.prototype, key)?.set
         ) {
@@ -463,7 +463,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         } else if (__DEV__)
             _dev.warn("fastjs/dom/set", `key **${key}** is not writable`, [
                 "*key: " + key,
-                "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): FastjsDom",
+                "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): Dom",
                 "super:", this
             ], ["fastjs.warn"]);
         return this;
@@ -479,17 +479,17 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     }
 
     text(): string
-    text(val: string): FastjsDom
+    text(val: string): Dom
 
-    text(val?: string): string | FastjsDom {
+    text(val?: string): string | Dom {
         // if null -> not change || String(val)
         return val === undefined ? this.get("innerText") : this.set("innerText", val);
     }
 
     val(): string
-    val(val: string): FastjsDom
+    val(val: string): Dom
 
-    val(val?: string): FastjsDom | string {
+    val(val?: string): Dom | string {
         const btn = this._el instanceof HTMLButtonElement;
         if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
             // if val and is button || input || textarea
@@ -505,7 +505,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
             _dev.warn("fastjs/dom/val", `This element is not a **input or textarea or button**, instanceof **${this._el.constructor.name}**`, [
                 "*super._el: ", this._el,
                 "val(): string",
-                "val(val: string): FastjsDom",
+                "val(val: string): Dom",
                 "super:", this
             ], ["fastjs.right", "fastjs.warn"]);
         }
@@ -514,10 +514,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     /** @description Class Functions */
 
-    addClass(className: string[]): FastjsDom
-    addClass(...className: string[]): FastjsDom
+    addClass(className: string[]): Dom
+    addClass(...className: string[]): Dom
 
-    addClass(className: string | string[]): FastjsDom {
+    addClass(className: string | string[]): Dom {
         if (typeof className === "string") {
             [...arguments].forEach((v: string) => {
                 v.split(" ").forEach((v) => {
@@ -528,14 +528,14 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    clearClass(): FastjsDom {
+    clearClass(): Dom {
         return this.removeClass(...this._el.classList);
     }
 
-    removeClass(className: string[]): FastjsDom
-    removeClass(...className: string[]): FastjsDom
+    removeClass(className: string[]): Dom
+    removeClass(...className: string[]): Dom
 
-    removeClass(className: string | string[]): FastjsDom {
+    removeClass(className: string | string[]): Dom {
         const classList: string[] = Array.isArray(className) ? className : [...arguments];
         classList.forEach((v) => {
             this.setClass(v, false);
@@ -543,12 +543,12 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         return this;
     }
 
-    setClass(): FastjsDom
-    setClass(className: string, value?: boolean): FastjsDom
-    setClass(classNames: string[]): FastjsDom
-    setClass(classNames: { [key: string]: boolean }): FastjsDom
+    setClass(): Dom
+    setClass(className: string, value?: boolean): Dom
+    setClass(classNames: string[]): Dom
+    setClass(classNames: { [key: string]: boolean }): Dom
 
-    setClass(classNames?: string | string[] | { [key: string]: boolean }, value: boolean = true): FastjsDom {
+    setClass(classNames?: string | string[] | { [key: string]: boolean }, value: boolean = true): Dom {
         if (typeof classNames === "string")
             this._el.classList[value ? "add" : "remove"](classNames);
         else if (Array.isArray(classNames))
@@ -566,10 +566,10 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     getClass(): string[]
     getClass(className: string): boolean
-    getClass(callback: (classNames: string[]) => void): FastjsDom
-    getClass(className: string, callback: (value: boolean) => void): FastjsDom
+    getClass(callback: (classNames: string[]) => void): Dom
+    getClass(className: string, callback: (value: boolean) => void): Dom
 
-    getClass(classNameOrCallback?: string | ((classNames: string[]) => void), callback?: (value: boolean) => void): string[] | boolean | FastjsDom {
+    getClass(classNameOrCallback?: string | ((classNames: string[]) => void), callback?: (value: boolean) => void): string[] | boolean | Dom {
         const getClassProxy = (): string[] => {
             const handler: ArrayProxyHandler<string> = {
                 set: (target, key: PropertyKey, value) => {
@@ -594,4 +594,4 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     }
 }
 
-export default FastjsDom
+export default Dom

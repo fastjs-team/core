@@ -1,4 +1,4 @@
-import FastjsDom from "./fastjsDom";
+import FastjsDom from "./dom";
 import {styleObj} from "./css";
 
 export enum PushTarget {

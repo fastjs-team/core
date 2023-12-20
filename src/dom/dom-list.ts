@@ -1,7 +1,7 @@
-import FastjsDom from './fastjsDom';
+import FastjsDom from './dom';
 import _dev from "../dev";
 import selector from "./selector";
-import type {EachCallback, EventCallback} from "./dom-base";
+import type {EachCallback, EventCallback} from "./def";
 import {styleObj, styleObjKeys} from "./css";
 
 class FastjsDomList {

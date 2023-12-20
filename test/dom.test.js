@@ -59,13 +59,13 @@ describe("Dom remove test", () => {
 })
 
 describe("DomList test", () => {
-  it("Return FastjsDom", () => {
+  it("Return Dom", () => {
     cleanupEnv(2)
     const result = dom.select(".child");
     expect(result.getEl(1).get("tagName")).toBe("A");
   })
 
-  it("Return FastjsDom Array", () => {
+  it("Return Dom Array", () => {
     cleanupEnv(2)
     const result = dom.select(".child").toArray();
     expect(result[1].get("tagName")).toBe("A");

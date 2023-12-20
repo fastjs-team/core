@@ -1,6 +1,6 @@
 import selector from "./selector";
-import FastjsDom from "./fastjsDom";
-import FastjsDomList from "./fastjsDomList";
+import FastjsDom from "./dom";
+import FastjsDomList from "./dom-list";
 import type {FastjsDomProps} from "./def";
 
 

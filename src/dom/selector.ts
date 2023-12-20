@@ -1,8 +1,6 @@
-import fastjsDom from "./fastjsDom";
-import fastjsDomList from "./fastjsDomList";
 import _dev from "../dev";
-import FastjsDom from "./fastjsDom";
-import FastjsDomList from "./fastjsDomList";
+import FastjsDom from "./dom";
+import FastjsDomList from "./dom-list";
 
 function selector(selector: string = "body", parent: Document | HTMLElement | HTMLElement[] = document): FastjsDom | FastjsDomList | null {
     if (__DEV__)
@@ -15,12 +13,12 @@ function selector(selector: string = "body", parent: Document | HTMLElement | HT
         result.push(...queryResultToArray(e.querySelectorAll(selector)));
     }) : result.push(...queryResultToArray(parent.querySelectorAll(selector)));
     if (result.length === 0) return null;
-    if (selector.includes(`#${result[0].id}`) || specialStatements.includes(selector)) return new fastjsDom(result[0] as HTMLElement);
+    if (selector.includes(`#${result[0].id}`) || specialStatements.includes(selector)) return new FastjsDom(result[0] as HTMLElement);
     const list: HTMLElement[] = [];
     result.forEach((e: Element) => {
         list.push(e as HTMLElement);
     })
-    return new fastjsDomList(list);
+    return new FastjsDomList(list);
 
     function queryResultToArray(queryResult: NodeListOf<Element>): HTMLElement[] {
         const result: HTMLElement[] = [];
