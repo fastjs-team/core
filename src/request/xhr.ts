@@ -1,100 +1,10 @@
 import _dev from "../dev";
+import moduleConfig from "./config";
+import FastjsBaseModule from "../base";
 
-interface data {
-    [key: string]: any;
-}
+import type {data, xhrRequestConfig} from "./def";
 
-interface requestConfig {
-    timeout: number;
-    /** @deprecated */
-    datatype: string;
-    headers: {
-        [key: string]: string;
-    };
-    shutdown: boolean;
-    wait: number;
-    failed: Function;
-    callback: Function;
-    keepalive: boolean;
-    keepaliveWait: number;
-    hooks?: {
-        before: (request: FastjsRequest, config: moduleConfig) => boolean;
-        success: (request: FastjsRequest, config: moduleConfig) => boolean;
-        failed: (request: FastjsRequest, config: moduleConfig) => boolean;
-        callback: (
-            request: FastjsRequest,
-            data: {
-                [key: string]: any;
-            }, config: moduleConfig
-        ) => boolean
-    };
-    query?: {
-        [key: string]: any;
-    };
-    body?: {
-        [key: string]: any;
-    } | string;
-}
-
-interface moduleConfig {
-    timeout: number;
-    hooks: {
-        before: (request: FastjsRequest, config: moduleConfig) => boolean;
-        success: (request: FastjsRequest, config: moduleConfig) => boolean;
-        failed: (request: FastjsRequest, config: moduleConfig) => boolean;
-        callback: (
-            request: FastjsRequest,
-            data: {
-                [key: string]: any;
-            }, config: moduleConfig
-        ) => boolean
-    };
-    handler: {
-        parseData: (data: any, request: FastjsRequest) => any;
-        responseCode: (code: number, request: FastjsRequest) => boolean;
-    }
-    ignoreFormatWarning: boolean;
-    returnFullResponse: boolean;
-}
-
-const moduleConfig: moduleConfig = {
-    timeout: 5000,
-    hooks: {
-        before: (): boolean => true,
-        success: (): boolean => true,
-        failed: (): boolean => true,
-        callback: (): boolean => true,
-    },
-    handler: {
-        parseData: (data: any, request: FastjsRequest) => {
-            try {
-                return JSON.parse(data);
-            } catch (e) {
-                if (__DEV__ && !moduleConfig.ignoreFormatWarning) {
-                    _dev.warn("fastjs/request", "Failed to parse JSON, do you sure you send a request correctly? Set request.config.ignoreFormatWarning to true to ignore this warning.", [
-                        `*Received data:`, {
-                            data: data,
-                            length: data.length,
-                            // headers to object
-                            headers: getHeaders(request.xhr as XMLHttpRequest),
-                        },
-                        `url: ${request.url}`,
-                        `config:`, request.config,
-                        "super:", request
-                    ], ["fastjs.warn"])
-                }
-                return data;
-            }
-        },
-        responseCode: (code: number): boolean => {
-            return code >= 200 && code < 300;
-        }
-    },
-    ignoreFormatWarning: false,
-    returnFullResponse: false
-}
-
-function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
+export function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
     const headers: { [key: string]: string } = {}
     xhr.getAllResponseHeaders()?.split("\n").forEach((e) => {
         e && (headers[e.split(": ")[0]] = e.split(": ")[1]);
@@ -102,11 +12,13 @@ function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
     return headers;
 }
 
-class FastjsRequest {
-    private waitId: number;
-    readonly construct: string;
+class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
+    private waitId: number = 0;
+    readonly construct: string = "FastjsXhrRequest";
 
-    constructor(url: string, data?: data, config: Partial<requestConfig> = {}) {
+    constructor(public url: string, public data: data = {}, config: Partial<xhrRequestConfig> = {}) {
+        super();
+
         if (__DEV__ && !url) {
             _dev.warn("fastjs/request", "A correct url is **required**.", [
                 `***url: ${url}`,
@@ -119,21 +31,9 @@ class FastjsRequest {
                 "FastjsRequest.constructor"
             ]);
         }
-        this.url = url;
-        this.data = data || {};
 
-        if (__DEV__) {
-            if (config.datatype)
-                _dev.warn("fastjs/request", "Datatype is **deprecated** and already **doesn't effect on anything**, it will be **removed** in the future, Try to use `request.config.hooks.callback` instead.", [
-                    `url: ${this.url}`,
-                    "data:", this.data,
-                    "*config:", config,
-                    "super:", this
-                ], ["fastjs.warn", "fastjs.warn", "fastjs.wrong", "fastjs.warn"])
-        }
         this.config = {
             timeout: config.timeout || moduleConfig.timeout,
-            datatype: config.datatype || "auto",
             headers: config.headers || {},
             shutdown: config.shutdown || false,
             wait: config.wait || 0,
@@ -142,21 +42,11 @@ class FastjsRequest {
             keepalive: config.keepalive || false,
             keepaliveWait: config.keepaliveWait || 0
         };
-        this.response = null;
-        this.xhr = null;
-        this.waitId = 0;
-
-        // construct
-        this.construct = "FastjsRequest";
     }
 
-    url: string;
-    data: {
-        [key: string]: any;
-    };
-    config: requestConfig;
-    response: any;
-    xhr: XMLHttpRequest | null;
+    config: xhrRequestConfig;
+    response: any = null;
+    xhr: XMLHttpRequest | null = null;
 
     get(data: data = {}) {
         return this.send("GET", data, "FastjsRequest.get()");
@@ -346,5 +236,6 @@ class FastjsRequest {
     }
 }
 
-export type {data, requestConfig}
-export {FastjsRequest as request, moduleConfig}
+export type {data, xhrRequestConfig}
+export {FastjsXhrRequest as request, moduleConfig}
+export default FastjsXhrRequest;
