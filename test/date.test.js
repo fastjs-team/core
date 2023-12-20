@@ -52,7 +52,7 @@ describe("Date create and convert", () => {
     })
 
     it("Parse date string", () => {
-        const result = date.parse("Y-M-D h:m:s A", "2021-01-01 01:00:00 PM");
+        const result = date.parse("2021-01-01 01:00:00 PM", "Y-M-D h:m:s A");
         console.log("Parse date string: ", result);
         expect(result.utcTimestamp - 1609462800000).toBeLessThan(10)
         expect(result.utcTimestamp - 1609462800000).toBeGreaterThan(-10)
