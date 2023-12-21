@@ -1,5 +1,5 @@
 {
-  "name": "@fastjs/core",
+  "name": "@fastjs-next/core",
   "version": "1.0.0-pre-alpha.1",
   "description": "Fastjs-next is a useful, lightweight JavaScript library for any types of project.",
   "main": "index.js",
