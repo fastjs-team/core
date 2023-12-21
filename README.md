@@ -18,9 +18,9 @@
 
 ## Important
 
-**This project is in maintenance, we are working new version of fastjs. This version(@fastjs/core) is still in development, so it doesn't publish to npm or have a release yet.**
+**This project is in maintenance, we are working new version of fastjs. This version(@fastjs-next/core) is still in development, so it doesn't publish to npm or have a release yet.**
 
-**The package name will be changed to @fastjs/core, and the package name fastjs-next will not be used anymore.**
+**The package name will be changed to @fastjs-next/core, and the package name fastjs-next will not be used anymore.**
 
 ## Getting Started
 
@@ -30,7 +30,7 @@
 
 ## Description
 
-@fastjs/core is a useful, lightweight JavaScript library for any types of project.
+@fastjs-next/core is a useful, lightweight JavaScript library for any types of project.
 
 It is designed to be easy to use. Fastjs can be with any framework or just pure JavaScript.
 
@@ -52,25 +52,25 @@ We have many versions, including:
 ### Bundler/CommonJS
 
 ```bash
-npm install @fastjs/core
+npm install @fastjs-next/core
 ```
 
 ```js
-import { dom } from '@fastjs/core' // esm
-const { request } = require('@fastjs/core') // cjs
+import { dom } from '@fastjs-next/core' // esm
+const { request } = require('@fastjs-next/core') // cjs
 ```
 
 ### CDN (Global)
 
 ```html
-<script src="https://unpkg.com/@fastjs/core/dist/fastjs.global.js"></script>
+<script src="https://unpkg.com/@fastjs-next/core/dist/fastjs.global.js"></script>
 ```
 
 ### Browser (ES Module)
 
 ```html
 <script type="module">
-  import { dom } from 'https://unpkg.com/@fastjs/core/dist/fastjs.esm.browser.js'
+  import { dom } from 'https://unpkg.com/@fastjs-next/core/dist/fastjs.esm.browser.js'
 </script>
 ```
 
