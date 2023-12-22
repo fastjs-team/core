@@ -1,27 +1,118 @@
 import _dev from "../dev";
+import FastjsBaseModule from "../base";
+import {extractIgnoreTokens, getReplacement} from "./lib";
+import {fDate} from "./def";
 
-interface replacement {
-    0: string;
-    1: string | number;
-}
-
-class FastjsDate {
+class FastjsDate extends FastjsBaseModule<FastjsDate> {
     public _date: number;
-    public _createAt: number;
-    public readonly construct: string;
+    public _createAt: number = Date.now();
+    public readonly construct: string = "FastjsDate"
 
-    constructor(public format: string = "Y-M-D h:m:s", date: number | string = Date.now()) {
+    public timezoneDiff: number = new Date().getTimezoneOffset() * 60 * 1000;
+
+    constructor(format: string, date: fDate)
+    constructor(format: string, date: number | string, isUTC?: boolean)
+    constructor(
+        public format: string = "Y-M-D h:m:s",
+        date: number | string | fDate = Date.now(),
+        public isUTC: boolean = false
+    ) {
+        super();
+
+        if (typeof date === "object") {
+            this._date = date.t;
+            this.timezoneDiff = date.z;
+            this.isUTC = date.u;
+        } else this._date = (typeof date === "string") ? this.parseFormatString(format, date) : date;
+    }
+
+    convertUTC(from: "utc" | "local" | "default" = "default", timezoneOffset: number = this.timezoneDiff): FastjsDate {
+        if (from === "default") from = this.isUTC ? "utc" : "local";
+        this._date = from === "utc" ? this._date + timezoneOffset : this._date - timezoneOffset;
+        this.isUTC = from === "utc";
+        return this;
+    }
+
+
+    changeDate(date: number | Date): FastjsDate;
+    changeDate(date: string, format?: string): FastjsDate;
+    changeDate(date: number | Date | string, format: string = this.format): FastjsDate {
         if (typeof date === "string") {
-            date = this.parseFormatString(format, date);
+            date = this.parseFormatString(this.format, date);
+        } else if (date instanceof Date) {
+            date = date.getTime();
         }
 
         this._date = date;
-        this._createAt = Date.now();
-        this.construct = "FastjsDate";
+        return this;
     }
 
-    private padZero(number: number): string {
-        return number < 10 ? "0" + number : number.toString();
+    setZone(zone: number): FastjsDate {
+        this.timezoneDiff = zone * 60 * 1000;
+        return this;
+    }
+
+    setStatus(isUTC: boolean): FastjsDate {
+        this.isUTC = isUTC;
+        return this;
+    }
+
+    refresh(): FastjsDate {
+        this._createAt = Date.now();
+        return this;
+    }
+
+    toString(newFormat?: string): string {
+        const timestamp = this.toNumber();
+        const date = new Date(timestamp);
+
+        const [formatString, ignoreTokens] = extractIgnoreTokens(newFormat || this.format);
+
+        let result = formatString;
+        for (const replace of this.getReplacement(date)) {
+            const format = replace[0];
+            const replacement = replace[1];
+            result = result.replace(new RegExp(format, "g"), String(replacement));
+        }
+
+        ignoreTokens.forEach((token, index) => {
+            result = result.replace(`{{*${index}}}`, `<${token}>`);
+        });
+
+        return result;
+    }
+
+    toNumber(): number {
+        const timeLeft = Date.now() - this._createAt;
+        return this._date + timeLeft;
+    }
+
+    export(toUTC: boolean): fDate {
+        if (__DEV__ && toUTC && this.isUTC) {
+            _dev.warn("fastjs/date/FastjsDate", "Exporting UTC date to UTC", [
+                "*export(**toUTC: boolean**): fDate",
+                "*this.isUTC: true",
+                "FastjsDate.export",
+                "super:", this
+            ], ["fastjs.warn"]);
+            throw _dev.error("fastjs/date/FastjsDate", "Exporting UTC date to UTC", [
+                "export(toUTC: boolean): fDate",
+                "FastjsDate.export",
+            ]);
+        }
+        return {
+            t: this.toNumber(),
+            z: this.timezoneDiff,
+            u: this.isUTC
+        }
+    }
+
+    toStringLocal(newFormat?: string): string {
+        return new FastjsDate(newFormat || this.format, this._date).toString();
+    }
+
+    toNumberLocal(): number {
+        return this._date;
     }
 
     private parseFormatString(formatString: string, dateString: string): number {
@@ -32,7 +123,7 @@ class FastjsDate {
         let isAm = null;
         let isToken = false;
         let dateStringPointer = -1;
-        const allTokens: Array<string> = this.getReplacement().map(replacement => replacement[0]);
+        const allTokens: Array<string> = getReplacement().map(replacement => replacement[0]);
 
         for (let i = 0; i < formatString.length; i++) {
             dateStringPointer++;
@@ -133,89 +224,6 @@ class FastjsDate {
         }
 
         return parsedDate.getTime();
-    }
-
-    private extractIgnoreTokens(formatString: string): [string, string[]] {
-        let processedString = formatString;
-        const ignoreTokens: string[] = formatString.match(/<.*?>/g)?.map(match => match.slice(1, -1)) || [];
-
-        ignoreTokens.forEach((_, index) => {
-            processedString = processedString.replace(/<.*?>/, `{{*${index}}}`);
-        })
-
-        return [processedString, ignoreTokens];
-    }
-
-
-    private getReplacement(date: Date = new Date()): replacement[] {
-        const replacement: Array<replacement> = [
-            ["Y", date.getFullYear()],
-            ["M", date.getMonth() + 1],
-            ["D", date.getDate()],
-            ["H", date.getHours() % 12],
-            ["hh", date.getHours()],
-            ["h", date.getHours()],
-            ["mm", date.getMinutes()],
-            ["m", date.getMinutes()],
-            ["ss", date.getSeconds()],
-            ["s", date.getSeconds()],
-            ["S", date.getMilliseconds()],
-            // A and a should be the last one because it will affect the result of replacement
-            ["A", date.getHours() >= 12 ? "PM" : "AM"],
-            ["a", date.getHours() >= 12 ? "pm" : "am"],
-        ]
-
-        return replacement.map(replacement =>
-            (replacement[0].length === 1 && typeof replacement[1] === "number") ? [replacement[0], this.padZero(replacement[1])] : replacement);
-    }
-
-    changeDate(date: number | string): FastjsDate {
-        if (typeof date === "string") {
-            date = this.parseFormatString(this.format, date);
-        }
-
-        this._date = date;
-        return this;
-    }
-
-    refresh(): FastjsDate {
-        this._createAt = Date.now();
-        return this;
-    }
-
-    toString(newFormat?: string): string {
-        const timestamp = this.toNumber();
-        const date = new Date(timestamp);
-
-        const [formatString, ignoreTokens] = this.extractIgnoreTokens(
-            newFormat || this.format
-        );
-
-        let result = formatString;
-        for (const replace of this.getReplacement(date)) {
-            const format = replace[0];
-            const replacement = replace[1];
-            result = result.replace(new RegExp(format, "g"), String(replacement));
-        }
-
-        ignoreTokens.forEach((token, index) => {
-            result = result.replace(`{{*${index}}}`, `<${token}>`);
-        });
-
-        return result;
-    }
-
-    toNumber(): number {
-        const timeLeft = Date.now() - this._createAt;
-        return this._date + timeLeft;
-    }
-
-    toStringLocal(newFormat?: string): string {
-        return new FastjsDate(newFormat || this.format, this._date).toString();
-    }
-
-    toNumberLocal(): number {
-        return this._date;
     }
 }
 
