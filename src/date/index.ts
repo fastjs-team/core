@@ -22,7 +22,6 @@ const parse = (time: string | number, format: string = "Y-M-D h:m:s"): parseRetu
     }
 }
 
-
 /**
  * @description
  * Get a parseReturn object of timestamp or now
@@ -60,6 +59,8 @@ const reformat = (format: string, date: string, newFormat: string = "Y-M-D h:m:s
  */
 const now = (format?: string): parseReturn => parse(Date.now(), format);
 
+const create = (format: string, date: number | string, isUTC?: boolean): FastjsDate => new FastjsDate(format, date, isUTC);
+
 export default {
     parse,
     parseDate,
@@ -67,7 +68,8 @@ export default {
     string,
     date,
     reformat,
-    now
+    now,
+    create
 }
 export {
     FastjsDate
