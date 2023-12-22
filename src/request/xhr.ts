@@ -2,7 +2,7 @@ import _dev from "../dev";
 import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
-import type {data, xhrRequestConfig} from "./def";
+import type {data, requestConfig} from "./def";
 
 export function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
     const headers: { [key: string]: string } = {}
@@ -12,11 +12,11 @@ export function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
     return headers;
 }
 
-class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
+class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     private waitId: number = 0;
     readonly construct: string = "FastjsXhrRequest";
 
-    constructor(public url: string, public data: data = {}, config: Partial<xhrRequestConfig> = {}) {
+    constructor(public url: string, public data: data = {}, config: Partial<requestConfig> = {}) {
         super();
 
         if (__DEV__ && !url) {
@@ -40,11 +40,14 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
             failed: config.failed || (() => 0),
             callback: config.callback || (() => 0),
             keepalive: config.keepalive || false,
-            keepaliveWait: config.keepaliveWait || 0
+            keepaliveWait: config.keepaliveWait || 0,
+            hooks: config.hooks || moduleConfig.hooks,
+            query: config.query || null,
+            body: config.body || null
         };
     }
 
-    config: xhrRequestConfig;
+    config: requestConfig;
     response: any = null;
     xhr: XMLHttpRequest | null = null;
 
@@ -106,9 +109,9 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
                 }
             }
 
-            let queryData: data | undefined;
+            let queryData: data | string | null;
             if (method === "GET") {
-                queryData = (typeof data === "object" ? data : undefined) || this.config.query;
+                queryData = (data ? data : null) || this.config.query;
             } else {
                 queryData = this.config.query;
             }
@@ -121,11 +124,15 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
                 let xhr = new XMLHttpRequest();
                 this.xhr = xhr;
                 let url = this.url;
-                if (queryData && Object.keys(queryData).length) {
-                    for (const key in queryData) {
-                        if (this.data.hasOwnProperty(key)) {
-                            const value = this.data[key];
-                            url += `${url.includes("?") ? "&" : "?"}${key}=${encodeURIComponent(value)}`;
+                if (queryData) {
+                    if (typeof queryData === "string") {
+                        url += (url.includes("?") ? "" : "?") + queryData;
+                    } else {
+                        for (const key in queryData) {
+                            if (queryData.hasOwnProperty(key)) {
+                                const value = queryData[key];
+                                url += `${url.includes("?") ? "&" : "?"}${key}=${encodeURIComponent(value)}`;
+                            }
                         }
                     }
                 }
@@ -139,7 +146,7 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
                     const result = this.xhr?.status === 0 ?
                         false : moduleConfig.handler.parseData(this.xhr?.response, this);
                     // hook
-                    if (!hooks.failed(this, moduleConfig)) return;
+                    if (!hooks.failed(this, moduleConfig)) return reject("hooks.failed() interrupted");
                     // run failed
                     this.config.failed(this);
                     // if keepalive
@@ -192,8 +199,8 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
                         return void fail("xhr -> onreadystatechange() -> load()");
                     }
                     const data = moduleConfig.handler.parseData(xhr.response, this);
-                    if (!hooks.success(this, moduleConfig)) return;
-                    if (!hooks.callback(this, data, moduleConfig)) return;
+                    if (!hooks.success(this, moduleConfig)) return reject("hooks.success() interrupted");
+                    if (!hooks.callback(this, data, moduleConfig)) return reject("hooks.callback() interrupted");
                     const response = {
                         status: xhr.status,
                         statusText: xhr.statusText,
@@ -215,7 +222,7 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
                     resolve(response);
                 };
 
-                if (!hooks.before(this, moduleConfig)) return;
+                if (!hooks.before(this, moduleConfig)) return reject("hooks.before() interrupted");
                 xhr.send(bodyData || null);
             };
 
@@ -236,6 +243,6 @@ class FastjsXhrRequest extends FastjsBaseModule<FastjsXhrRequest> {
     }
 }
 
-export type {data, xhrRequestConfig}
-export {FastjsXhrRequest as request, moduleConfig}
-export default FastjsXhrRequest;
+export type {data, requestConfig}
+export {FastjsRequest as request, moduleConfig}
+export default FastjsRequest;
