@@ -1,11 +1,12 @@
 // all modules
-import request from "./request";
 import array from "./array";
 import {FastjsArray} from "./array";
 import date from "./date";
 import {FastjsDate} from "./date";
 import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
+import request from "./request";
+import {FastjsRequest} from "./request"
 import utils from "./utils";
 import {rand, copy} from "./utils";
 import {FastjsExpression} from "./base";
@@ -31,6 +32,7 @@ export {
     FastjsDomList,
     /** @module request */
     request,
+    FastjsRequest,
     /** @module utils */
     utils,
     rand,
