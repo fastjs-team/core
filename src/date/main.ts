@@ -61,31 +61,6 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         return this;
     }
 
-    toString(newFormat?: string): string {
-        const timestamp = this.toNumber();
-        const date = new Date(timestamp);
-
-        const [formatString, ignoreTokens] = extractIgnoreTokens(newFormat || this.format);
-
-        let result = formatString;
-        for (const replace of getReplacement(date)) {
-            const format = replace[0];
-            const replacement = replace[1];
-            result = result.replace(new RegExp(format, "g"), String(replacement));
-        }
-
-        ignoreTokens.forEach((token, index) => {
-            result = result.replace(`{{*${index}}}`, `<${token}>`);
-        });
-
-        return result;
-    }
-
-    toNumber(): number {
-        const timeLeft = Date.now() - this._createAt;
-        return this._date + timeLeft;
-    }
-
     export(toUTC: boolean): fDate {
         if (__DEV__ && toUTC && this.isUTC) {
             _dev.warn("fastjs/date/FastjsDate", "Exporting UTC date to UTC", [
@@ -106,12 +81,34 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         }
     }
 
-    toStringLocal(newFormat?: string): string {
-        return new FastjsDate(newFormat || this.format, this._date).toString();
+    toNumber(): number {
+        return this._date;
     }
 
     toNumberLocal(): number {
-        return this._date;
+        const timeLeft = Date.now() - this._createAt;
+        return this._date + timeLeft;
+    }
+
+    toString(newFormat?: string): string {
+        const [formatString, ignoreTokens] = extractIgnoreTokens(newFormat || this.format);
+
+        let result = formatString;
+        for (const replace of getReplacement(new Date(this._date))) {
+            const format = replace[0];
+            const replacement = replace[1];
+            result = result.replace(new RegExp(format, "g"), String(replacement));
+        }
+
+        ignoreTokens.forEach((token, index) => {
+            result = result.replace(`{{*${index}}}`, `<${token}>`);
+        });
+
+        return result;
+    }
+
+    toStringLocal(newFormat?: string): string {
+        return new FastjsDate(newFormat || this.format, this.toNumberLocal()).toString();
     }
 
     private parseFormatString(formatString: string, dateString: string): number {
