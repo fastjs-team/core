@@ -32,7 +32,7 @@ const formatsExport = {
 Object.keys(formatsExport).forEach(formatName => {
   const format = formatsExport[formatName]
   packageConfig.push(generateConfig(formatName, format))
-  if (['global', 'cjs'].includes(formatName)) {
+  if (['global', 'cjs', 'esm-browser'].includes(formatName)) {
     packageConfig.push(generateMinifiedConfig(formatName))
   } else if (formatName !== 'esm-bundler') {
     packageConfig.push(generateProductionConfig(formatName))
@@ -127,7 +127,8 @@ function generateMinifiedConfig(format) {
       module: true,
       compress: {
         ecma: 2021,
-        pure_getters: true
+        pure_getters: true,
+        keep_fnames: true,
       }
     })
   ])
