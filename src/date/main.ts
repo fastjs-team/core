@@ -4,10 +4,9 @@ import {extractIgnoreTokens, getReplacement} from "./lib";
 import {fDate} from "./def";
 
 class FastjsDate extends FastjsBaseModule<FastjsDate> {
+    public readonly construct: string = "FastjsDate";
     public _date: number;
     public _createAt: number = Date.now();
-    public readonly construct: string = "FastjsDate"
-
     public timezoneDiff: number = new Date().getTimezoneOffset() * 60 * 1000;
 
     constructor(format: string, date: fDate)
@@ -38,7 +37,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
     changeDate(date: string, format?: string): FastjsDate;
     changeDate(date: number | Date | string, format: string = this.format): FastjsDate {
         if (typeof date === "string") {
-            date = this.parseFormatString(this.format, date);
+            date = this.parseFormatString(format, date);
         } else if (date instanceof Date) {
             date = date.getTime();
         }
@@ -69,7 +68,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         const [formatString, ignoreTokens] = extractIgnoreTokens(newFormat || this.format);
 
         let result = formatString;
-        for (const replace of this.getReplacement(date)) {
+        for (const replace of getReplacement(date)) {
             const format = replace[0];
             const replacement = replace[1];
             result = result.replace(new RegExp(format, "g"), String(replacement));
