@@ -1,5 +1,5 @@
 import FastjsDate from "./main";
-import type {parseReturn} from "./def";
+import type {fDate, parseReturn} from "./def";
 
 /**
  * @description
@@ -59,7 +59,15 @@ const reformat = (format: string, date: string, newFormat: string = "Y-M-D h:m:s
  */
 const now = (format?: string): parseReturn => parse(Date.now(), format);
 
-const create = (format: string, date: number | string, isUTC?: boolean): FastjsDate => new FastjsDate(format, date, isUTC);
+function create(format: string, date: fDate): FastjsDate;
+function create(format: string, date: number | string, isUTC?: boolean): FastjsDate;
+function create(
+    format: string,
+    date: number | string | fDate = Date.now(),
+    isUTC?: boolean
+): FastjsDate {
+    return (typeof date === "object") ? new FastjsDate(format, date) : new FastjsDate(format, date, isUTC);
+}
 
 export default {
     parse,
