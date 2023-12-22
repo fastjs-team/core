@@ -1,6 +1,6 @@
 import _dev from "../dev";
 import {getHeaders} from "./xhr";
-import FastjsXhrRequest from "./xhr";
+import FastjsRequest from "./xhr";
 import type { moduleConfig } from "./def";
 
 const config: moduleConfig = {
@@ -12,7 +12,7 @@ const config: moduleConfig = {
         callback: (): boolean => true,
     },
     handler: {
-        parseData: (data: any, request: FastjsXhrRequest) => {
+        parseData: (data: any, request: FastjsRequest) => {
             try {
                 return JSON.parse(data);
             } catch (e) {
