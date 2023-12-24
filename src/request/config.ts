@@ -1,6 +1,7 @@
 import _dev from "../dev";
 import {getHeaders} from "./xhr";
 import FastjsRequest from "./xhr";
+import FastjsFetchRequest from "./fetch";
 import type { moduleConfig } from "./def";
 
 const config: moduleConfig = {
@@ -10,6 +11,18 @@ const config: moduleConfig = {
         success: (): boolean => true,
         failed: (): boolean => true,
         callback: (): boolean => true,
+    },
+    xhrHooks: {
+        // before: (): boolean => true,
+        // success: (): boolean => true,
+        // failed: (): boolean => true,
+        // callback: (): boolean => true,
+    },
+    fetchHooks: {
+        // before: (): boolean => true,
+        // success: (): boolean => true,
+        // failed: (): boolean => true,
+        // callback: (): boolean => true,
     },
     handler: {
         parseData: (data: any, request: FastjsRequest) => {
@@ -33,7 +46,7 @@ const config: moduleConfig = {
                 return data;
             }
         },
-        fetchReturn: async (response: Response, request: FastjsRequest): Promise<object | string> => {
+        fetchReturn: async (response: Response, request: FastjsFetchRequest): Promise<object | string> => {
             try {
                 return (await response.json());
             } catch (e) {
