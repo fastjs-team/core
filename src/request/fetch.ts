@@ -7,11 +7,12 @@ import {addQuery} from "./lib";
 
 class FastjsFetchRequest extends FastjsRequest {
     readonly construct: string = "FastjsFetchRequest";
+    declare config: fetchRequestConfig;
 
     constructor(
         public url: string,
         public data: data = {},
-        public config: fetchRequestConfig
+        config: Partial<fetchRequestConfig> = {}
     ) {
         super(url, data, config);
 

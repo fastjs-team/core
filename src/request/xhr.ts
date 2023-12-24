@@ -15,11 +15,12 @@ export function getHeaders(xhr: XMLHttpRequest): { [key: string]: string } {
 
 class FastjsXhrRequest extends FastjsRequest {
     readonly construct: string = "FastjsXhrRequest";
+    declare config: xhrRequestConfig;
 
     constructor(
         public url: string,
         public data: data = {},
-        public config: xhrRequestConfig
+        config: Partial<xhrRequestConfig> = {}
     ) {
         super(url, data, config);
 
@@ -149,5 +150,4 @@ class FastjsXhrRequest extends FastjsRequest {
     }
 }
 
-export {FastjsXhrRequest as request, moduleConfig}
 export default FastjsXhrRequest;
