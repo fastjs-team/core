@@ -65,6 +65,10 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         return this.send("PATCH", data, "FastjsRequest.patch()");
     }
 
+    head(data: data = {}) {
+        return this.send("HEAD", data, "FastjsRequest.head()");
+    }
+
     protected handleBadResponse(send: () => void, response?: Response) {
         let res;
         let status = this.xhr ? this.xhr.status : response?.status;
