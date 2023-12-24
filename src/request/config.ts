@@ -16,8 +16,8 @@ const config: moduleConfig = {
             try {
                 return JSON.parse(data);
             } catch (e) {
-                if (__DEV__ && !config.ignoreFormatWarning) {
-                    _dev.warn("fastjs/request", "Failed to parse JSON, do you sure you send a request correctly? Set request.config.ignoreFormatWarning to true to ignore this warning.", [
+                if (__DEV__ && !config.check.ignoreFormatWarning) {
+                    _dev.warn("fastjs/request", "Failed to parse JSON, do you sure you send a request correctly? Set request.config.check.ignoreFormatWarning to true to ignore this warning.", [
                         `*Received data:`, {
                             data: data,
                             length: data.length,
@@ -36,8 +36,11 @@ const config: moduleConfig = {
             return code >= 200 && code < 300;
         }
     },
-    ignoreFormatWarning: false,
-    returnFullResponse: false
+    check: {
+        ignoreFormatWarning: false,
+        returnFullResponse: false,
+        unrecommendedMethodWarning: true
+    }
 }
 
 export default config;
