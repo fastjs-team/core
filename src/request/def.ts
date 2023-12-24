@@ -1,4 +1,3 @@
-import _dev from "../dev";
 import FastjsRequest from "./xhr";
 
 export interface data {
