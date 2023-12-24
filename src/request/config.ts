@@ -14,6 +14,7 @@ const config: moduleConfig = {
     handler: {
         parseData: (data: any, request: FastjsRequest) => {
             try {
+                if (typeof data === "string") return data;
                 return JSON.parse(data);
             } catch (e) {
                 if (__DEV__ && !config.check.ignoreFormatWarning) {
@@ -32,13 +33,20 @@ const config: moduleConfig = {
                 return data;
             }
         },
+        fetchReturn: async (response: Response, request: FastjsRequest): Promise<object | string> => {
+            try {
+                return (await response.json());
+            } catch (e) {
+                return (await response.text());
+            }
+        },
         responseCode: (code: number): boolean => {
             return code >= 200 && code < 300;
         }
     },
     check: {
         ignoreFormatWarning: false,
-        returnFullResponse: false,
+        stringBodyWarning: true,
         unrecommendedMethodWarning: true
     }
 }
