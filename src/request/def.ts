@@ -50,8 +50,12 @@ export interface moduleConfig {
     };
     handler: {
         parseData: (data: any, request: FastjsRequest) => any;
+        fetchReturn: (response: Response, request: FastjsRequest) => Promise<object | string>;
         responseCode: (code: number, request: FastjsRequest) => boolean;
     }
-    ignoreFormatWarning: boolean;
-    returnFullResponse: boolean;
+    check: {
+        ignoreFormatWarning: boolean;
+        stringBodyWarning: boolean;
+        unrecommendedMethodWarning: boolean;
+    }
 }
