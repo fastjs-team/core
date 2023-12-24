@@ -30,6 +30,7 @@ enum style {
 }
 
 function warn(module: string, message: string, args: Array<any> = [], styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []): void {
+    args = args.filter((arg) => arg !== null)
     args = args.map((arg) => typeof arg === "string" ? "\n    > " + arg : arg)
 
     let styleKey = 0
