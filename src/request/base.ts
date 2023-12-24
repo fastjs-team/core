@@ -3,12 +3,14 @@ import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
 import type {data, requestConfig, xhrReturn} from "./def";
+import FastjsXhrRequest from "./xhr";
+import FastjsFetchRequest from "./fetch";
 
 class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     protected wait: number | void = 0;
     readonly construct: string = "FastjsRequest";
 
-    config: Partial<requestConfig> = {};
+    config: requestConfig;
     response: any = null;
     xhr: XMLHttpRequest | null = null;
 
@@ -61,6 +63,28 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
 
     patch(data: data = {}) {
         return this.send("PATCH", data, "FastjsRequest.patch()");
+    }
+
+    protected handleBadResponse(send: () => void, response?: Response) {
+        let res;
+        let status = this.xhr ? this.xhr.status : response?.status;
+        if (response) response.json().then((j => res = j)).catch(() => res = response.text());
+        else this.xhr?.responseText.startsWith("{") ? res = JSON.parse(this.xhr?.responseText) : res = this.xhr?.responseText;
+        if (__DEV__) {
+            _dev.warn("fastjs/request", `Request failed with status code ${status}`, [
+                "url: " + this.url,
+                "config:", this.config,
+                "*code: " + status,
+                "*response:", res,
+                "global config:", moduleConfig,
+                "super:", this,
+            ], ["fastjs.wrong"]);
+        }
+        // run failed
+        this.config.failed(this);
+        // if keepalive
+        if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
+        return res;
     }
 }
 
