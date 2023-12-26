@@ -8,21 +8,25 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
     public _date: number;
     public _createAt: number = Date.now();
     public timezoneDiff: number = new Date().getTimezoneOffset() * 60 * 1000;
+    public isUTC: boolean;
 
-    constructor(format: string, date: fDate)
+    constructor(format: string, date: fDate, toLocal?: boolean)
     constructor(format: string, date: number | string, isUTC?: boolean)
     constructor(
         public format: string = "Y-M-D h:m:s",
         date: number | string | fDate = Date.now(),
-        public isUTC: boolean = false
+        sw: boolean = false
     ) {
         super();
 
         if (typeof date === "object") {
-            this._date = date.t;
+            this._date = sw ? date.t - date.z : date.t;
             this.timezoneDiff = date.z;
-            this.isUTC = date.u;
-        } else this._date = (typeof date === "string") ? this.parseFormatString(format, date) : date;
+            this.isUTC = date.u && !sw;
+        } else {
+            this.isUTC = sw
+            this._date = (typeof date === "string") ? this.parseFormatString(format, date) : date;
+        }
     }
 
     convertUTC(from: "utc" | "local" | "default" = "default", timezoneOffset: number = this.timezoneDiff): FastjsDate {
@@ -67,17 +71,19 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
                 "*export(**toUTC: boolean**): fDate",
                 "*this.isUTC: true",
                 "FastjsDate.export",
-                "super:", this
+                "super: ", this
             ], ["fastjs.warn"]);
             throw _dev.error("fastjs/date/FastjsDate", "Exporting UTC date to UTC", [
                 "export(toUTC: boolean): fDate",
                 "FastjsDate.export",
             ]);
         }
+        let t = this._date;
+        if (toUTC && !this.isUTC) t += this.timezoneDiff;
         return {
-            t: this.toNumber(),
+            t: t,
             z: this.timezoneDiff,
-            u: this.isUTC
+            u: this.isUTC || toUTC
         }
     }
 
@@ -85,7 +91,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         return this._date;
     }
 
-    toNumberLocal(): number {
+    toActiveNumber(): number {
         const timeLeft = Date.now() - this._createAt;
         return this._date + timeLeft;
     }
@@ -107,7 +113,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         return result;
     }
 
-    toStringLocal(newFormat?: string): string {
+    toActiveString(newFormat?: string): string {
         return new FastjsDate(newFormat || this.format, this.toNumberLocal()).toString();
     }
 
@@ -139,7 +145,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
                             "***formatString: " + formatString,
                             "***dateString: " + dateString,
                             "private parseFormatString(formatString: string, dateString: string): number",
-                            "super:", this
+                            "super: ", this
                         ], ["fastjs.wrong"]);
                         throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent", [
                             "private parseFormatString(formatString: string, dateString: string): number",
@@ -203,7 +209,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
                         "***formatString: " + formatString,
                         "***dateString: " + dateString,
                         "private parseFormatString(formatString: string, dateString: string): number",
-                        "super:", this
+                        "super: ", this
                     ], ["fastjs.wrong"]);
                     throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, using 12 hours format but missing AM/PM token", [
                         "private parseFormatString(formatString: string, dateString: string): number",
