@@ -58,6 +58,7 @@ const fetchHead = (url: string, data?: data, config?: Partial<fetchRequestConfig
 export default {
     request: FastjsXhrRequest,
     create,
+    createFetch,
     config: moduleConfig,
     get,
     post,
@@ -74,4 +75,4 @@ export default {
     fetchHead
 };
 
-export {FastjsXhrRequest}
+export {FastjsXhrRequest, FastjsFetchRequest}
