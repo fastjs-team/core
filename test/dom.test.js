@@ -62,7 +62,7 @@ describe("DomList test", () => {
   it("Return Dom", () => {
     cleanupEnv(2)
     const result = dom.select(".child");
-    expect(result.getEl(1).get("tagName")).toBe("A");
+    expect(result.getDom(1).get("tagName")).toBe("A");
   })
 
   it("Return Dom Array", () => {
