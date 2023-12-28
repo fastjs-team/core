@@ -1,10 +1,11 @@
 import FastjsDom from './dom';
 import _dev from "../dev";
 import selector from "./selector";
-import type {EachCallback, EventCallback} from "./def";
-import {styleObj, styleObjKeys} from "./css";
+import type {EachCallback} from "./def";
+import FastjsBaseModule from "../base";
 
-class FastjsDomList {
+// @ts-ignore: Implements by Proxy, TypeScript can't detect it(TS2720)
+class FastjsDomList extends FastjsBaseModule<FastjsDomList> implements FastjsDom {
     readonly #effect: Function;
     readonly construct: "FastjsDomList";
 
@@ -12,9 +13,10 @@ class FastjsDomList {
         if (__DEV__)
             _dev.browserCheck("fastjs/dom/FastjsDomList")
 
+        super()
+
         let domList: Array<FastjsDom> = [];
-        let el;
-        for (el of list) {
+        for (let el of list) {
             domList.push(new FastjsDom(el));
         }
 
@@ -41,7 +43,26 @@ class FastjsDomList {
         // construct
         this.construct = 'FastjsDomList';
 
-        return this;
+        // return this;
+        return new Proxy(this, {
+            get: (target, key) => {
+                if (key in target) return target[key as string];
+                if (key in target._list) return target._list[key as unknown as number];
+                // if in FastjsDom
+                if (key in FastjsDom.prototype) {
+                    const domList = this;
+                    return function () {
+                        for (const e of domList._list) {
+                            const rs = e[key as string](...arguments);
+                            if (rs !== undefined && rs.constructor !== FastjsDom) return rs;
+                        }
+                        return domList;
+
+                    }
+                }
+                if (key in this._list[0]) return this._list[0][key as string];
+            }
+        })
     }
 
     [key: string]: any;
@@ -58,24 +79,6 @@ class FastjsDomList {
         return this;
     }
 
-    bind(bind: "text" | "html" | keyof HTMLElement, key: string | number, object: object = {}, isAttr: boolean = false): object {
-        this._list.forEach((e: FastjsDom) => {
-            object = e.bind(bind, String(key), object, isAttr);
-        })
-        return object;
-    }
-
-    css(key: styleObj): FastjsDomList
-    css(key: styleObjKeys, value?: string, other?: string): FastjsDomList
-
-    css(key: styleObj | styleObjKeys, value?: string, other?: string): FastjsDomList {
-        this._list.forEach((e: FastjsDom) => {
-            if (typeof key === 'object') e.css(key);
-            else e.css(key, value || "", other);
-        })
-        return this;
-    }
-
     delete(key: number, deleteDom: boolean = false): FastjsDomList {
         if (deleteDom) this._list[key].remove();
         this._list.splice(key, 1);
@@ -89,104 +92,32 @@ class FastjsDomList {
         return this;
     }
 
-    el(key: number = 0): HTMLElement {
-        return this._list[key].el();
-    }
-
-    father(): FastjsDom | null {
-        return this._list[0].father();
-    }
-
-    get<T extends keyof HTMLElement>(key: T, index: number = 0): HTMLElement[T] {
-        // get()
-        // get a value of element
-
-        return this._list[index || 0].get(key);
-    }
-
-    getEl(key: number = 0): FastjsDom {
-        // overflow
+    getElement(key: number = 0): HTMLElement {
         if (key >= this._list.length)
             if (__DEV__)
                 _dev.warn('FastjsDomList', 'key is overflow', [
                     "*key: " + key,
                     "*length: " + this._list.length,
-                    "getEl(key: number): FastjsDom",
+                    "getElement(key: number): FastjsDom",
+                    "super", this
+                ], ["fastjs.warn"])
+        return this._list[key].el();
+    }
+
+    getDom(key: number = 0): FastjsDom {
+        if (key >= this._list.length)
+            if (__DEV__)
+                _dev.warn('FastjsDomList', 'key is overflow', [
+                    "*key: " + key,
+                    "*length: " + this._list.length,
+                    "getDom(key: number): FastjsDom",
                     "super", this
                 ], ["fastjs.warn"])
         return this._list[key || 0];
     }
 
-    html(): string
-    html(val: string): FastjsDomList
-
-    html(val?: string): string | FastjsDomList {
-        if (val === undefined)
-            return this._list[0].html();
-        this._list.forEach((e: FastjsDom) => {
-            e.html(val);
-        })
-        return this;
-    }
-
     next(el: string): FastjsDom | FastjsDomList | null {
         return selector(el, this.toArray().map((e: FastjsDom) => e.el()));
-    }
-
-    on(event: keyof HTMLElementEventMap = "click", callback: EventCallback) {
-        this._list.forEach((e: FastjsDom) => {
-            e.on(event, callback);
-        })
-        return this;
-    }
-
-    off(event: keyof HTMLElementEventMap = "click", callback: EventCallback) {
-        this._list.forEach((e: FastjsDom) => {
-            e.off(event, callback);
-        })
-        return this;
-    }
-
-    remove(): null
-    remove(key: number, dontDelete: boolean): FastjsDomList
-
-    remove(key?: number, dontDelete: boolean = false): FastjsDomList | null {
-        if (key !== undefined) {
-            // remove in dom
-            this._list[key].remove();
-            // delete this[key];
-            if (!dontDelete) this._list.splice(key, 1);
-            return this;
-        }
-
-        this._list.forEach((e: FastjsDom) => {
-            e.remove();
-        })
-        return null;
-    }
-
-    set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T], el?: number): FastjsDomList {
-        if (el === undefined)
-            // set for all elements
-            this.each((e: FastjsDom) => {
-                e.set(key, val);
-            })
-        else
-            // getEl(key) -> FastjsDom -> set val
-            this.getEl(el).set(key, val);
-        return this;
-    }
-
-    text(): string
-    text(val: string): FastjsDomList
-
-    text(val?: string): string | FastjsDomList {
-        if (val === undefined)
-            return this._list[0].text();
-        this._list.forEach((e: FastjsDom) => {
-            e.text(val);
-        })
-        return this;
     }
 
     toArray(): Array<FastjsDom> {
@@ -195,24 +126,6 @@ class FastjsDomList {
 
     toElArray(): Array<HTMLElement> {
         return this._list.map((e: FastjsDom) => e.el());
-    }
-
-    val(key?: number): string
-    val(val: string, key?: number): FastjsDomList
-
-    val(val?: string | number, key?: number): FastjsDomList | string {
-        const set = (val: string, el: FastjsDom): void => void el.val(val)
-
-        // get value
-        if (typeof val !== 'string') return this._list[val || 0].val();
-
-        if (key === undefined) {
-            this._list.forEach(el => set(val, el));
-        } else {
-            set(val, this._list[key])
-        }
-
-        return this;
     }
 }
 
