@@ -1,0 +1,33 @@
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  issue-closed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Tag
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const github_token = process.env.GITHUB_TOKEN;
+            
+            const octokit = github.getOctokit(github_token);
+            
+            const { data: issue } = await octokit.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            if (issue.state === 'closed' && issue.state_reason === 'completed') {
+              await octokit.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  labels: ["Status: Solved"]
+                });
+            }
