@@ -134,6 +134,7 @@ class FastjsXhrRequest extends FastjsRequest {
                     if (this.config.keepalive) {
                         setTimeout(send, this.config.keepaliveWait);
                     }
+                    if (this.config.callback) this.config.callback(response);
                     resolve(response);
                 };
 
