@@ -23,7 +23,7 @@
 
 ## Description
 
-@fastjs-next/core is a useful, lightweight JavaScript library for any types of project.
+Fastjs is a useful, lightweight JavaScript library for any types of project.
 
 It is designed to be easy to use. Fastjs can be with any framework or just pure JavaScript.
 
@@ -32,25 +32,25 @@ It is designed to be easy to use. Fastjs can be with any framework or just pure 
 ### Bundler/CommonJS
 
 ```bash
-npm install @fastjs-next/core
+npm install jsfast
 ```
 
 ```js
-import { dom } from '@fastjs-next/core' // esm
-const { request } = require('@fastjs-next/core') // cjs
+import { dom } from 'jsfast' // esm
+const { request } = require('jsfast') // cjs
 ```
 
 ### CDN (Global)
 
 ```html
-<script src="https://unpkg.com/@fastjs-next/core/dist/fastjs.global.js"></script>
+<script src="https://unpkg.com/jsfast/dist/fastjs.global.js"></script>
 ```
 
 ### Browser (ES Module)
 
 ```html
 <script type="module">
-  import { dom } from 'https://unpkg.com/@fastjs-next/core/dist/fastjs.esm.browser.js'
+  import { dom } from 'https://unpkg.com/jsfast/dist/fastjs.esm.browser.js'
 </script>
 ```
 
