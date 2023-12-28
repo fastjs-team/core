@@ -36,8 +36,8 @@ class FastjsFetchRequest extends FastjsRequest {
                     _dev.warn("fastjs/request", `Unrecommended method ${method} used in ${referer}, use GET instead. Set request.config.check.unrecommendedMethodWarning to false to ignore this warning.`, [
                         `url: ${this.url}`,
                         `*method: ${method}`,
-                        `*config:`, this.config,
-                        "super:", this
+                        `*config: `, this.config,
+                        "super: ", this
                     ], ["fastjs.warn"])
                 }
 
@@ -46,14 +46,14 @@ class FastjsFetchRequest extends FastjsRequest {
                     _dev.warn("fastjs/request", `Body is not allowed in ${method} request, use POST instead. (HTTP 1.1)`, [
                         `url: ${this.url}`,
                         `*method: ${method}`,
-                        `*body:`, this.config.body,
-                        "super:", this
+                        `*body: `, this.config.body,
+                        "super: ", this
                     ], ["fastjs.warn"])
                     _dev.warn("fastjs/request", `We have deleted the body in ${method} request, if you still want to do this, use FastjsRequest without FastjsFetchRequest.`, [
                         `url: ${this.url}`,
                         `*method: ${method}`,
-                        `*body:`, this.config.body,
-                        "super:", this
+                        `*body: `, this.config.body,
+                        "super: ", this
                     ], ["fastjs.warn"])
                 }
             }
@@ -75,14 +75,22 @@ class FastjsFetchRequest extends FastjsRequest {
 
                 if (hooks.before(this, moduleConfig)) {
                     fetch(this.request).then((response) => {
-                        if (moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(send, response);
+                        if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(send, response);
                         if (!hooks.success(this, moduleConfig)) return reject("hooks.success() interrupted");
 
                         moduleConfig.handler.fetchReturn(response, this).then((data) => {
                             if (!hooks.callback(this, data, moduleConfig)) return reject("hooks.callback() interrupted");
                             this.config.callback(this, data, moduleConfig);
+                            console.log(response)
+                            const merge = {
+                                data: data,
+                                request: this,
+                                // @ts-ignore
+                                resend: () => this.send(method, data, "FastjsFetchRequest.resend()")
+                            }
+
                             resolve({
-                                ...response,
+                                response: response,
                                 data: data,
                                 request: this,
                                 // @ts-ignore
@@ -92,16 +100,23 @@ class FastjsFetchRequest extends FastjsRequest {
                             return _dev.warn("fastjs/request", `Failed to parse return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue to https://github.com/fastjs-team/core/issues.`, [
                                 `url: ${this.url}`,
                                 `method: ${method}`,
-                                `*body:`, this.config.body,
-                                `*response:`, response,
-                                `*error:`, error,
-                                "super:", this
+                                `*body: `, this.config.body,
+                                `*response: `, response,
+                                `*error: `, error,
+                                "super: ", this
                             ], ["fastjs.wrong"]);
                         })
                     }).catch((error) => {
                         if (!hooks.failed(this, moduleConfig)) return reject("hooks.failed() interrupted");
                         if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
                         if (__DEV__) {
+                            _dev.warn("fastjs/request", `Request failed with error, if maybe intercepted by CORS or network problem.`, [
+                                `url: ${this.url}`,
+                                `method: ${method}`,
+                                `*body: `, this.config.body,
+                                `*error: ${error.message}`,
+                                "super: ", this
+                            ], ["fastjs.wrong"]);
                             console.error(_dev.error("fastjs/request", `Request failed with error`, [
                                 "url: " + this.url]))
                         }
@@ -115,7 +130,7 @@ class FastjsFetchRequest extends FastjsRequest {
             if (this.config.wait > 0 && this.config.wait !== this.wait) {
                 if (this.wait) clearTimeout(this.wait);
                 this.wait = setTimeout(() => this.wait = send(), this.config.wait) as unknown as number;
-            }
+            } else send()
         })
 
     }
