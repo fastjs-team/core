@@ -123,13 +123,6 @@ function generateMinifiedConfig(format) {
     file: formatsExport[format].file.replace(/\.js$/, '.prod.js'),
     format: formatsExport[format].format
   },[
-    terser({
-      module: true,
-      compress: {
-        ecma: 2021,
-        pure_getters: true,
-        keep_fnames: true,
-      }
-    })
+    terser()
   ])
 }
