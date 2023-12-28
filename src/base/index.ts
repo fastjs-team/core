@@ -23,7 +23,7 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
     [key: string]: any;
 
     setCustomProp(name: string, value: any): T {
-        this[name] = value;
+        this[String(name)] = value;
         return this as unknown as T;
     }
 
@@ -35,7 +35,7 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
     }
 
     getCustomProp(name: string): any {
-        return this[name];
+        return this[String(name)];
     }
 
     setCustomEvent(name: string, func: (module: T, ...args: any[]) => void, setup: boolean = false): T {
@@ -50,6 +50,28 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
     }
 
     then(func: (e: T) => void, time: number = 0): T {
+        if (__DEV__) {
+            if (typeof func !== "function") {
+                _dev.warn("fastjs/base/FastjsBaseModule", "Invalid function, **a function is required**.", [
+                    `***func: ${func}`,
+                    `time: ${time}`,
+                    "then(**func: (e: T) => void**, time: number = 0): T",
+                    "FastjsBaseModule.then"
+                ], ["fastjs.wrong"]);
+                throw _dev.error("fastjs/base/FastjsBaseModule", "Invalid function, a function is required.", [
+                    "then(func: (e: T) => void, time: number = 0): T",
+                    "FastjsBaseModule.then"
+                ]);
+            }
+            if (typeof time !== "number") {
+                _dev.warn("fastjs/base/FastjsBaseModule", "Invalid time, **a number is required**.", [
+                    `func: ${func}`,
+                    `***time: ${time}`,
+                    "then(func: (e: T) => void, **time: number = 0**): T",
+                    "FastjsBaseModule.then"
+                ], ["fastjs.warn"]);
+            }
+        }
         const callback = () => func(this as unknown as T);
         time === 0 ? callback() : setTimeout(callback, time);
         return this as unknown as T;
