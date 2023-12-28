@@ -20,9 +20,9 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         if (__DEV__ && !url) {
             _dev.warn("fastjs/request", "A correct url is **required**.", [
                 `***url: ${url}`,
-                "data:", data,
-                "config:", config,
-                "super:", this
+                "data: ", data,
+                "config: ", config,
+                "super: ", this
             ], ["fastjs.wrong"])
             throw _dev.error("fastjs/request", "A correct url is required.", [
                 "constructor(url: string, data?: data, config: Partial<requestConfig> = {})",
@@ -77,11 +77,11 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         if (__DEV__) {
             _dev.warn("fastjs/request", `Request failed with status code ${status}`, [
                 "url: " + this.url,
-                "config:", this.config,
+                "config: ", this.config,
                 "*code: " + status,
-                "*response:", res,
-                "global config:", moduleConfig,
-                "super:", this,
+                "*response: ", res,
+                "global config: ", moduleConfig,
+                "super: ", this,
             ], ["fastjs.wrong"]);
         }
         // run failed

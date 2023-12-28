@@ -32,15 +32,15 @@ const config: moduleConfig = {
             } catch (e) {
                 if (__DEV__ && !config.check.ignoreFormatWarning) {
                     _dev.warn("fastjs/request", "Failed to parse JSON, do you sure you send a request correctly? Set request.config.check.ignoreFormatWarning to true to ignore this warning.", [
-                        `*Received data:`, {
+                        `*Received data: `, {
                             data: data,
                             length: data.length,
                             // headers to object
                             headers: getHeaders(request.xhr as XMLHttpRequest),
                         },
                         `url: ${request.url}`,
-                        `config:`, request.config,
-                        "super:", request
+                        `config: `, request.config,
+                        "super: ", request
                     ], ["fastjs.warn"])
                 }
                 return data;
