@@ -44,8 +44,8 @@ class FastjsXhrRequest extends FastjsRequest {
                     _dev.warn("fastjs/request", `Unrecommended method ${method} used in ${referer}, use GET instead. Set request.config.check.unrecommendedMethodWarning to false to ignore this warning.`, [
                         `url: ${this.url}`,
                         `*method: ${method}`,
-                        `config:`, this.config,
-                        "super:", this
+                        `config: `, this.config,
+                        "super: ", this
                     ], ["fastjs.warn"])
                 }
 
@@ -54,8 +54,8 @@ class FastjsXhrRequest extends FastjsRequest {
                     _dev.warn("fastjs/request", `Sending a body data with **GET** method should be **avoided**, use POST instead. (HTTP 1.1)`, [
                         `url: ${this.url}`,
                         `*method: ${method}`,
-                        `*config:`, this.config,
-                        "super:", this
+                        `*config: `, this.config,
+                        "super: ", this
                     ], ["fastjs.warn"])
                 }
 
@@ -67,8 +67,8 @@ class FastjsXhrRequest extends FastjsRequest {
                         `url: ${this.url}`,
                         `*data: ${data}`,
                         `*method: ${method}`,
-                        `config:`, this.config,
-                        "super:", this
+                        `config: `, this.config,
+                        "super: ", this
                     ], ["fastjs.warn"])
                 }
             }
@@ -104,7 +104,7 @@ class FastjsXhrRequest extends FastjsRequest {
                 xhr.ontimeout = () => fail;
                 // xhr load
                 const requestFinish = () => {
-                    if (moduleConfig.handler.responseCode(xhr.status, this)) return this.handleBadResponse(send);
+                    if (!moduleConfig.handler.responseCode(xhr.status, this)) return this.handleBadResponse(send);
                     if (!hooks.success(this, moduleConfig)) return reject("hooks.success() interrupted");
 
                     let data: any;
@@ -114,15 +114,14 @@ class FastjsXhrRequest extends FastjsRequest {
                         return _dev.warn("fastjs/request", `Failed to parse return, if you are using custom handler(config.handler.parseData), please check your hooks. If not, this may be a bug, check server response and submit an issue to https://github.com/fastjs-team/core/issues.`, [
                             `url: ${this.url}`,
                             `method: ${method}`,
-                            `*body:`, this.config.body,
-                            `*response:`, xhr.response,
-                            `*error:`, e,
-                            "super:", this
+                            `*body: `, this.config.body,
+                            `*response: `, xhr.response,
+                            `*error: `, e,
+                            "super: ", this
                         ], ["fastjs.wrong"]);
                     }
                     if (!hooks.callback(this, data, moduleConfig)) return reject("hooks.callback() interrupted");
                     const response: xhrReturn = {
-                        ...xhr,
                         headers: getHeaders(xhr),
                         body: xhr.response,
                         data: data,
@@ -145,7 +144,7 @@ class FastjsXhrRequest extends FastjsRequest {
             if (this.config.wait > 0 && this.config.wait !== this.wait) {
                 if (this.wait) clearTimeout(this.wait);
                 this.wait = setTimeout(() => this.wait = send(), this.config.wait) as unknown as number;
-            }
+            } else send()
         })
     }
 }
