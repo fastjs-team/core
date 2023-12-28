@@ -100,7 +100,7 @@ export interface moduleConfig {
     }
 }
 
-export interface xhrReturn extends XMLHttpRequest {
+export interface xhrReturn {
     headers: {
         [key: string]: string;
     }
@@ -111,7 +111,8 @@ export interface xhrReturn extends XMLHttpRequest {
     resend: () => Promise<xhrReturn>;
 }
 
-export interface fetchReturn extends Response {
+export interface fetchReturn {
+    response: Response;
     data: any;
     request: FastjsFetchRequest;
     resend: () => Promise<fetchReturn>;
