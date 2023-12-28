@@ -258,8 +258,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         }
 
         const _target: T = typeof callbackOrTarget === "function" ? target as T : callbackOrTarget;
-        el = el instanceof FastjsDom || el instanceof FastjsDomList ? el.el() : el;
-        // const node = (typeof target === "boolean" ? target : clone) ? this._el.cloneNode(true) as HTMLElement : this._el;
+        el = (el instanceof HTMLElement ? el : (el instanceof FastjsDomList ? el.el()[0] : el.el())) as HTMLElement;
         let node: HTMLElement;
         if (typeof target === "boolean" ? target : clone) {
             node = this._el.cloneNode(true) as HTMLElement;
@@ -337,7 +336,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         }
 
         const _target: T = typeof callbackOrTarget === "function" ? target as T : callbackOrTarget;
-        el = (el instanceof HTMLElement ? el : el.getElement()) as HTMLElement;
+        el = (el instanceof HTMLElement ? el : (el instanceof FastjsDomList ? el.el()[0] : el.el())) as HTMLElement;
         const node = (typeof target === "boolean" ? target : clone) ? el.cloneNode(true) as HTMLElement : el;
 
         let added;
