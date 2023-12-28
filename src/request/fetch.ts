@@ -80,15 +80,7 @@ class FastjsFetchRequest extends FastjsRequest {
 
                         moduleConfig.handler.fetchReturn(response, this).then((data) => {
                             if (!hooks.callback(this, data, moduleConfig)) return reject("hooks.callback() interrupted");
-                            this.config.callback(this, data, moduleConfig);
-                            console.log(response)
-                            const merge = {
-                                data: data,
-                                request: this,
-                                // @ts-ignore
-                                resend: () => this.send(method, data, "FastjsFetchRequest.resend()")
-                            }
-
+                            if (this.config.callback) this.config.callback(this, data, moduleConfig);
                             resolve({
                                 response: response,
                                 data: data,
