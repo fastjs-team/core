@@ -13,7 +13,7 @@ function selector(selector: string = "body", parent: Document | HTMLElement | HT
         result.push(...queryResultToArray(e.querySelectorAll(selector)));
     }) : result.push(...queryResultToArray(parent.querySelectorAll(selector)));
     if (result.length === 0) return null;
-    if (selector.includes(`#${result[0].id}`) || specialStatements.includes(selector)) return new FastjsDom(result[0] as HTMLElement);
+    if ((result[0].id && selector.includes(`#${result[0].id}`)) || specialStatements.includes(selector)) return new FastjsDom(result[0] as HTMLElement);
     const list: HTMLElement[] = [];
     result.forEach((e: Element) => {
         list.push(e as HTMLElement);
