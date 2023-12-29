@@ -6,20 +6,23 @@ import type { moduleConfig } from "./def";
 
 const config: moduleConfig = {
     timeout: 5000,
-    hooks: {
-        before: (): boolean => true,
-        success: (): boolean => true,
-        failed: (): boolean => true,
-        callback: (): boolean => true,
-    },
+    // hooks: {
+    //     before: (): boolean => true,
+    //     init: (): boolean => true,
+    //     success: (): boolean => true,
+    //     failed: (): boolean => true,
+    //     callback: (): boolean => true,
+    // },
     xhrHooks: {
         // before: (): boolean => true,
+        // init: (): boolean => true,
         // success: (): boolean => true,
         // failed: (): boolean => true,
         // callback: (): boolean => true,
     },
     fetchHooks: {
         // before: (): boolean => true,
+        // init: (): boolean => true,
         // success: (): boolean => true,
         // failed: (): boolean => true,
         // callback: (): boolean => true,
