@@ -36,13 +36,13 @@
     "dev": "npm run rm && rollup -cw",
     "build": "npm run rm && rollup -c && npm run types",
     "rm": "rm -rf ./dist",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.mjs",
     "prod": "npm run build && npm run test",
 
     "dev:windows": "npm run rm:windows && rollup -cw",
     "build:windows": "npm run rm:windows && rollup -c && npm run types",
     "rm:windows": "if exist dist rmdir /s/q dist",
-    "test:windows": "cross-env-shell NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.js",
+    "test:windows": "cross-env-shell NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.mjs",
     "prod:windows": "npm run build && npm run test:windows"
   },
   "bugs": {
