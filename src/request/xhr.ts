@@ -25,10 +25,11 @@ class FastjsXhrRequest extends FastjsRequest {
         super(url, data, config);
 
         this.config.hooks = {
-            before: this.config.hooks?.before || moduleConfig.xhrHooks.before || moduleConfig.hooks.before || (() => true),
-            success: this.config.hooks?.success || moduleConfig.xhrHooks.success || moduleConfig.hooks.success || (() => true),
-            failed: this.config.hooks?.failed || moduleConfig.xhrHooks.failed || moduleConfig.hooks.failed || (() => true),
-            callback: this.config.hooks?.callback || moduleConfig.xhrHooks.callback || moduleConfig.hooks.callback || (() => true)
+            before: this.config.hooks?.before || moduleConfig.xhrHooks.before || (() => true),
+            init: this.config.hooks?.init || moduleConfig.xhrHooks.init || (() => true),
+            success: this.config.hooks?.success || moduleConfig.xhrHooks.success || (() => true),
+            failed: this.config.hooks?.failed || moduleConfig.xhrHooks.failed || (() => true),
+            callback: this.config.hooks?.callback || moduleConfig.xhrHooks.callback || (() => true)
         }
     }
 
@@ -73,13 +74,14 @@ class FastjsXhrRequest extends FastjsRequest {
                 }
             }
 
-            let bodyData: string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
-                null : (typeof data === "string" ? data : JSON.stringify(data || this.config.body));
-            let queryData: data | string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
-                data || this.config.query : this.config.query;
-
             const send = () => {
                 if (this.xhr && this.config.shutdown) return
+                if (!hooks.init(this, moduleConfig)) return reject("hooks.init() interrupted");
+
+                let bodyData: string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
+                    null : (typeof data === "string" ? data : JSON.stringify(data || this.config.body));
+                let queryData: data | string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
+                    data || this.config.query : this.config.query;
 
                 let xhr = this.xhr = new XMLHttpRequest();
                 xhr.open(method, addQuery(this.url, queryData), true);
