@@ -28,6 +28,7 @@ export interface requestConfig {
 export interface xhrRequestConfig extends requestConfig {
     hooks: {
         before: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
+        init: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         success: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         failed: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         callback: (
@@ -42,9 +43,11 @@ export interface xhrRequestConfig extends requestConfig {
 export interface fetchRequestConfig extends requestConfig {
     hooks: {
         before: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        success: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        failed: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        init: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        success: (response: Response, request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        failed: (error: any, request: FastjsFetchRequest, config: moduleConfig) => boolean;
         callback: (
+            response: Response,
             request: FastjsFetchRequest,
             data: {
                 [key: string]: any;
@@ -55,19 +58,9 @@ export interface fetchRequestConfig extends requestConfig {
 
 export interface moduleConfig {
     timeout: number;
-    hooks: {
-        before: (request: FastjsFetchRequest | FastjsXhrRequest, config: moduleConfig) => boolean;
-        success: (request: FastjsFetchRequest | FastjsXhrRequest, config: moduleConfig) => boolean;
-        failed: (request: FastjsFetchRequest | FastjsXhrRequest, config: moduleConfig) => boolean;
-        callback: (
-            request: FastjsFetchRequest | FastjsXhrRequest,
-            data: {
-                [key: string]: any;
-            }, config: moduleConfig
-        ) => boolean
-    };
     xhrHooks: {
         before?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
+        init?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         success?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         failed?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
         callback?: (
@@ -79,9 +72,11 @@ export interface moduleConfig {
     };
     fetchHooks: {
         before?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        success?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        failed?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        init?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        success?: (response: Response, request: FastjsFetchRequest, config: moduleConfig) => boolean;
+        failed?: (error: any, request: FastjsFetchRequest, config: moduleConfig) => boolean;
         callback?: (
+            response: Response,
             request: FastjsFetchRequest,
             data: {
                 [key: string]: any;
