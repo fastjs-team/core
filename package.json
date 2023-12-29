@@ -9,15 +9,15 @@
   "jsdelivr": "dist/fastjs.global.js",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/types/main.d.ts",
-        "node": "./index.js",
-        "default": "./dist/fastjs.esm-bundler.js"
+      "types": {
+        "require": "./dist/types/main.d.ts",
+        "node": "./dist/types/main.d.ts",
+        "default": "./dist/types/main.d.ts"
       },
-      "require": {
-        "types": "./dist/types/main.d.ts",
+      "default": {
+        "require": "./index.cjs",
         "node": "./index.cjs",
-        "default": "./index.cjs"
+        "default": "./dist/fastjs.esm-bundler.js"
       }
     }
   },
