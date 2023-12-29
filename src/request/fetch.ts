@@ -17,10 +17,11 @@ class FastjsFetchRequest extends FastjsRequest {
         super(url, data, config);
 
         this.config.hooks = {
-            before: this.config.hooks?.before || moduleConfig.fetchHooks.before || moduleConfig.hooks.before || (() => true),
-            success: this.config.hooks?.success || moduleConfig.fetchHooks.success || moduleConfig.hooks.success || (() => true),
-            failed: this.config.hooks?.failed || moduleConfig.fetchHooks.failed || moduleConfig.hooks.failed || (() => true),
-            callback: this.config.hooks?.callback || moduleConfig.fetchHooks.callback || moduleConfig.hooks.callback || (() => true)
+            before: this.config.hooks?.before || moduleConfig.fetchHooks.before || (() => true),
+            init: this.config.hooks?.init || moduleConfig.fetchHooks.init || (() => true),
+            success: this.config.hooks?.success || moduleConfig.fetchHooks.success || (() => true),
+            failed: this.config.hooks?.failed || moduleConfig.fetchHooks.failed || (() => true),
+            callback: this.config.hooks?.callback || moduleConfig.fetchHooks.callback || (() => true)
         }
     }
 
@@ -66,6 +67,8 @@ class FastjsFetchRequest extends FastjsRequest {
             const send = () => {
                 if (this.request && this.config.shutdown) return
 
+                if (!hooks.before(this, moduleConfig)) return reject("hooks.before() interrupted");
+
                 // use fetch rewrite xhr
                 this.request = new Request(addQuery(this.url, queryData), {
                     method: method,
@@ -73,13 +76,14 @@ class FastjsFetchRequest extends FastjsRequest {
                     body: bodyData
                 });
 
-                if (hooks.before(this, moduleConfig)) {
+                if (hooks.init(this, moduleConfig)) {
                     fetch(this.request).then((response) => {
                         if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(send, response);
-                        if (!hooks.success(this, moduleConfig)) return reject("hooks.success() interrupted");
+
+                        if (!hooks.success(response, this, moduleConfig)) return reject("hooks.success() interrupted");
 
                         moduleConfig.handler.fetchReturn(response, this).then((data) => {
-                            if (!hooks.callback(this, data, moduleConfig)) return reject("hooks.callback() interrupted");
+                            if (!hooks.callback(response, this, data, moduleConfig)) return reject("hooks.callback() interrupted");
                             if (this.config.callback) this.config.callback(this, data, moduleConfig);
                             resolve({
                                 response: response,
@@ -99,7 +103,7 @@ class FastjsFetchRequest extends FastjsRequest {
                             ], ["fastjs.wrong"]);
                         })
                     }).catch((error) => {
-                        if (!hooks.failed(this, moduleConfig)) return reject("hooks.failed() interrupted");
+                        if (!hooks.failed(error, this, moduleConfig)) return reject("hooks.failed() interrupted");
                         if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
                         if (__DEV__) {
                             _dev.warn("fastjs/request", `Request failed with error, if maybe intercepted by CORS or network problem.`, [
@@ -115,7 +119,7 @@ class FastjsFetchRequest extends FastjsRequest {
                         throw error;
                     });
                 } else {
-                    reject(new Error("hooks.before() return false"));
+                    reject(new Error("hooks.init() return false"));
                 }
             }
 
