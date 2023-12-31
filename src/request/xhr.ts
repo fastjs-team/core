@@ -96,7 +96,6 @@ class FastjsXhrRequest extends FastjsRequest {
         }
 
         const send = () => {
-            if (this.xhr && this.config.shutdown) return
             if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
             let bodyData: string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
