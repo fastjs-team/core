@@ -86,8 +86,6 @@ class FastjsFetchRequest extends FastjsRequest {
             data || this.config.query : this.config.query;
 
         const send = (): void => {
-            if (this.request && this.config.shutdown) return
-
             if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
             // use fetch rewrite xhr

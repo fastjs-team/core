@@ -35,7 +35,6 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         this.config = {
             timeout: config.timeout || moduleConfig.timeout,
             headers: config.headers || {},
-            shutdown: config.shutdown || false,
             wait: config.wait || 0,
             failed: config.failed || (() => 0),
             callback: config.callback || (() => 0),
