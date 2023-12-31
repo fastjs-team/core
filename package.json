@@ -1,7 +1,7 @@
 {
   "name": "jsfast",
-  "version": "v1.0.0-pre-alpha.4",
-  "description": "Fastjs-next is a useful, lightweight JavaScript library for any types of project.",
+  "version": "v1.0.0-alpha.1",
+  "description": "Fastjs(jsfast) is a useful, lightweight JavaScript library for any types of project.",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
   "types": "dist/types/main.d.ts",
@@ -36,22 +36,22 @@
     "dev": "npm run rm && rollup -cw",
     "build": "npm run rm && rollup -c && npm run types",
     "rm": "rm -rf ./dist",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --config jest.config.mjs",
+    "test": "",
     "prod": "npm run build && npm run test",
 
     "dev:windows": "npm run rm:windows && rollup -cw",
     "build:windows": "npm run rm:windows && rollup -c && npm run types",
     "rm:windows": "if exist dist rmdir /s/q dist",
-    "test:windows": "cross-env-shell NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.mjs",
-    "prod:windows": "npm run build && npm run test:windows"
+    "test:windows": "",
+    "prod:windows": "npm run build:windows && npm run test:windows"
   },
   "bugs": {
-    "url": "https://github.com/fastjs-team/fastjs-next/issues",
+    "url": "https://github.com/fastjs-team/core/issues",
     "email": "xiaodong@indouyin.cn"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fastjs-team/fastjs-next.git"
+    "url": "https://github.com/fastjs-team/core.git"
   },
   "keywords": [
     "fastjs",
