@@ -12,7 +12,7 @@ class FastjsFetchRequest extends FastjsRequest {
     declare config: fetchRequestConfig;
     private callbacks: {
         success: ((data: any, response: fetchReturn) => void)[],
-        failed: ((error: Error | any, response: fetchReturn | null) => void)[]
+        failed: ((error: Error | number, response: fetchReturn | FastjsFetchRequest) => void)[]
     } = {
         success: [],
         failed: []
@@ -39,13 +39,13 @@ class FastjsFetchRequest extends FastjsRequest {
         return this;
     }
 
-    addFailedCallback(callback: (error: any, response: fetchReturn | null) => void): this {
+    addFailedCallback(callback: (error: Error | number, response: fetchReturn | FastjsFetchRequest) => void): this {
         this.callbacks.failed.push(callback);
         return this;
     }
 
     then: (callback: (data: any, response: fetchReturn) => void) => this = this.addSuccessCallback;
-    catch: (callback: (error: any, response: fetchReturn | null) => void) => this = this.addFailedCallback;
+    catch: (callback: (error: Error | number, response: fetchReturn | FastjsFetchRequest) => void) => this = this.addFailedCallback;
 
     send(method: "GET" | "HEAD" | "OPTIONS", data?: data, referer?: string): this;
     send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data, referer?: string): this;
@@ -138,8 +138,8 @@ class FastjsFetchRequest extends FastjsRequest {
                         console.error(_dev.error("fastjs/request", `Request failed with error`, [
                             "url: " + this.url]))
                     }
-                    if (this.config.failed) this.config.failed(error, null);
-                    this.callbacks.failed.forEach((callback) => callback(error, null));
+                    if (this.config.failed) this.config.failed(error, this);
+                    this.callbacks.failed.forEach((callback) => callback(error, this));
                 });
             } else {
                 this.hookFailed("init");
