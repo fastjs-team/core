@@ -83,7 +83,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         return {
             t: t,
             z: this.timezoneDiff,
-            u: this.isUTC || toUTC
+            u: toUTC || this.isUTC
         }
     }
 
