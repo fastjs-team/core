@@ -3,7 +3,6 @@ import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
 import type {data, requestConfig} from "./def";
-import Func = jest.Func;
 import {fetchReturn} from "./fetch-def";
 import {xhrReturn} from "./xhr-def";
 
@@ -92,7 +91,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
     }
 
-    protected hookFailed(hook: string): this {
+    protected hookFailed(hook: string) {
         if (__DEV__) {
             _dev.warn("fastjs/request", `Request **interrupted** by ${hook}`, [
                 "url: " + this.url,
@@ -104,7 +103,6 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
 
         if (this.config.failed) this.config.failed(new Error(`Request interrupted by ${hook}`), this);
         this.callbacks.failed.forEach((callback: ((error: Error | any, response: fetchReturn | xhrReturn | null) => void)) => callback(new Error(`Request interrupted by ${hook}`), null));
-        return this;
     }
 }
 
