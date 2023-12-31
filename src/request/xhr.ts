@@ -112,9 +112,20 @@ class FastjsXhrRequest extends FastjsRequest {
             }
             xhr.timeout = this.config.timeout;
             const fail = (e: string) => {
+                if (__DEV__) {
+                    _dev.warn("fastjs/request", `Request failed with error, if maybe intercepted by CORS or network problem.`, [
+                        `url: ${this.url}`,
+                        `method: ${method}`,
+                        `*body: `, this.config.body,
+                        `*error: **${e}**`,
+                        "super: ", this
+                    ], ["fastjs.wrong"]);
+                    console.error(_dev.error("fastjs/request", `Request failed with error`, [
+                        "url: " + this.url]))
+                }
+
                 if (!hooks.failed(this, moduleConfig)) return this.hookFailed("failed");
                 if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
-                // return reject(xhr);
                 if (this.config.failed) this.config.failed(new Error(e), this);
                 this.callbacks.failed.forEach((callback) => callback(new Error(e), this));
             };
@@ -125,12 +136,9 @@ class FastjsXhrRequest extends FastjsRequest {
                     else requestFinish()
                 }
             }
-            xhr.onerror = () => fail("Network Error")
             xhr.ontimeout = () => fail("Request Timeout")
-            // xhr load
             const requestFinish = () => {
-                if (!moduleConfig.handler.responseCode(xhr.status, this)) return this.handleBadResponse(send);
-
+                if (!moduleConfig.handler.responseCode(xhr.status, this)) return this.handleBadResponse(this.generateResponse(xhr.response, method));
                 if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
                 let data: any;
@@ -146,22 +154,13 @@ class FastjsXhrRequest extends FastjsRequest {
                         "super: ", this
                     ], ["fastjs.wrong"]);
                 }
+
+                if (this.config.keepalive) setTimeout(() => this.resend(method, data), this.config.keepaliveWait);
+
                 if (!hooks.callback(this, data, moduleConfig)) return this.hookFailed("callback");
-                const response: xhrReturn = {
-                    headers: getHeaders(xhr),
-                    body: xhr.response,
-                    data: data,
-                    xhr: xhr,
-                    request: this,
-                    // @ts-ignore
-                    resend: () => this.send(method, data, "FastjsXhrRequest.resend()")
-                }
-                // if keepalive
-                if (this.config.keepalive) {
-                    setTimeout(send, this.config.keepaliveWait);
-                }
+
+                const response: xhrReturn = this.generateResponse(data, method);
                 if (this.config.callback) this.config.callback(data, response);
-                // resolve(response);
                 this.callbacks.success.forEach((callback) => callback(data, response));
             };
 
@@ -170,7 +169,7 @@ class FastjsXhrRequest extends FastjsRequest {
             xhr.send(bodyData || null);
         };
 
-        if (this.config.wait > 0 && this.config.wait !== this.wait) {
+        if (this.config.wait > 0) {
             if (this.wait) clearTimeout(this.wait);
             this.wait = setTimeout(() => this.wait = send(), this.config.wait) as unknown as number;
         } else send()

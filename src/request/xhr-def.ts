@@ -1,5 +1,5 @@
 import FastjsXhrRequest from "./xhr";
-import {moduleConfig, requestConfig} from "./def";
+import type {moduleConfig, requestConfig, data} from "./def";
 
 export interface xhrRequestConfig extends requestConfig {
     hooks: {
@@ -19,13 +19,11 @@ export interface xhrRequestConfig extends requestConfig {
 }
 
 export interface xhrReturn {
-    headers: {
-        [key: string]: string;
-    }
+    headers: data;
     data: any;
     body: any;
     status: number;
     request: FastjsXhrRequest;
     xhr: XMLHttpRequest;
-    resend: () => Promise<xhrReturn>;
+    resend: () => FastjsXhrRequest;
 }
