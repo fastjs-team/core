@@ -1,5 +1,5 @@
 import FastjsFetchRequest from "./fetch";
-import {moduleConfig, requestConfig} from "./def";
+ import {moduleConfig, requestConfig, data} from "./def";
 
 export interface fetchRequestConfig extends requestConfig {
     hooks: {
@@ -20,9 +20,10 @@ export interface fetchRequestConfig extends requestConfig {
 }
 
 export interface fetchReturn {
+    headers: data;
     response: Response;
     data: any;
     status: number;
     request: FastjsFetchRequest;
-    resend: () => Promise<fetchReturn>;
+    resend: () => FastjsFetchRequest;
 }
