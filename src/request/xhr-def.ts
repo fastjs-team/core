@@ -15,7 +15,7 @@ export interface xhrRequestConfig extends requestConfig {
         ) => boolean
     };
     callback: (data: any, response: xhrReturn) => void;
-    failed: (error: any, response: xhrReturn) => void;
+    failed: (error: any, response: xhrReturn | null) => void;
 }
 
 export interface xhrReturn {
