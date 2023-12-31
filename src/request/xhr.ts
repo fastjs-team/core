@@ -111,22 +111,22 @@ class FastjsXhrRequest extends FastjsRequest {
                 xhr.setRequestHeader(key, this.config.headers[key]);
             }
             xhr.timeout = this.config.timeout;
-            const fail = () => {
+            const fail = (e: string) => {
                 if (!hooks.failed(this, moduleConfig)) return this.hookFailed("failed");
                 if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
                 // return reject(xhr);
-                if (this.config.failed) this.config.failed(xhr, null);
-                this.callbacks.failed.forEach((callback) => callback(xhr, this));
+                if (this.config.failed) this.config.failed(new Error(e), null);
+                this.callbacks.failed.forEach((callback) => callback(new Error(e), null));
             };
             // xhr failed
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
-                    if (xhr.status === 0) fail();
+                    if (xhr.status === 0) fail("Network Error");
                     else requestFinish()
                 }
             }
-            xhr.onerror = () => fail;
-            xhr.ontimeout = () => fail;
+            xhr.onerror = () => fail("Network Error")
+            xhr.ontimeout = () => fail("Request Timeout")
             // xhr load
             const requestFinish = () => {
                 if (!moduleConfig.handler.responseCode(xhr.status, this)) return this.handleBadResponse(send);
