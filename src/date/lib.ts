@@ -4,12 +4,29 @@ interface replacement {
 }
 
 export function extractIgnoreTokens(formatString: string): [string, string[]] {
-    let processedString = formatString;
-    const ignoreTokens: string[] = formatString.match(/<.*?>/g)?.map(match => match.slice(1, -1)) || [];
+    const ignoreTokens: string[] = [];
+    let processedString = "";
+    let tokenBuffer = "";
+    let depth = 0;
 
-    ignoreTokens.forEach((_, index) => {
-        processedString = processedString.replace(/<.*?>/, `{{*${index}}}`);
-    })
+    for (const char of formatString) {
+        if (char === '<') {
+            if (++depth === 1) continue;
+        } else if (char === '>') {
+            depth--;
+            if (depth === 0) {
+                ignoreTokens.push(tokenBuffer);
+                processedString += `{{*${ignoreTokens.length - 1}}}`;
+                tokenBuffer = '';
+                continue;
+            }
+        }
+
+        if (depth > 0) tokenBuffer += char;
+        else processedString += char;
+    }
+
+    if (depth > 0) processedString += `<${tokenBuffer}`;
 
     return [processedString, ignoreTokens];
 }
