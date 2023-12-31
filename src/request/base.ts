@@ -3,6 +3,9 @@ import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
 import type {data, requestConfig} from "./def";
+import Func = jest.Func;
+import {fetchReturn} from "./fetch-def";
+import {xhrReturn} from "./xhr-def";
 
 class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     protected wait: number | void = 0;
@@ -68,7 +71,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     }
 
     protected handleBadResponse(send: () => void, response?: Response) {
-        let res;
+        let res: any;
         let status = this.xhr ? this.xhr.status : response?.status;
         if (response) response.json().then((j => res = j)).catch(() => res = response.text());
         else this.xhr?.responseText.startsWith("{") ? res = JSON.parse(this.xhr?.responseText) : res = this.xhr?.responseText;
@@ -83,10 +86,10 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
             ], ["fastjs.wrong"]);
         }
         // run failed
-        this.config.failed(this);
+        this.config.failed(status, res)
+        this.callbacks.failed.forEach((callback: ((error: Error | any, response: any) => void)) => callback(status, res));
         // if keepalive
         if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
-        return res;
     }
 
     protected hookFailed(hook: string): this {
@@ -100,7 +103,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         }
 
         if (this.config.failed) this.config.failed(new Error(`Request interrupted by ${hook}`), this);
-        this.callbacks.failed.forEach((callback) => callback(new Error(`Request interrupted by ${hook}`), this));
+        this.callbacks.failed.forEach((callback: ((error: Error | any, response: fetchReturn | xhrReturn | null) => void)) => callback(new Error(`Request interrupted by ${hook}`), null));
         return this;
     }
 }
