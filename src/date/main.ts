@@ -107,7 +107,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         }
 
         ignoreTokens.forEach((token, index) => {
-            result = result.replace(`{{*${index}}}`, `<${token}>`);
+            result = result.replace(`{{*${index}}}`, `${token}`);
         });
 
         return result;
