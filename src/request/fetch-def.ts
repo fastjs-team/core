@@ -16,12 +16,13 @@ export interface fetchRequestConfig extends requestConfig {
         ) => boolean
     };
     callback: (data: any, response: fetchReturn) => void;
-    failed: (error: Error | any, response: fetchReturn | null) => void;
+    failed: (error: Error | number, response: fetchReturn | FastjsFetchRequest) => void;
 }
 
 export interface fetchReturn {
     response: Response;
     data: any;
+    status: number;
     request: FastjsFetchRequest;
     resend: () => Promise<fetchReturn>;
 }
