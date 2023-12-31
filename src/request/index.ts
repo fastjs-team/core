@@ -1,29 +1,32 @@
-import type {data, fetchRequestConfig, fetchReturn, xhrRequestConfig, xhrReturn} from './def';
 import moduleConfig from './config';
 import FastjsXhrRequest from './xhr';
 import FastjsFetchRequest from "./fetch";
+
+import type {data} from "./def";
+import type {xhrRequestConfig} from "./xhr-def";
+import type {fetchRequestConfig} from "./fetch-def";
 
 
 const create = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config);
 }
-const get = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const get = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).get();
 }
-const post = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const post = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).post();
 }
-const put = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const put = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).put();
 }
-const del = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const del = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).delete();
 }
-const patch = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const patch = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).patch();
 }
 
-const head = (url: string, data?: data, config?: Partial<xhrRequestConfig>): Promise<xhrReturn> => {
+const head = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
     return new FastjsXhrRequest(url, data, config).head();
 }
 
@@ -31,27 +34,27 @@ const createFetch = (url: string, data?: data, config?: Partial<fetchRequestConf
     return new FastjsFetchRequest(url, data, config);
 }
 
-const fetchGet = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchGet = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).get();
 }
 
-const fetchPost = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchPost = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).post();
 }
 
-const fetchPut = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchPut = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).put();
 }
 
-const fetchDel = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchDel = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).delete();
 }
 
-const fetchPatch = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchPatch = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).patch();
 }
 
-const fetchHead = (url: string, data?: data, config?: Partial<fetchRequestConfig>): Promise<fetchReturn> => {
+const fetchHead = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
     return new FastjsFetchRequest(url, data, config).head();
 }
 
