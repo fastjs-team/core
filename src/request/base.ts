@@ -3,8 +3,10 @@ import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
 import type {data, requestConfig} from "./def";
-import {fetchReturn} from "./fetch-def";
 import {xhrReturn} from "./xhr-def";
+import {fetchReturn} from "./fetch-def";
+import FastjsFetchRequest from "./fetch";
+import FastjsXhrRequest, {getHeaders} from "./xhr";
 
 class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     protected wait: number | void = 0;
@@ -69,11 +71,9 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         return this.send("HEAD", data, "FastjsRequest.head()");
     }
 
-    protected handleBadResponse(send: () => void, response?: Response) {
-        let res: any;
-        let status = this.xhr ? this.xhr.status : response?.status;
-        if (response) response.json().then((j => res = j)).catch(() => res = response.text());
-        else this.xhr?.responseText.startsWith("{") ? res = JSON.parse(this.xhr?.responseText) : res = this.xhr?.responseText;
+    protected handleBadResponse(response: xhrReturn | fetchReturn) {
+        let status = response?.status;
+        let res = response.data
         if (__DEV__) {
             _dev.warn("fastjs/request", `Request failed with status code ${status}`, [
                 "url: " + this.url,
@@ -88,7 +88,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         this.config.failed(status, res)
         this.callbacks.failed.forEach((callback: ((error: Error | any, response: any) => void)) => callback(status, res));
         // if keepalive
-        if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
+        if (this.config.keepalive) setTimeout(response.resend, this.config.keepaliveWait);
     }
 
     protected hookFailed(hook: string) {
@@ -102,7 +102,29 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         }
 
         if (this.config.failed) this.config.failed(new Error(`Request interrupted by ${hook}`), this);
-        this.callbacks.failed.forEach((callback: ((error: Error | any, response: fetchReturn | xhrReturn | null) => void)) => callback(new Error(`Request interrupted by ${hook}`), null));
+        this.callbacks.failed.forEach((callback: ((error: Error | any, response: FastjsRequest) => void)) => callback(new Error(`Request interrupted by ${hook}`), this));
+    }
+
+    /** @description This method purpose to avoid typescript error (can't automatically detect correct overload method) */
+    protected resend(method: string, data: string | data) {
+        return this.send(method, data, "FastjsRequest.resend()");
+    }
+
+    protected generateResponse(data: any, method: string): xhrReturn
+    protected generateResponse(data: any, method: string, response: Response): fetchReturn
+    protected generateResponse(data: any, method: string, response?: Response): xhrReturn | fetchReturn {
+        const fullReturn = {
+            data: data,
+            body: this.xhr ? this.xhr.response : null,
+            status: response?.status || this.xhr?.status || 0,
+            headers: response ? response.headers as data : getHeaders(this.xhr as XMLHttpRequest),
+            request: this as unknown as FastjsFetchRequest | FastjsXhrRequest,
+            resend: () => this.resend(method, data),
+            xhr: this.xhr,
+            response: response
+        }
+        if (this.xhr) return fullReturn as xhrReturn;
+        else return fullReturn as fetchReturn;
     }
 }
 
