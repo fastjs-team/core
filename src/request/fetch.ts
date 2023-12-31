@@ -2,7 +2,7 @@ import _dev from "../dev";
 import moduleConfig from "./config";
 
 import FastjsRequest from "./base";
-import {addQuery} from "./lib";
+import {addQuery, parse} from "./lib";
 
 import type {data} from "./def";
 import {fetchRequestConfig, fetchReturn} from "./fetch-def";
@@ -98,24 +98,18 @@ class FastjsFetchRequest extends FastjsRequest {
             });
 
             if (hooks.init(this, moduleConfig)) {
-                fetch(this.request).then((response) => {
-                    if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(send, response);
-
+                fetch(this.request).then(async (response) => {
+                    if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(this.generateResponse(parse(await response.text()), method, response));
                     if (!hooks.success(response, this, moduleConfig)) return this.hookFailed("success");
 
                     moduleConfig.handler.fetchReturn(response, this).then((data) => {
                         if (!hooks.callback(response, this, data, moduleConfig)) return this.hookFailed("callback");
-                        const fullReturn: fetchReturn = {
-                            response: response,
-                            data: data,
-                            request: this,
-                            // @ts-ignore
-                            resend: () => this.send(method, data, "FastjsFetchRequest.resend()")
-                        }
+
+                        const fullReturn: fetchReturn = this.generateResponse(data, method, response)
                         if (this.config.callback) this.config.callback(data, fullReturn);
                         this.callbacks.success.forEach((callback) => callback(data, fullReturn));
                     }).catch((error) => {
-                        return _dev.warn("fastjs/request", `Failed to parse return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue to https://github.com/fastjs-team/core/issues.`, [
+                        return _dev.warn("fastjs/request", `Failed to **parse** return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue with this error output to https://github.com/fastjs-team/core/issues.`, [
                             `url: ${this.url}`,
                             `method: ${method}`,
                             `*body: `, this.config.body,
@@ -126,7 +120,8 @@ class FastjsFetchRequest extends FastjsRequest {
                     })
                 }).catch((error: Error) => {
                     if (!hooks.failed(error, this, moduleConfig)) return this.hookFailed("failed");
-                    if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
+
+                    if (this.config.keepalive) setTimeout(() => this.resend(method, data), this.config.keepaliveWait);
                     if (__DEV__) {
                         _dev.warn("fastjs/request", `Request failed with error, if maybe intercepted by CORS or network problem.`, [
                             `url: ${this.url}`,
@@ -146,7 +141,7 @@ class FastjsFetchRequest extends FastjsRequest {
             }
         }
 
-        if (this.config.wait > 0 && this.config.wait !== this.wait) {
+        if (this.config.wait > 0) {
             if (this.wait) clearTimeout(this.wait);
             this.wait = setTimeout(() => this.wait = send(), this.config.wait) as unknown as number;
         } else send()
