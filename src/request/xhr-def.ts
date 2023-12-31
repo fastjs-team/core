@@ -15,7 +15,7 @@ export interface xhrRequestConfig extends requestConfig {
         ) => boolean
     };
     callback: (data: any, response: xhrReturn) => void;
-    failed: (error: any, response: xhrReturn | null) => void;
+    failed: (error: Error | number, response: xhrReturn | FastjsXhrRequest) => void;
 }
 
 export interface xhrReturn {
@@ -24,6 +24,7 @@ export interface xhrReturn {
     }
     data: any;
     body: any;
+    status: number;
     request: FastjsXhrRequest;
     xhr: XMLHttpRequest;
     resend: () => Promise<xhrReturn>;
