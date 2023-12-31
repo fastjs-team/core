@@ -2,9 +2,7 @@ import _dev from "../dev";
 import moduleConfig from "./config";
 import FastjsBaseModule from "../base";
 
-import type {data, requestConfig, xhrReturn} from "./def";
-import FastjsXhrRequest from "./xhr";
-import FastjsFetchRequest from "./fetch";
+import type {data, requestConfig} from "./def";
 
 class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     protected wait: number | void = 0;
@@ -25,7 +23,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
                 "super: ", this
             ], ["fastjs.wrong"])
             throw _dev.error("fastjs/request", "A correct url is required.", [
-                "constructor(url: string, data?: data, config: Partial<requestConfig> = {})",
+                "constructor(public url: string, public data: data = {}, config: Partial<requestConfig> = {})",
                 "FastjsRequest.constructor"
             ]);
         }
@@ -45,27 +43,27 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     }
 
 
-    get(data: data = {}) {
+    get(data: data = {}): this {
         return this.send("GET", data, "FastjsRequest.get()");
     }
 
-    post(data: data = {}) {
+    post(data: data = {}): this {
         return this.send("POST", data, "FastjsRequest.post()");
     }
 
-    put(data: data = {}) {
+    put(data: data = {}): this {
         return this.send("PUT", data, "FastjsRequest.put()");
     }
 
-    delete(data: data = {}) {
+    delete(data: data = {}): this {
         return this.send("DELETE", data, "FastjsRequest.delete()");
     }
 
-    patch(data: data = {}) {
+    patch(data: data = {}): this {
         return this.send("PATCH", data, "FastjsRequest.patch()");
     }
 
-    head(data: data = {}) {
+    head(data: data = {}): this {
         return this.send("HEAD", data, "FastjsRequest.head()");
     }
 
@@ -89,6 +87,21 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         // if keepalive
         if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
         return res;
+    }
+
+    protected hookFailed(hook: string): this {
+        if (__DEV__) {
+            _dev.warn("fastjs/request", `Request **interrupted** by ${hook}`, [
+                "url: " + this.url,
+                "config: ", this.config,
+                "global config: ", moduleConfig,
+                "super: ", this,
+            ], ["fastjs.warn"]);
+        }
+
+        if (this.config.failed) this.config.failed(new Error(`Request interrupted by ${hook}`), this);
+        this.callbacks.failed.forEach((callback) => callback(new Error(`Request interrupted by ${hook}`), this));
+        return this;
     }
 }
 
