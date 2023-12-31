@@ -10,7 +10,6 @@ export interface requestConfig {
     headers: {
         [key: string]: string;
     };
-    shutdown: boolean;
     wait: number;
     failed: Function;
     callback: Function;
