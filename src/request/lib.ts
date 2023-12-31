@@ -14,3 +14,11 @@ export function addQuery(url: string, query: string | data | null): string {
     query = new URLSearchParams(query);
     return url + (url.includes("?") ? "&" : "?") + query.toString();
 }
+
+export function parse(data: string): any {
+    try {
+        return JSON.parse(data);
+    } catch (error) {
+        return data;
+    }
+}
