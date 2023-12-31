@@ -20,7 +20,7 @@ class FastjsXhrRequest extends FastjsRequest {
     declare config: xhrRequestConfig;
     private callbacks: {
         success: ((data: any, response: xhrReturn) => void)[],
-        failed: ((error: any, response: any) => void)[]
+        failed: ((error: Error | number, response: xhrReturn | FastjsXhrRequest) => void)[]
     } = {
         success: [],
         failed: []
@@ -47,13 +47,13 @@ class FastjsXhrRequest extends FastjsRequest {
         return this;
     }
 
-    addFailedCallback(callback: (error: any, response: xhrReturn) => void): this {
+    addFailedCallback(callback: (error: Error | number, response: xhrReturn | FastjsXhrRequest) => void): this {
         this.callbacks.failed.push(callback);
         return this;
     }
 
     then: (callback: (data: any, response: xhrReturn) => void) => this = this.addSuccessCallback;
-    catch: (callback: (error: any, response: xhrReturn) => void) => this = this.addFailedCallback;
+    catch: (callback: (error: Error | number, response: xhrReturn | FastjsXhrRequest) => void) => this = this.addFailedCallback;
 
     send(method: "GET" | "HEAD" | "OPTIONS", data?: data, referer?: string): this;
     send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data, referer?: string): this;
@@ -115,8 +115,8 @@ class FastjsXhrRequest extends FastjsRequest {
                 if (!hooks.failed(this, moduleConfig)) return this.hookFailed("failed");
                 if (this.config.keepalive) setTimeout(send, this.config.keepaliveWait);
                 // return reject(xhr);
-                if (this.config.failed) this.config.failed(new Error(e), null);
-                this.callbacks.failed.forEach((callback) => callback(new Error(e), null));
+                if (this.config.failed) this.config.failed(new Error(e), this);
+                this.callbacks.failed.forEach((callback) => callback(new Error(e), this));
             };
             // xhr failed
             xhr.onreadystatechange = () => {
