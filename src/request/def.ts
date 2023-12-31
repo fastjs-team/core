@@ -1,4 +1,3 @@
-import FastjsRequest from "./xhr";
 import FastjsFetchRequest from "./fetch";
 import FastjsXhrRequest from "./xhr";
 
@@ -23,37 +22,6 @@ export interface requestConfig {
     body: {
         [key: string]: any;
     } | string | null;
-}
-
-export interface xhrRequestConfig extends requestConfig {
-    hooks: {
-        before: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        init: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        success: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        failed: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        callback: (
-            request: FastjsXhrRequest,
-            data: {
-                [key: string]: any;
-            }, config: moduleConfig
-        ) => boolean
-    };
-}
-
-export interface fetchRequestConfig extends requestConfig {
-    hooks: {
-        before: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        init: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        success: (response: Response, request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        failed: (error: any, request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        callback: (
-            response: Response,
-            request: FastjsFetchRequest,
-            data: {
-                [key: string]: any;
-            }, config: moduleConfig
-        ) => boolean
-    };
 }
 
 export interface moduleConfig {
@@ -93,22 +61,4 @@ export interface moduleConfig {
         stringBodyWarning: boolean;
         unrecommendedMethodWarning: boolean;
     }
-}
-
-export interface xhrReturn {
-    headers: {
-        [key: string]: string;
-    }
-    data: any;
-    body: any;
-    request: FastjsXhrRequest;
-    xhr: XMLHttpRequest;
-    resend: () => Promise<xhrReturn>;
-}
-
-export interface fetchReturn {
-    response: Response;
-    data: any;
-    request: FastjsFetchRequest;
-    resend: () => Promise<fetchReturn>;
 }
