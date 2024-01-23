@@ -57,7 +57,7 @@ class FastjsXhrRequest extends FastjsRequest {
 
     send(method: "GET" | "HEAD" | "OPTIONS", data?: data, referer?: string): this;
     send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data, referer?: string): this;
-    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data: data | string = {}, referer: string = "FastjsRequest.send()"): this {
+    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data?: data | string, referer: string = "FastjsRequest.send()"): this {
         const hooks = this.config.hooks
 
         if (__DEV__) {
