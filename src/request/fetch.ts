@@ -107,14 +107,17 @@ class FastjsFetchRequest extends FastjsRequest {
                         if (this.config.callback) this.config.callback(data, fullReturn);
                         this.callbacks.success.forEach((callback) => callback(data, fullReturn));
                     }).catch((error) => {
-                        return _dev.warn("fastjs/request", `Failed to **parse** return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue with this error output to https://github.com/fastjs-team/core/issues.`, [
-                            `url: ${this.url}`,
-                            `method: ${method}`,
-                            `*body: `, this.config.body,
-                            `*response: `, response,
-                            `*error: `, error,
-                            "super: ", this
-                        ], ["fastjs.wrong"]);
+                        if (__DEV__) {
+                            _dev.warn("fastjs/request", `Failed to **parse** return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue with this error output to https://github.com/fastjs-team/core/issues.`, [
+                                `url: ${this.url}`,
+                                `method: ${method}`,
+                                `*body: `, this.config.body,
+                                `*response: `, response,
+                                `*error: `, error,
+                                "super: ", this
+                            ], ["fastjs.wrong"])
+                        }
+                        return;
                     })
                 }).catch((error: Error) => {
                     if (!hooks.failed(error, this, moduleConfig)) return this.hookFailed("failed");
