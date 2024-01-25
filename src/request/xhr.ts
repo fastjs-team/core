@@ -144,14 +144,16 @@ class FastjsXhrRequest extends FastjsRequest {
                 try {
                     data = moduleConfig.handler.parseData(xhr.response, this);
                 } catch (e) {
-                    return _dev.warn("fastjs/request", `Failed to parse return, if you are using custom handler(config.handler.parseData), please check your hooks. If not, this may be a bug, check server response and submit an issue to https://github.com/fastjs-team/core/issues.`, [
-                        `url: ${this.url}`,
-                        `method: ${method}`,
-                        `*body: `, this.config.body,
-                        `*response: `, xhr.response,
-                        `*error: `, e,
-                        "super: ", this
-                    ], ["fastjs.wrong"]);
+                    if (__DEV__)
+                        _dev.warn("fastjs/request", `Failed to parse return, if you are using custom handler(config.handler.parseData), please check your hooks. If not, this may be a bug, check server response and submit an issue to https://github.com/fastjs-team/core/issues.`, [
+                            `url: ${this.url}`,
+                            `method: ${method}`,
+                            `*body: `, this.config.body,
+                            `*response: `, xhr.response,
+                            `*error: `, e,
+                            "super: ", this
+                        ], ["fastjs.wrong"])
+                    return;
                 }
 
                 if (this.config.keepalive) setTimeout(() => this.resend(method, data), this.config.keepaliveWait);
