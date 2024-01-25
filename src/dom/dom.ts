@@ -71,18 +71,17 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
             }
         } else if (el instanceof HTMLElement) {
             this._el = el
-        } else if (__DEV__) {
-            _dev.warn("fastjs/dom/Dom", `el is not **HTMLElement or string**, instead of **${typeof el}**`, [
-                "*el: ", el,
-                "properties: ", p,
-                "constructor(**el: Dom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
-                "super: ", this
-            ], ["fastjs.right", "fastjs.wrong"]);
-            throw _dev.error("fastjs/dom/Dom", "el is not HTMLElement or string, instead of " + typeof el, [
-                "constructor(el: Dom | HTMLElement | Element | string, properties?: FastjsDomProps)",
-                "Dom.constructor",
-            ]);
-        } else throw "6e2s"
+        } else {
+            if (__DEV__) {
+                throw _dev.error("fastjs/dom/Dom", `el is not **HTMLElement or string**, instead of **${typeof el}**`, [
+                    "*el: ", el,
+                    "properties: ", p,
+                    "constructor(**el: Dom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
+                    "super: ", this
+                ], ["fastjs.right", "fastjs.wrong"]);
+            }
+            throw "6e2s"
+        }
 
         return this;
     }
@@ -270,17 +269,13 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         if (el.parentElement === null) {
             if (__DEV__) {
                 let callback = typeof callbackOrTarget === "function" ? callbackOrTarget : undefined;
-                _dev.warn("fastjs/dom/push", "el.parentElement is null, did you pass the **document object** or is this element **exist in document**?", [
+                throw _dev.error("fastjs/dom/push", "el.parentElement is null, did you pass the **document object** or is this element **exist in document**?", [
                     "*el: ", el,
                     "target: Fastjs.PushTarget." + target,
                     "clone: " + clone,
                     "callback: " + callback,
                     "push<T extends PushTarget>(**el?: HTMLElement | FastjsDomList | Dom**, target?: T, clone?: boolean): PushReturn<T>",
                 ], ["fastjs.warn", "fastjs.warn", "fastjs.wrong"]);
-                throw _dev.error("fastjs/dom/push", "el.parentElement can't be null", [
-                    "push<T extends PushTarget>(el?: HTMLElement | FastjsDomList | Dom, target?: T, clone?: boolean): PushReturn<T>",
-                    "Dom.push",
-                ])
             }
             throw "hg42"
         }

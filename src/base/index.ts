@@ -52,16 +52,15 @@ class FastjsBaseModule<T extends FastjsBaseModule<any>> {
     then(func: (e: T) => void, time: number = 0): T {
         if (__DEV__) {
             if (typeof func !== "function") {
-                _dev.warn("fastjs/base/FastjsBaseModule", "Invalid function, **a function is required**.", [
-                    `***func: ${func}`,
-                    `time: ${time}`,
-                    "then(**func: (e: T) => void**, time: number = 0): T",
-                    "FastjsBaseModule.then"
-                ], ["fastjs.wrong"]);
-                throw _dev.error("fastjs/base/FastjsBaseModule", "Invalid function, a function is required.", [
-                    "then(func: (e: T) => void, time: number = 0): T",
-                    "FastjsBaseModule.then"
-                ]);
+                if (__DEV__) {
+                    throw _dev.error("fastjs/base/FastjsBaseModule", "Invalid function, **a function is required**.", [
+                        `***func: ${func}`,
+                        `time: ${time}`,
+                        "then(**func: (e: T) => void**, time: number = 0): T",
+                        "FastjsBaseModule.then"
+                    ], ["fastjs.wrong"]);
+                }
+                throw "t33q";
             }
             if (typeof time !== "number") {
                 _dev.warn("fastjs/base/FastjsBaseModule", "Invalid time, **a number is required**.", [

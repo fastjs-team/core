@@ -20,16 +20,12 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         super();
 
         if (__DEV__ && !url) {
-            _dev.warn("fastjs/request", "A correct url is **required**.", [
+            throw _dev.error("fastjs/request", "A correct url is **required**.", [
                 `***url: ${url}`,
                 "data: ", data,
                 "config: ", config,
                 "super: ", this
             ], ["fastjs.wrong"])
-            throw _dev.error("fastjs/request", "A correct url is required.", [
-                "constructor(public url: string, public data: data = {}, config: Partial<requestConfig> = {})",
-                "FastjsRequest.constructor"
-            ]);
         }
 
         this.config = {

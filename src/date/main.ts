@@ -141,16 +141,12 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
             if (allTokens.includes(char)) {
                 if (isToken) {
                     if (__DEV__) {
-                        _dev.warn("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent", [
+                         throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent", [
                             "***formatString: " + formatString,
                             "***dateString: " + dateString,
                             "private parseFormatString(formatString: string, dateString: string): number",
                             "super: ", this
                         ], ["fastjs.wrong"]);
-                        throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent", [
-                            "private parseFormatString(formatString: string, dateString: string): number",
-                            "FastjsDate.parseFormatString",
-                        ]);
                     }
                     throw "fg3j"
                 }
@@ -205,16 +201,12 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         if (is12Hour) {
             if (isAm === null) {
                 if (__DEV__) {
-                    _dev.warn("fastjs/date/FastjsDate", "Invalid format string, using 12 hours format but missing AM/PM token", [
+                    throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, using 12 hours format but missing AM/PM token", [
                         "***formatString: " + formatString,
                         "***dateString: " + dateString,
                         "private parseFormatString(formatString: string, dateString: string): number",
                         "super: ", this
                     ], ["fastjs.wrong"]);
-                    throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, using 12 hours format but missing AM/PM token", [
-                        "private parseFormatString(formatString: string, dateString: string): number",
-                        "FastjsDate.parseFormatString",
-                    ]);
                 }
                 throw "2b5s"
             }
