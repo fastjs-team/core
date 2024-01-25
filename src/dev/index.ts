@@ -75,14 +75,12 @@ function warn(module: string, message: string, args: Array<any> = [], styleArgs:
     }
 }
 
-function error(module: string, message: string, args: Array<string> = []): Error {
-    let msg = `[Fastjs error] ${module}: ${message}`;
-    if (args.length > 0) {
-        msg += args.map((arg) => "\n    > " + arg).join("");
-    }
-    return new Error(msg);
+function error(module: string, message: string, args: Array<any> = [], styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []): Error {
+    const eid = Math.floor(Math.random() * 1e8);
+    args.push(`Trace: ${eid}`)
+    warn(module, message, args, styleArgs)
+    return new Error(`[Fastjs error] ${module}: ${message}\n    > Trace: ${eid}`)
 }
-
 
 export default {
     browserCheck,
