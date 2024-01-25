@@ -15,16 +15,14 @@ jobs:
             const issueNumber = context.payload.issue.number;
             const github_token = process.env.GITHUB_TOKEN;
             
-            const octokit = github.getOctokit(github_token);
-            
-            const { data: issue } = await octokit.rest.issues.get({
+            const { data: issue } = await github.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber
             });
             
             if (issue.state === 'closed' && issue.state_reason === 'completed') {
-              await octokit.rest.issues.addLabels({
+              await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
