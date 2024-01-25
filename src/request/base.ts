@@ -105,7 +105,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     }
 
     /** @description This method purpose to avoid typescript error (can't automatically detect correct overload method) */
-    protected resend(method: string, data: string | data) {
+    protected resend(method: string, data?: string | data) {
         return this.send(method, data, "FastjsRequest.resend()");
     }
 
