@@ -31,7 +31,13 @@ enum style {
 
 function warn(module: string, message: string, args: Array<any> = [], styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []): void {
     args = args.filter((arg) => arg !== "")
-    args = args.map((arg) => typeof arg === "string" ? "\n    > " + arg : arg)
+    args = args.map((arg, k) => (typeof arg === "string" && arg[0] !== "&" && args[k - 1]?.[args[k - 1].length - 1] !== "&") ? "\n    > " + arg : arg)
+    args = args.map((arg) => {
+        if (typeof arg !== "string") return arg;
+        if (arg[0] === "&") arg = ` ${arg.slice(1)} `
+        if (arg[arg.length - 1] === "&") arg = `${arg.slice(0, -1)} `
+        return arg;
+    })
     let styleKey = 0
     let outputMessage = ""
     let outputObjects: any[] = []
@@ -79,7 +85,7 @@ function error(module: string, message: string, args: Array<any> = [], styleArgs
     const eid = Math.floor(Math.random() * 1e8);
     args.push(`Trace: ${eid}`)
     warn(module, message, args, styleArgs)
-    return new Error(`[Fastjs error] ${module}: ${message}\n    > Trace: ${eid}`)
+    return new Error(`[Fastjs error] ${module}: ${message.replace(/[*&]/g, "")}\n    > Trace: ${eid}`)
 }
 
 export default {
