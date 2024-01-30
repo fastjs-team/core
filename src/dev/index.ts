@@ -1,3 +1,5 @@
+import {rand} from "../utils";
+
 function browserCheck(module: string): void {
     const isBrowser: boolean = typeof window !== "undefined";
     if (!isBrowser) {
@@ -82,7 +84,8 @@ function warn(module: string, message: string, args: Array<any> = [], styleArgs:
 }
 
 function error(module: string, message: string, args: Array<any> = [], styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []): Error {
-    const eid = Math.floor(Math.random() * 1e8);
+    // Note: Called utils.rand, but it should be tree-shaked after build(prod mode)
+    const eid = rand(1e7, 1e8 - 1);
     args.push(`Trace: ${eid}`)
     warn(module, message, args, styleArgs)
     return new Error(`[Fastjs error] ${module}: ${message.replace(/[*&]/g, "")}\n    > Trace: ${eid}`)
