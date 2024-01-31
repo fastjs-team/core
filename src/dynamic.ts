@@ -2,7 +2,7 @@ import _dev from "./dev";
 
 interface dynamicParam {
   name: string;
-  type?: string;
+  type?: string | string[];
   required?: boolean;
   multiple?: boolean;
   default?: any;
@@ -73,6 +73,7 @@ export function createDynamicFunction<T>(params: dynamicParam[], call: Function)
         if (
           param.type === "any" ||
           typeof value === param.type ||
+          (Array.isArray(param.type) && param.type.includes(typeof value)) ||
           (param.equal && value === param.equal) ||
           (param.include && param.include.includes(value)) ||
           (param.verify && param.verify(value)) ||
