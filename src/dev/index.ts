@@ -91,8 +91,15 @@ function error(module: string, message: string, args: Array<any> = [], styleArgs
     return new Error(`[Fastjs error] ${module}: ${message.replace(/[*&]/g, "")}\n    > Trace: ${eid}`)
 }
 
+function experimentFeatureWarning(id: string, name: string, call: string) {
+    warn("fastjs/experiment-feature-" + id, `${name} is an experimental feature, it may be removed or changed in the future.`, [
+        `call: `, call
+    ], ["fastjs.warn"])
+}
+
 export default {
     browserCheck,
+    experimentFeatureWarning,
     warn,
     error
 };
