@@ -1,7 +1,6 @@
 import _dev from "../dev";
 import FastjsBaseModule from "../base";
 import {extractIgnoreTokens, getReplacement} from "./lib";
-import {fDate} from "./def";
 import {createDynamicFunction} from "../dynamic";
 
 class FastjsDate extends FastjsBaseModule<FastjsDate> {
