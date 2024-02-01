@@ -1,5 +1,6 @@
 import FastjsDate from "./main";
-import type {fDate, parseReturn} from "./def";
+import type {parseReturn} from "./def";
+import {createDynamicFunction} from "../dynamic";
 
 /**
  * @description
@@ -39,14 +40,28 @@ const parseDate = (date: string, format?: string): parseReturn => parse(date, fo
  * - For string to string(reformat), use reformat(t, f, nf?) instead
  * - For other output, use parse(t, f?) instead
  */
-const string = (format: string, date: number = Date.now()): string => parse(date, format).string;
-/**
- * @description
- * Get a Date object of string or now.
- * - For number input, use Date(t) instead
- * - For other output, use parse(t, f?) instead
- */
-const date = (format: string, date: string): Date => parse(date, format).date;
+// const string = (format: string, date: number = Date.now()): string => parse(date, format).string;
+function string(): string;
+function string(format: string): string;
+function string(date: number | string): string;
+function string(format: string, date: number | string): string;
+function string(...args: any[]): string {
+    return createDynamicFunction<string>([
+        {
+            name: "format",
+            type: "string",
+            default: "Y-M-D h:m:s"
+        },
+        {
+            name: "date",
+            type: ["number", "string"],
+            verify: (v: any) => (typeof v === "string" && !!v.match(/\d+/g) && v.match(/[<>]/g) === null),
+            default: Date.now()
+        }
+    ], (params: { format: string, date: number | string }): string => {
+        return parse(params.date, params.format).string;
+    })(...args);
+}
 /**
  * @description
  * Reformat a date string into another format
@@ -59,14 +74,13 @@ const reformat = (format: string, date: string, newFormat: string = "Y-M-D h:m:s
  */
 const now = (format?: string): parseReturn => parse(Date.now(), format);
 
-function create(format: string, date: fDate): FastjsDate;
-function create(format: string, date: number | string, isUTC?: boolean): FastjsDate;
-function create(
-    format: string,
-    date: number | string | fDate = Date.now(),
-    isUTC?: boolean
-): FastjsDate {
-    return (typeof date === "object") ? new FastjsDate(format, date) : new FastjsDate(format, date, isUTC);
+function create(): FastjsDate;
+function create(format: string): FastjsDate;
+function create(date: number | string): FastjsDate;
+function create(format: string, date: number | string): FastjsDate;
+function create(...args: any[]): FastjsDate {
+    // @ts-ignore
+    return new FastjsDate(...args);
 }
 
 export default {
@@ -74,7 +88,6 @@ export default {
     parseDate,
     parseTime,
     string,
-    date,
     reformat,
     now,
     create
