@@ -7,7 +7,6 @@ import type {EventCallback, EventList, InsertReturn, PushReturn, FastjsDomProps,
 import FastjsBaseModule from "../base";
 import {InsertTarget, PushTarget} from "./def";
 
-
 class FastjsDom extends FastjsBaseModule<FastjsDom>{
     public readonly construct: string = "FastjsDom";
     _events: EventList = [];
@@ -17,14 +16,6 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         
         if (__DEV__)
             _dev.browserCheck("fastjs/dom/Dom")
-
-        if (__DEV__ && el instanceof FastjsDom) {
-            _dev.warn("fastjs/dom/Dom", "wtf are you doing? el is already a Dom", [
-                "*el: ", el,
-                "constructor(**el: Dom | HTMLElement | Element | string**, properties?: FastjsDomProps)",
-                "super: ", this
-            ], ["fastjs.wrong"]);
-        }
 
         el = el instanceof FastjsDom ? el.el() : el;
         // if string
@@ -582,6 +573,38 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
             return getClassProxy()
 
         return this;
+    }
+
+    // ==== DomList Base Function Support ==== //
+
+    getDom(key: number): FastjsDom {
+        if (__DEV__)
+            _dev.experimentFeatureWarning("dom-with-domlist", "DomList Base Function Support", "FastjsDom.getDom");
+        return this;
+    }
+
+    getElement(key: number): HTMLElement {
+        if (__DEV__)
+            _dev.experimentFeatureWarning("dom-with-domlist", "DomList Base Function Support", "FastjsDom.getElement");
+        return this.el();
+    }
+
+    toArray(): Array<FastjsDom> {
+        if (__DEV__)
+            _dev.experimentFeatureWarning("dom-with-domlist", "DomList Base Function Support", "FastjsDom.toArray")
+        return [this];
+    }
+
+    toElArray(): Array<HTMLElement> {
+        if (__DEV__)
+            _dev.experimentFeatureWarning("dom-with-domlist", "DomList Base Function Support", "FastjsDom.toElArray")
+        return [this._el];
+    }
+
+    each(callback: EachCallback): FastjsDomList {
+        if (__DEV__)
+            _dev.experimentFeatureWarning("dom-with-domlist", "DomList Base Function Support", "FastjsDom.each")
+        return new FastjsDomList([this]).each(callback);
     }
 }
 

@@ -9,7 +9,7 @@ class FastjsDomList extends FastjsBaseModule<FastjsDomList> implements FastjsDom
     readonly #effect: Function;
     readonly construct: "FastjsDomList";
 
-    constructor(list: Array<HTMLElement | Element> = []) {
+    constructor(list: Array<HTMLElement | Element | FastjsDom> = []) {
         if (__DEV__)
             _dev.browserCheck("fastjs/dom/FastjsDomList")
 
