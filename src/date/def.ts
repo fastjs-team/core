@@ -16,12 +16,3 @@ export interface parseReturn {
     /** @description string of UTC */
     utcDateString: string
 }
-
-export interface fDate {
-    // timestamp: number
-    t: number
-    // timezone: number
-    z: number
-    // utc: boolean
-    u: boolean
-}
