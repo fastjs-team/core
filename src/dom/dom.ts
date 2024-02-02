@@ -6,6 +6,7 @@ import {ArrayProxyHandler} from "./proxy";
 import type {EventCallback, EventList, InsertReturn, PushReturn, FastjsDomProps, EachCallback} from "./def";
 import FastjsBaseModule from "../base";
 import {InsertTarget, PushTarget} from "./def";
+import {isUndefined} from "../utils";
 
 class FastjsDom extends FastjsBaseModule<FastjsDom>{
     public readonly construct: string = "FastjsDom";
@@ -27,7 +28,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
                 for (key in p) {
                     const value = p[key];
 
-                    if (value === undefined) continue;
+                    if (isUndefined(value)) continue;
 
                     switch (key) {
                         case "html":
@@ -225,8 +226,8 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     html(val: string): FastjsDom
 
     html(val?: string): string | FastjsDom {
-        // if null -> not change || String(val)
-        return val === undefined ? this.get("innerHTML") : this.set("innerHTML", val);
+        // @ts-ignore
+        return this[isUndefined(val) ? "get" : "set"]("innerHTML", val);
     }
 
     last(): FastjsDom | null {
@@ -388,14 +389,14 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
 
     removeEvent(typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | EventCallback, key?: number): FastjsDom {
         if (__DEV__) {
-            if (typeOrKeyOrCallback === undefined) {
+            if (isUndefined(typeOrKeyOrCallback)) {
                 _dev.warn("fastjs/dom/removeEvent", "You are removing **all events**, make sure you want to do this.", [
                     "***No Any Argument",
                     "*removeEvent(): Dom",
                     "super: ", this
                 ], ["fastjs.warn"]);
             }
-            if (typeof typeOrKeyOrCallback === "string" && key === undefined) {
+            if (typeof typeOrKeyOrCallback === "string" && isUndefined(key)) {
                 _dev.warn("fastjs/dom/removeEvent", "You are removing **all events** with type " + typeOrKeyOrCallback + ", make sure you want to do this.", [
                     "*type: " + typeOrKeyOrCallback,
                     "*removeEvent(key: keyof HTMLElementEventMap): Dom",
@@ -405,7 +406,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         }
 
         if (typeof typeOrKeyOrCallback === "string")
-            if (key !== undefined) {
+            if (!isUndefined(key)) {
                 this._el.removeEventListener(typeOrKeyOrCallback, this._events.filter((v) => v.type === typeOrKeyOrCallback)[key].trigger as Function as EventListener);
                 this._events.splice(key, 1);
             } else
@@ -464,8 +465,8 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
     text(val: string): FastjsDom
 
     text(val?: string): string | FastjsDom {
-        // if null -> not change || String(val)
-        return val === undefined ? this.get("innerText") : this.set("innerText", val);
+        // @ts-ignore
+        return this[isUndefined(val) ? "get" : "set"]("innerText", val);
     }
 
     val(): string
@@ -475,14 +476,8 @@ class FastjsDom extends FastjsBaseModule<FastjsDom>{
         const btn = this._el instanceof HTMLButtonElement;
         if (this._el instanceof HTMLInputElement || this._el instanceof HTMLTextAreaElement || this._el instanceof HTMLButtonElement) {
             // if val and is button || input || textarea
-            if (val === undefined) {
-                return btn ? this._el.innerText : this._el.value;
-            } else {
-                if (btn)
-                    this._el.innerText = val;
-                else
-                    this._el.value = val;
-            }
+            if (isUndefined(val)) return btn ? this._el.innerText : this._el.value;
+            else this._el[btn ? "innerText" : "value"] = val;
         } else if (__DEV__) {
             _dev.warn("fastjs/dom/val", `This element is not a **input or textarea or button**, instanceof **${this._el.constructor.name}**`, [
                 "*super._el: ", this._el,

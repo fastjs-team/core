@@ -3,6 +3,7 @@ import _dev from "../dev";
 import selector from "./selector";
 import type {EachCallback} from "./def";
 import FastjsBaseModule from "../base";
+import {isUndefined} from "../utils";
 
 // @ts-ignore: Implements by Proxy, TypeScript can't detect it(TS2720)
 class FastjsDomList extends FastjsBaseModule<FastjsDomList> implements FastjsDom {
@@ -54,7 +55,7 @@ class FastjsDomList extends FastjsBaseModule<FastjsDomList> implements FastjsDom
                     return function () {
                         for (const e of domList._list) {
                             const rs = e[key as string](...arguments);
-                            if (rs !== undefined && rs.constructor !== FastjsDom) return rs;
+                            if (!isUndefined(rs) && rs.constructor !== FastjsDom) return rs;
                         }
                         return domList;
 

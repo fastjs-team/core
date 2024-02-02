@@ -2,6 +2,7 @@ import _dev from "../dev";
 import FastjsBaseModule from "../base";
 import {extractIgnoreTokens, getReplacement} from "./lib";
 import {createDynamicFunction} from "../dynamic";
+import {isUndefined} from "../utils";
 
 class FastjsDate extends FastjsBaseModule<FastjsDate> {
   public readonly construct: string = "FastjsDate";
@@ -57,7 +58,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         "FastjsDate.convertUTC"
       ], ["fastjs.warn"]);
     }
-    this._date += (timezone === undefined ? this.timezoneDiff : timezone * 3600);
+    this._date += (isUndefined(timezone) ? this.timezoneDiff : timezone * 3600);
     return this;
   }
 

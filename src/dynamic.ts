@@ -1,4 +1,5 @@
 import _dev from "./dev";
+import {isUndefined} from "./utils";
 
 interface dynamicParam {
   name: string;
@@ -39,8 +40,8 @@ export function createDynamicFunction<T>(params: dynamicParam[], call: Function)
     const callParams: { [key: string]: any } = {}
 
     staticParams.forEach((v, k) => {
-      if (args[k] === undefined) {
-        if (v.default !== undefined) args[k] = v.default;
+      if (isUndefined(args[k])) {
+        if (!isUndefined(v.default)) args[k] = v.default;
         else if (__DEV__) {
           throw _dev.error("fastjs/dynamic-function", `Missing strict param ${v.name}.`, [
             `***params: `, callParams,
@@ -59,7 +60,7 @@ export function createDynamicFunction<T>(params: dynamicParam[], call: Function)
 
     // add default value if not set
     params.forEach((v) => {
-      if (v.default !== undefined && !usedParams.has(v.name)) {
+      if (!isUndefined(v.default) && !usedParams.has(v.name)) {
         usedParams.add(v.name);
         callParams[v.name] = v.default;
       }
