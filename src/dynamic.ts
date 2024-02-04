@@ -1,5 +1,5 @@
 import _dev from "./dev";
-import {isUndefined} from "./utils";
+import {isUndefined} from "./utils.js";
 
 interface dynamicParam {
   name: string;
