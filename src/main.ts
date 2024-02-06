@@ -1,14 +1,12 @@
 // all modules
-import array from "./array";
-import {FastjsArray} from "./array";
 import date from "./date";
 import {FastjsDate} from "./date";
 import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
 import request from "./request";
 import {FastjsXhrRequest, FastjsFetchRequest} from "./request"
-import utils from "./utils";
-import {rand, copy} from "./utils";
+import utils from "./utils/";
+import {rand, copy} from "./utils/";
 import {FastjsExpression} from "./base";
 
 import {PushTarget, InsertTarget} from "./dom/def";
@@ -20,9 +18,6 @@ if (__DEV__) {
 
 // export
 export {
-    /** @module array */
-    array,
-    FastjsArray,
     /** @module date */
     date,
     FastjsDate,
