@@ -15,7 +15,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
   constructor(format: string);
   constructor(date: number | string | Date);
   constructor(date: number | string | Date, local: boolean);
-  constructor(format: string, date: number | string);
+  constructor(format: string, date: number | string | Date);
   constructor(date: number | string, format: string);
   constructor(date: number | string, format: string, local: boolean);
   constructor(...args: any[]) {

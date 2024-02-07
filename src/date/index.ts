@@ -6,7 +6,7 @@ import {createDynamicFunction} from "../dynamic";
  * @description
  * Parse a date string or timestamp into a parseReturn object
  */
-const parse = (time: string | number, format: string = "Y-M-D h:m:s"): parseReturn => {
+const parse = (time: string | number | Date, format: string = "Y-M-D h:m:s"): parseReturn => {
     const fastjsDateObject = new FastjsDate(format, time);
     const dateString = fastjsDateObject.toString();
     const timestamp = fastjsDateObject.toNumber();
@@ -43,8 +43,8 @@ const parseDate = (date: string, format?: string): parseReturn => parse(date, fo
 // const string = (format: string, date: number = Date.now()): string => parse(date, format).string;
 function string(): string;
 function string(format: string): string;
-function string(date: number | string): string;
-function string(format: string, date: number | string): string;
+function string(date: number | string | Date): string;
+function string(format: string, date: number | string | Date): string;
 function string(...args: any[]): string {
     return createDynamicFunction<string>([
         {
@@ -54,7 +54,7 @@ function string(...args: any[]): string {
         },
         {
             name: "date",
-            type: ["number", "string"],
+            type: ["number", "string", "object"],
             verify: (v: any) => (typeof v === "string" && !!v.match(/\d+/g) && v.match(/[<>]/g) === null),
             default: Date.now()
         }
@@ -76,8 +76,8 @@ const now = (format?: string): parseReturn => parse(Date.now(), format);
 
 function create(): FastjsDate;
 function create(format: string): FastjsDate;
-function create(date: number | string): FastjsDate;
-function create(format: string, date: number | string): FastjsDate;
+function create(date: number | string | Date): FastjsDate;
+function create(format: string, date: number | string | Date): FastjsDate;
 function create(...args: any[]): FastjsDate {
     // @ts-ignore
     return new FastjsDate(...args);
