@@ -1,81 +1,43 @@
 import moduleConfig from './config';
-import FastjsXhrRequest from './xhr';
-import FastjsFetchRequest from "./fetch";
+import FastjsRequest from "./fetch";
 
 import type {data} from "./def";
-import type {xhrRequestConfig} from "./xhr-def";
-import type {fetchRequestConfig} from "./fetch-def";
+import type {requestConfig} from "./def";
 
 
-const create = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config);
+const create = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config);
 }
-const get = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).get();
+const get = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).get();
 }
-const post = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).post();
+const post = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).post();
 }
-const put = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).put();
+const put = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).put();
 }
-const del = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).delete();
+const del = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).delete();
 }
-const patch = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).patch();
-}
-
-const head = (url: string, data?: data, config?: Partial<xhrRequestConfig>): FastjsXhrRequest => {
-    return new FastjsXhrRequest(url, data, config).head();
+const patch = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).patch();
 }
 
-const createFetch = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config);
-}
-
-const fetchGet = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).get();
-}
-
-const fetchPost = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).post();
-}
-
-const fetchPut = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).put();
-}
-
-const fetchDel = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).delete();
-}
-
-const fetchPatch = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).patch();
-}
-
-const fetchHead = (url: string, data?: data, config?: Partial<fetchRequestConfig>): FastjsFetchRequest => {
-    return new FastjsFetchRequest(url, data, config).head();
+const head = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
+    return new FastjsRequest(url, data, config).head();
 }
 
 export default {
-    request: FastjsXhrRequest,
+    request: FastjsRequest,
     create,
-    createFetch,
     config: moduleConfig,
     get,
     post,
     put,
     delete: del,
     patch,
-    head,
-    fetch: FastjsFetchRequest,
-    fetchGet,
-    fetchPost,
-    fetchPut,
-    fetchDelete: fetchDel,
-    fetchPatch,
-    fetchHead
+    head
 };
 
-export {FastjsXhrRequest, FastjsFetchRequest}
+export {FastjsRequest}
