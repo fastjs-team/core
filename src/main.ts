@@ -4,7 +4,7 @@ import {FastjsDate} from "./date";
 import dom from "./dom";
 import {FastjsDom, FastjsDomList} from "./dom";
 import request from "./request";
-import {FastjsXhrRequest, FastjsFetchRequest} from "./request"
+import {FastjsRequest} from "./request"
 import utils from "./utils/";
 import {rand, copy} from "./utils/";
 import {FastjsExpression} from "./base";
@@ -27,8 +27,7 @@ export {
     FastjsDomList,
     /** @module request */
     request,
-    FastjsXhrRequest,
-    FastjsFetchRequest,
+    FastjsRequest,
     /** @module utils */
     utils,
     rand,
