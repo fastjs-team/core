@@ -1,61 +1,90 @@
 import _dev from "../dev";
 import moduleConfig from "./config";
+import FastjsBaseModule from "../base";
 
-import FastjsRequest from "./base";
 import {addQuery, parse} from "./lib";
 
-import type {data} from "./def";
-import {fetchRequestConfig, fetchReturn} from "./fetch-def";
+import type {data, requestConfig, requestReturn, failedParams} from "./def";
 
-class FastjsFetchRequest extends FastjsRequest {
-    readonly construct: string = "FastjsFetchRequest";
-    declare config: fetchRequestConfig;
+class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
+    readonly construct: string = "FastjsRequest";
+    declare config: requestConfig;
+    
     private callbacks: {
-        success: ((data: any, response: fetchReturn) => void)[],
-        failed: ((error: Error | number, response: fetchReturn | FastjsFetchRequest) => void)[]
+        success: ((data: any, response: requestReturn) => void)[],
+        failed: ((err: failedParams<Error | number | null>) => void)[]
+        finally: ((request: requestReturn) => void)[]
     } = {
         success: [],
-        failed: []
+        failed: [],
+        finally: []
     };
+    request?: Request;
 
     constructor(
         public url: string,
         public data: data = {},
-        config: Partial<fetchRequestConfig> = {}
+        config: Partial<requestConfig> = {}
     ) {
-        super(url, data, config);
+        super();
 
-        this.config.hooks = {
-            before: this.config.hooks?.before || moduleConfig.fetchHooks.before || (() => true),
-            init: this.config.hooks?.init || moduleConfig.fetchHooks.init || (() => true),
-            success: this.config.hooks?.success || moduleConfig.fetchHooks.success || (() => true),
-            failed: this.config.hooks?.failed || moduleConfig.fetchHooks.failed || (() => true),
-            callback: this.config.hooks?.callback || moduleConfig.fetchHooks.callback || (() => true)
+        if (__DEV__ && !url) {
+            throw _dev.error("fastjs/request", "A correct url is **required**.", [
+                `***url: ${url}`,
+                "data: ", data,
+                "config: ", config,
+                "super: ", this
+            ], ["fastjs.wrong"])
         }
+
+        this.config = {
+            timeout: config.timeout || moduleConfig.timeout,
+            headers: config.headers || {},
+            wait: config.wait || 0,
+            failed: config.failed || (() => 0),
+            callback: config.callback || (() => 0),
+            keepalive: config.keepalive || false,
+            keepaliveWait: config.keepaliveWait || 0,
+            query: config.query || null,
+            body: config.body || null,
+            hooks: {
+                before: config.hooks?.before || moduleConfig.hooks.before || (() => true),
+                init: config.hooks?.init || moduleConfig.hooks.init || (() => true),
+                success: config.hooks?.success || moduleConfig.hooks.success || (() => true),
+                failed: config.hooks?.failed || moduleConfig.hooks.failed || (() => true),
+                callback: config.hooks?.callback || moduleConfig.hooks.callback || (() => true)
+            }
+        };
     }
 
-    addSuccessCallback(callback: (data: any, response: fetchReturn) => void): this {
+    /*   Custom promise   */
+
+    then(callback: (data: any, response: requestReturn) => void): this {
         this.callbacks.success.push(callback);
         return this;
     }
 
-    addFailedCallback(callback: (error: Error | number, response: fetchReturn | FastjsFetchRequest) => void): this {
+    catch(callback: (err: failedParams<Error | number | null>) => void): this {
         this.callbacks.failed.push(callback);
         return this;
     }
 
-    then: (callback: (data: any, response: fetchReturn) => void) => this = this.addSuccessCallback;
-    catch: (callback: (error: Error | number, response: fetchReturn | FastjsFetchRequest) => void) => this = this.addFailedCallback;
+    finally(callback: (response: requestReturn) => void): this {
+        this.callbacks.finally.push(callback);
+        return this;
+    }
 
-    send(method: "GET" | "HEAD" | "OPTIONS", data?: data, referer?: string): this;
-    send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data, referer?: string): this;
-    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data?: data | string, referer: string = "FastjsFetchRequest.send()"): this {
+    /*   Custom promise   */
+
+    send(method: "GET" | "HEAD" | "OPTIONS", data?: data): this;
+    send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data): this;
+    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data?: data | string): this {
         const hooks = this.config.hooks
 
         if (__DEV__) {
             // unrecommended method
             if (["OPTIONS"].includes(method) && moduleConfig.check.unrecommendedMethodWarning) {
-                _dev.warn("fastjs/request", `Unrecommended method ${method} used in ${referer}, use GET instead. Set request.config.check.unrecommendedMethodWarning to false to ignore this warning.`, [
+                _dev.warn("fastjs/request", `Unrecommended method ${method} used, use GET instead. Set request.config.check.unrecommendedMethodWarning to false to ignore this warning.`, [
                     `url: ${this.url}`,
                     `*method: ${method}`,
                     `*config: `, this.config,
@@ -88,7 +117,6 @@ class FastjsFetchRequest extends FastjsRequest {
         const send = (): void => {
             if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
-            // use fetch rewrite xhr
             this.request = new Request(addQuery(this.url, queryData), {
                 method: method,
                 headers: this.config.headers,
@@ -98,12 +126,12 @@ class FastjsFetchRequest extends FastjsRequest {
             if (hooks.init(this, moduleConfig)) {
                 fetch(this.request).then(async (response) => {
                     if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(this.generateResponse(parse(await response.text()), method, response));
-                    if (!hooks.success(response, this, moduleConfig)) return this.hookFailed("success");
+                    if (!hooks.success(response, this, moduleConfig)) return this.hookFailed("success", response);
 
                     moduleConfig.handler.fetchReturn(response, this).then((data) => {
-                        if (!hooks.callback(response, this, data, moduleConfig)) return this.hookFailed("callback");
+                        if (!hooks.callback(response, this, data, moduleConfig)) return this.hookFailed("callback", response);
 
-                        const fullReturn: fetchReturn = this.generateResponse(data, method, response)
+                        const fullReturn: requestReturn = this.generateResponse(data, method, response)
                         if (this.config.callback) this.config.callback(data, fullReturn);
                         this.callbacks.success.forEach((callback) => callback(data, fullReturn));
                     }).catch((error) => {
@@ -134,8 +162,15 @@ class FastjsFetchRequest extends FastjsRequest {
                         console.error(_dev.error("fastjs/request", `Request failed with error`, [
                             "url: " + this.url]))
                     }
+
                     if (this.config.failed) this.config.failed(error, this);
-                    this.callbacks.failed.forEach((callback) => callback(error, this));
+                    this.callbacks.failed.forEach((callback) => callback({
+                        error: error,
+                        request: this,
+                        intercept: false,
+                        hook: null,
+                        response: null
+                    }));
                 });
             } else {
                 this.hookFailed("init");
@@ -150,7 +185,93 @@ class FastjsFetchRequest extends FastjsRequest {
         return this;
     }
 
-    request: Request | null = null;
+
+
+    protected handleBadResponse(response: requestReturn) {
+        let status = response?.status;
+        let res = response.data
+        if (__DEV__) {
+            _dev.warn("fastjs/request", `Request failed with status code ${status}`, [
+                "url: " + this.url,
+                "config: ", this.config,
+                "*code: " + status,
+                "*response: ", res,
+                "global config: ", moduleConfig,
+                "super: ", this,
+            ], ["fastjs.wrong"]);
+        }
+        // run failed
+        this.config.failed(status, res)
+        this.callbacks.failed.forEach((callback: ((error: Error | any, response: any) => void)) => callback(status, res));
+        // if keepalive
+        if (this.config.keepalive) setTimeout(response.resend, this.config.keepaliveWait);
+    }
+
+    protected hookFailed(hook: "before" | "init" | "success" | "failed" | "callback", response: Response | null = null) {
+        if (__DEV__) {
+            _dev.warn("fastjs/request", `Request **interrupted** by ${hook}`, [
+                "url: " + this.url,
+                "config: ", this.config,
+                "global config: ", moduleConfig,
+                "super: ", this,
+            ], ["fastjs.warn"]);
+        }
+
+        if (this.config.failed) this.config.failed(new Error(`Request interrupted by ${hook}`), this);
+        // this.callbacks.failed.forEach((callback: ((error: Error | any, response: Request) => void)) => callback(new Error(`Request interrupted by ${hook}`), this));
+        this.callbacks.failed.forEach(callback => {
+            callback({
+                error: new Error(`Request interrupted by ${hook}`),
+                request: this,
+                intercept: true,
+                hook: hook,
+                response: response
+            })
+        })
+    }
+
+    /** @description This method purpose to avoid typescript error (can't automatically detect correct overload method) */
+    protected resend(method: string, data?: string | data) {
+        // @ts-expect-error
+        return this.send(method, data);
+    }
+
+
+    protected generateResponse(data: any, method: string, response: Response): requestReturn {
+        const fullReturn: requestReturn = {
+            data: data,
+            status: response?.status || 0,
+            headers: response.headers as data,
+            request: this,
+            resend: () => this.resend(method, data),
+            response: response
+        }
+        return fullReturn;
+    }
+
+    get(data: data = {}): this {
+        return this.send("GET", data);
+    }
+
+    post(data: data = {}): this {
+        return this.send("POST", data);
+    }
+
+    put(data: data = {}): this {
+        return this.send("PUT", data);
+    }
+
+    delete(data: data = {}): this {
+        return this.send("DELETE", data);
+    }
+
+    patch(data: data = {}): this {
+        return this.send("PATCH", data);
+    }
+
+    head(data: data = {}): this {
+        return this.send("HEAD", data);
+    }
 }
 
-export default FastjsFetchRequest;
+export default FastjsRequest;
