@@ -1,5 +1,4 @@
-import FastjsFetchRequest from "./fetch";
-import FastjsXhrRequest from "./xhr";
+import FastjsRequest from "./fetch"
 
 export interface data {
     [key: string]: any;
@@ -21,43 +20,60 @@ export interface requestConfig {
     body: {
         [key: string]: any;
     } | string | null;
-}
-
-export interface moduleConfig {
-    timeout: number;
-    xhrHooks: {
-        before?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        init?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        success?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        failed?: (request: FastjsXhrRequest, config: moduleConfig) => boolean;
-        callback?: (
-            request: FastjsXhrRequest,
+    hooks: {
+        before: (request: FastjsRequest, config: moduleConfig) => boolean;
+        init: (request: FastjsRequest, config: moduleConfig) => boolean;
+        success: (response: Response, request: FastjsRequest, config: moduleConfig) => boolean;
+        failed: (error: any, request: FastjsRequest, config: moduleConfig) => boolean;
+        callback: (
+            response: Response,
+            request: FastjsRequest,
             data: {
                 [key: string]: any;
             }, config: moduleConfig
         ) => boolean
-    };
-    fetchHooks: {
-        before?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        init?: (request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        success?: (response: Response, request: FastjsFetchRequest, config: moduleConfig) => boolean;
-        failed?: (error: any, request: FastjsFetchRequest, config: moduleConfig) => boolean;
+    }
+}
+
+export interface moduleConfig {
+    timeout: number;
+    hooks: {
+        before?: (request: FastjsRequest, config: moduleConfig) => boolean;
+        init?: (request: FastjsRequest, config: moduleConfig) => boolean;
+        success?: (response: Response, request: FastjsRequest, config: moduleConfig) => boolean;
+        failed?: (error: any, request: FastjsRequest, config: moduleConfig) => boolean;
         callback?: (
             response: Response,
-            request: FastjsFetchRequest,
+            request: FastjsRequest,
             data: {
                 [key: string]: any;
             }, config: moduleConfig
         ) => boolean
     }
     handler: {
-        parseData: (data: any, request: FastjsXhrRequest) => any;
-        fetchReturn: (response: Response, request: FastjsFetchRequest) => Promise<any>;
-        responseCode: (code: number, request: FastjsXhrRequest | FastjsFetchRequest) => boolean;
+        fetchReturn: (response: Response, request: FastjsRequest) => Promise<any>;
+        responseCode: (code: number, request: FastjsRequest) => boolean;
     }
     check: {
         ignoreFormatWarning: boolean;
         stringBodyWarning: boolean;
         unrecommendedMethodWarning: boolean;
     }
+}
+
+export interface requestReturn {
+    headers: data;
+    response: any;
+    data: any;
+    status: number;
+    request: FastjsRequest;
+    resend: () => FastjsRequest;
+}
+
+export interface failedParams<T extends Error | number | null> {
+    error: T;
+    request: FastjsRequest;
+    intercept: boolean;
+    hook: "before" | "init" | "success" | "failed" | "callback" | null;
+    response: T extends number ? requestReturn : (Response | null);
 }
