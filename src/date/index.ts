@@ -10,7 +10,7 @@ const parse = (time: string | number | Date, format: string = "Y-M-D h:m:s"): pa
     const fastjsDateObject = new FastjsDate(format, time);
     const dateString = fastjsDateObject.toString();
     const timestamp = fastjsDateObject.toNumber();
-    const utc = timestamp - (new Date().getTimezoneOffset() * 60 * 1000);
+    const utc = timestamp + (new Date().getTimezoneOffset() * 60 * 1000);
     return {
         format,
         date: new Date(timestamp),
@@ -19,7 +19,7 @@ const parse = (time: string | number | Date, format: string = "Y-M-D h:m:s"): pa
         timestamp,
         utcDate: new Date(utc),
         utcTimestamp: utc,
-        utcDateString: new FastjsDate(format, timestamp - (new Date().getTimezoneOffset() * 60 * 1000)).toString(),
+        utcDateString: string(format, utc),
     }
 }
 
