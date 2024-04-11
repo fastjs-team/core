@@ -19,7 +19,7 @@ const parse = (time: string | number | Date, format: string = "Y-M-D h:m:s"): pa
         timestamp,
         utcDate: new Date(utc),
         utcTimestamp: utc,
-        utcDateString: string(format, utc),
+        utcDateString: new FastjsDate(format, utc).toString(),
     }
 }
 
