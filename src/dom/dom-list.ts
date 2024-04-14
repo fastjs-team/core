@@ -9,7 +9,7 @@ import DomAtom from "./dom-atom";
 class FastjsDomList extends DomAtom<FastjsDomList> {
   readonly #effect: Function;
 
-  constructor(...list: FastjsDom[] | HTMLElement[]) {
+  constructor(...list: Array<FastjsDom | HTMLElement>) {
     if (__DEV__) _dev.browserCheck("fastjs/dom/FastjsDomList");
 
     // this param is not used, just for super

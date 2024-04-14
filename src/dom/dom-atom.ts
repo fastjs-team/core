@@ -10,7 +10,7 @@ import type FastjsDomList from "./dom-list";
 
 // This is the core(atom) of FastjsDom, user should only see/use FastjsDom(-> DomAtom)
 // This design is for TypeScript support and prevent circular dependencies
-// Depedencies Circular should be: DomAtom -> FastjsDom -> FastjsDomList
+// Depedencies circular should be: DomAtom -> FastjsDom -> FastjsDomList
 // So, following these when design:
 // - DomAtom should not depend on FastjsDom / FastjsDomList
 // - FastjsDom should not depend on FastjsDomList

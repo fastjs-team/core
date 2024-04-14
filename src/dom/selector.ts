@@ -9,7 +9,7 @@ function selector(
 ): FastjsDom | FastjsDomList | null {
   const result = _selector(selector, parent);
   if (result instanceof HTMLElement) return new FastjsDom(result);
-  if (Array.isArray(result)) return new FastjsDomList(result);
+  if (Array.isArray(result)) return new FastjsDomList(...result);
   return null;
 }
 
