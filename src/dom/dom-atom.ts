@@ -10,10 +10,10 @@ import type FastjsDomList from "./dom-list";
 
 // This is the core(atom) of FastjsDom, user should only see/use FastjsDom(-> DomAtom)
 // This design is for TypeScript support and prevent circular dependencies
-// Depedencies Circular should be: DomAtom -> FastjsDomList -> FastjsDom
+// Depedencies Circular should be: DomAtom -> FastjsDom -> FastjsDomList
 // So, following these when design:
 // - DomAtom should not depend on FastjsDom / FastjsDomList
-// - FastjsDomList should not depend on FastjsDom
+// - FastjsDom should not depend on FastjsDomList
 
 class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   public construct: string = "FastjsDom";
@@ -467,48 +467,6 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
     else return getClassProxy();
 
     return this as unknown as FastjsDom;
-  }
-
-  // ==== DomList Base Function Support ==== //
-
-  getDom(key: number): FastjsDom {
-    if (__DEV__)
-      _dev.experimentFeatureWarning(
-        "dom-with-domlist",
-        "DomList Base Function Support",
-        "FastjsDom.getDom",
-      );
-    return this as unknown as FastjsDom;
-  }
-
-  getElement(key: number): HTMLElement {
-    if (__DEV__)
-      _dev.experimentFeatureWarning(
-        "dom-with-domlist",
-        "DomList Base Function Support",
-        "FastjsDom.getElement",
-      );
-    return this._el;
-  }
-
-  toArray(): Array<FastjsDom> {
-    if (__DEV__)
-      _dev.experimentFeatureWarning(
-        "dom-with-domlist",
-        "DomList Base Function Support",
-        "FastjsDom.toArray",
-      );
-    return [this] as unknown as Array<FastjsDom>;
-  }
-
-  toElArray(): Array<HTMLElement> {
-    if (__DEV__)
-      _dev.experimentFeatureWarning(
-        "dom-with-domlist",
-        "DomList Base Function Support",
-        "FastjsDom.toElArray",
-      );
-    return [this._el];
   }
 }
 

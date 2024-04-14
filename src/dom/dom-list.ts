@@ -1,27 +1,26 @@
 import FastjsDom from "./dom";
 import _dev from "../dev";
-import selector from "./selector";
+import _selector from "./selector-atom";
 import type { EachCallback } from "./def";
-import FastjsBaseModule from "../base";
-import { isUndefined } from "../utils";
+import { isUndefined, isDom } from "../utils";
 
 import DomAtom from "./dom-atom";
 
 class FastjsDomList extends DomAtom<FastjsDomList> {
   readonly #effect: Function;
 
-  constructor(list: Array<HTMLElement | Element | FastjsDom> = []) {
+  constructor(...list: FastjsDom[] | HTMLElement[]) {
     if (__DEV__) _dev.browserCheck("fastjs/dom/FastjsDomList");
 
     // this param is not used, just for super
     super(document.body);
 
-    let domList: Array<FastjsDom> = [];
-    for (let el of list) {
-      domList.push(new FastjsDom(el));
-    }
+    list = list.map((e) => {
+      if (!isDom(e)) return new FastjsDom(e);
+      return e;
+    })
 
-    this._list = new Proxy(domList, {
+    this._list = new Proxy(list as Array<FastjsDom>, {
       set: (target, key, value) => {
         target[Number(key)] = value;
         this.#effect();
@@ -50,7 +49,7 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
         if (key in target) return target[key as string];
         if (key in target._list) return target._list[key as unknown as number];
         // if param in FastjsDom
-        if (key in FastjsDom.prototype) {
+        if (isDom(key)) {
           const domList = this;
           return function () {
             for (const dom of domList._list) {
@@ -76,10 +75,8 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
 
   // methods
 
-  add(el: FastjsDom | HTMLElement): FastjsDomList {
-    this._list.push(
-      el instanceof FastjsDom ? el : new FastjsDom(el as HTMLElement)
-    );
+  add(el: FastjsDom): FastjsDomList {
+    this._list.push(el);
     return this;
   }
 
@@ -133,10 +130,10 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
   }
 
   next(el: string): FastjsDom | FastjsDomList | null {
-    return selector(
-      el,
-      this.toArray().map((e: FastjsDom) => e._el)
-    );
+    const result = _selector(el, this.toElArray());
+    if (result instanceof HTMLElement) return new FastjsDom(result);
+    if (Array.isArray(result)) return new FastjsDomList(...result);
+    return null;
   }
 
   toArray(): Array<FastjsDom> {

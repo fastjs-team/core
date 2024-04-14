@@ -96,29 +96,19 @@ class FastjsDom extends DomAtom<FastjsDom> {
     return this;
   }
 
-  children(): FastjsDomList {
-    return new FastjsDomList([...this._el.children]);
+  children(): FastjsDom[] {
+    return [...this._el.children].map((e) => new FastjsDom(e as HTMLElement));
   }
 
   father(): FastjsDom | null {
     return new FastjsDom(this.get("parentElement") as HTMLElement);
   }
 
-  next(selector: string): FastjsDom | FastjsDomList | null {
+  next(selector: string): FastjsDom | FastjsDom[] | null {
     const result = _selector(selector, this);
     if (result instanceof HTMLElement) return new FastjsDom(result);
-    if (Array.isArray(result)) return new FastjsDomList(result);
+    if (Array.isArray(result)) return result.map((e) => new FastjsDom(e));
     return null;
-  }
-
-  each(callback: EachCallback): FastjsDomList {
-    if (__DEV__)
-      _dev.experimentFeatureWarning(
-        "dom-with-domlist",
-        "DomList Base Function Support",
-        "FastjsDom.each"
-      );
-    return new FastjsDomList([this]).each(callback);
   }
 
   eachChild(callback: EachCallback, deep: boolean = false): FastjsDom {
@@ -205,7 +195,11 @@ class FastjsDom extends DomAtom<FastjsDom> {
         isReplace: true,
         newElement: newEl,
         oldElement: new FastjsDom(replaced),
-        index: newEl.father()?.children().toElArray().indexOf(node),
+        index: newEl
+          .father()
+          ?.children()
+          .map((e) => e._el)
+          .indexOf(node),
         el: newEl,
         origin: this,
         father: newEl.father()
@@ -232,7 +226,7 @@ class FastjsDom extends DomAtom<FastjsDom> {
         index: newEl
           .father()
           ?.children()
-          .toElArray()
+          .map((e) => e._el)
           .indexOf(added as HTMLElement),
         el: newEl,
         origin: this,
@@ -300,7 +294,7 @@ class FastjsDom extends DomAtom<FastjsDom> {
     const newEl = new FastjsDom(added as HTMLElement);
     return solve({
       index: this.children()
-        .toElArray()
+        .map((e) => e._el)
         .indexOf(added as HTMLElement),
       added: newEl,
       origin: this
