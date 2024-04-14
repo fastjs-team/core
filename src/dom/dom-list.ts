@@ -14,7 +14,7 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
 
     // this param is not used, just for super
     super(document.body);
-
+    
     list = list.map((e) => {
       if (!isDom(e)) return new FastjsDom(e);
       return e;
@@ -46,7 +46,6 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
     // return this;
     return new Proxy(this, {
       get: (target, key) => {
-        if (key in target) return target[key as string];
         if (key in target._list) return target._list[key as unknown as number];
         // if param in FastjsDom
         if (isDom(key)) {
@@ -64,6 +63,7 @@ class FastjsDomList extends DomAtom<FastjsDomList> {
           };
         }
         if (key in this._list[0]) return this._list[0][key as string];
+        if (key in target) return target[key as string];
       },
     });
   }
