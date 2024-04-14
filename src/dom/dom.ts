@@ -1,5 +1,5 @@
 import _dev from "../dev";
-import _selector from "./selector";
+import _selector from "./selector-atom";
 import FastjsDomList from "./dom-list";
 import type { styleObj } from "./css";
 import type {
@@ -105,7 +105,10 @@ class FastjsDom extends DomAtom<FastjsDom> {
   }
 
   next(selector: string): FastjsDom | FastjsDomList | null {
-    return _selector(selector, this._el);
+    const result = _selector(selector, this);
+    if (result instanceof HTMLElement) return new FastjsDom(result);
+    if (Array.isArray(result)) return new FastjsDomList(result);
+    return null;
   }
 
   each(callback: EachCallback): FastjsDomList {
