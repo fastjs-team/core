@@ -4,7 +4,7 @@ import type FastjsDomList from "./dom-list";
 import _dev from "../dev";
 
 function _selector(
-  selector: string = "body",
+  selector: string,
   parent:
     | Document
     | HTMLElement

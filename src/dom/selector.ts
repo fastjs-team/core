@@ -4,10 +4,10 @@ import _selector from "./selector-atom";
 import _dev from "../dev";
 
 function selector(
-  selector: string = "body",
+  target: string = "body",
   parent: Document | HTMLElement | HTMLElement[] = document
 ): FastjsDom | FastjsDomList | null {
-  const result = _selector(selector, parent);
+  const result = _selector(target, parent);
   if (result instanceof HTMLElement) return new FastjsDom(result);
   if (Array.isArray(result)) return new FastjsDomList(...result);
   return null;
