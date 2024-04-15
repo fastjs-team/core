@@ -17,9 +17,10 @@ export interface FastjsDomList extends FastjsDom {
   next(el: string): FastjsDom | FastjsDomList | null;
   toArray(): Array<FastjsDom>;
   toElArray(): Array<HTMLElement>;
+  [key: number]: FastjsDom;
 }
 
-export function createFastjsDomList(list: Array<FastjsDom | HTMLElement>) {
+export function createFastjsDomList(list: Array<FastjsDom | HTMLElement | Element>) {
   const domList: FastjsDom[] = list.map((e) => {
     if (!isDom(e)) return new FastjsDom(e);
     return e;
@@ -72,11 +73,11 @@ export function setupAtom(list: FastjsDom[]): FastjsDomList {
       this._list.forEach((el, i) => callback(el, el.el(), i));
       return this;
     },
-    el(key: number = 0) {
+    el(key = 0) {
       return this._list[key].el();
     },
     getElement(key = 0) {
-      return this._list[key].el();
+      return this.el(key);
     },
     getDom(key = 0) {
       return this._list[key];
