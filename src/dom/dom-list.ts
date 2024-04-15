@@ -19,7 +19,7 @@ export interface FastjsDomList extends FastjsDom {
   toElArray(): Array<HTMLElement>;
 }
 
-export function createFastjsDomList(...list: Array<FastjsDom | HTMLElement>) {
+export function createFastjsDomList(list: Array<FastjsDom | HTMLElement>) {
   const domList: FastjsDom[] = list.map((e) => {
     if (!isDom(e)) return new FastjsDom(e);
     return e;
@@ -69,14 +69,14 @@ export function setupAtom(list: FastjsDom[]): FastjsDomList {
       return this;
     },
     each(callback: EachCallback) {
-      this._list.forEach((el, i) => callback(el, el._el, i));
+      this._list.forEach((el, i) => callback(el, el.el(), i));
       return this;
     },
     el(key: number = 0) {
-      return this._list[key]._el;
+      return this._list[key].el();
     },
     getElement(key = 0) {
-      return this._list[key]._el;
+      return this._list[key].el();
     },
     getDom(key = 0) {
       return this._list[key];
@@ -84,14 +84,14 @@ export function setupAtom(list: FastjsDom[]): FastjsDomList {
     next(el: string) {
       const result = _selector(el, this.toElArray());
       if (result instanceof HTMLElement) return new FastjsDom(result);
-      if (Array.isArray(result)) return createFastjsDomList(...result);
+      if (Array.isArray(result)) return createFastjsDomList(result);
       return null;
     },
     toArray() {
       return this._list;
     },
     toElArray() {
-      return this._list.map((e) => e._el);
+      return this._list.map((e) => e.el());
     }
   } as FastjsDomList;
 }

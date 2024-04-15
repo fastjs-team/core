@@ -11,7 +11,7 @@ function selector(
 ): FastjsDom | FastjsDomList | null {
   const result = _selector(target, parent);
   if (result instanceof HTMLElement) return new FastjsDom(result);
-  if (Array.isArray(result)) return createFastjsDomList(...result);
+  if (Array.isArray(result)) return createFastjsDomList(result);
   return null;
 }
 
