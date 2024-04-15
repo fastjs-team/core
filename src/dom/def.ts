@@ -1,5 +1,5 @@
 import FastjsDom from "./dom";
-import {styleObj} from "./css";
+import type {styleObj} from "./css";
 
 export enum PushTarget {
     firstElementChild = "firstElementChild",

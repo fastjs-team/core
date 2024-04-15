@@ -42,3 +42,8 @@ test("Select 2 input with selector 'input[name=textinput]'", () => {
   const el = dom.select("input[name=textinput]");
   assert(el?.toArray().length === 2, "3 div with name div-child should be selected");
 })
+
+test("Select child of FastjsDom", () => {
+  const el = dom.select("div#root");
+  assert(el?.children().length === 5, "5 children of root div should be selected");
+})
