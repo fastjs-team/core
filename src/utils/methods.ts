@@ -10,7 +10,7 @@ async function copy(text: string): Promise<void> {
         const {FastjsDom} = await import("../dom");
         let input = new FastjsDom("span");
         input.html(replaceNewLinesAndSpaces(text)).push();
-        return input._el;
+        return input.el();
 
         function replaceNewLinesAndSpaces(text: string): string {
             return text.replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
