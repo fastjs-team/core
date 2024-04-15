@@ -202,7 +202,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
         index: newEl
           .father()
           ?.children()
-          .map((e) => e._el)
+          .toElArray()
           .indexOf(node),
         el: newEl,
         origin: this,
@@ -230,7 +230,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
         index: newEl
           .father()
           ?.children()
-          .map((e) => e._el)
+          .toElArray()
           .indexOf(added as HTMLElement),
         el: newEl,
         origin: this,
@@ -298,7 +298,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
     const newEl = new FastjsDom(added as HTMLElement);
     return solve({
       index: this.children()
-        .map((e) => e._el)
+        .toElArray()
         .indexOf(added as HTMLElement),
       added: newEl,
       origin: this
