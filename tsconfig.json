@@ -10,5 +10,12 @@
     "skipLibCheck": true,
     "lib": ["ES6", "dom", "DOM.Iterable"],
     "moduleResolution": "node",
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "test/**/*.ts",
+  ]
 }
