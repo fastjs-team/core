@@ -16,6 +16,8 @@ import type {
 } from "./def";
 import type { ArrayProxyHandler } from "./proxy";
 
+import { createFastjsDomList } from "./dom-list";
+
 class FastjsDom extends FastjsBaseModule<FastjsDom> {
   public construct: string = "FastjsDom";
   protected _events: EventList = [];
@@ -98,18 +100,18 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
     return this;
   }
 
-  children(): FastjsDom[] {
-    return [...this._el.children].map((e) => new FastjsDom(e as HTMLElement));
+  children(): FastjsDomList {
+    return createFastjsDomList([...this._el.children]);
   }
 
   father(): FastjsDom | null {
     return new FastjsDom(this.get("parentElement") as HTMLElement);
   }
 
-  next(selector: string): FastjsDom | FastjsDom[] | null {
+  next(selector: string): FastjsDom | FastjsDomList | null {
     const result = _selector(selector, this);
     if (result instanceof HTMLElement) return new FastjsDom(result);
-    if (Array.isArray(result)) return result.map((e) => new FastjsDom(e));
+    if (Array.isArray(result)) return createFastjsDomList(result);
     return null;
   }
 
