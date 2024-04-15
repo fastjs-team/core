@@ -1,6 +1,6 @@
 import _dev from "../dev";
 import _selector from "./selector-atom";
-import type FastjsDomList from "./dom-list";
+import type { FastjsDomList } from "./dom-list";
 import type { styleObj } from "./css";
 import type {
   EventList,
@@ -154,9 +154,9 @@ class FastjsDom extends DomAtom<FastjsDom> {
     el = (
       el instanceof HTMLElement
         ? el
-        : el instanceof FastjsDom
-          ? el._list[0]
-          : el._el
+        : el.construct === "FastjsDom"
+          ? el._el
+          : el._list[0]
     ) as HTMLElement;
     let node: HTMLElement;
     if (typeof target === "boolean" ? target : clone) {
@@ -264,7 +264,11 @@ class FastjsDom extends DomAtom<FastjsDom> {
     const _target: T =
       typeof callbackOrTarget === "function" ? (target as T) : callbackOrTarget;
     el = (
-      el instanceof HTMLElement ? el : isDom(el) ? el._el : el._list[0]
+      el instanceof HTMLElement
+        ? el
+        : el.construct === "FastjsDom"
+          ? el._el
+          : el._list[0]
     ) as HTMLElement;
     const node = (typeof target === "boolean" ? target : clone)
       ? (el.cloneNode(true) as HTMLElement)

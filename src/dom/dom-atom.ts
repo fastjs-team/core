@@ -6,7 +6,7 @@ import _dev from "../dev";
 import type { EventList, EventCallback } from "./def";
 import type { styleObj, styleObjKeys } from "./css";
 import type FastjsDom from "./dom";
-import type FastjsDomList from "./dom-list";
+import type { FastjsDomList } from "./dom-list";
 
 // This is the core(atom) of FastjsDom, user should only see/use FastjsDom(-> DomAtom)
 // This design is for TypeScript support and prevent circular dependencies
@@ -53,7 +53,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   last(): FastjsDom | null {
     return this._el.lastElementChild
       ? (new DomAtom(
-          this._el.lastElementChild as HTMLElement,
+          this._el.lastElementChild as HTMLElement
         ) as unknown as FastjsDom)
       : null;
   }
@@ -61,7 +61,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   firstChild(): FastjsDom | null {
     return this._el.firstElementChild
       ? (new DomAtom(
-          this._el.firstElementChild as HTMLElement,
+          this._el.firstElementChild as HTMLElement
         ) as unknown as FastjsDom)
       : null;
   }
@@ -69,7 +69,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   lastChild(): FastjsDom | null {
     return this._el.lastElementChild
       ? (new DomAtom(
-          this._el.lastElementChild as HTMLElement,
+          this._el.lastElementChild as HTMLElement
         ) as unknown as FastjsDom)
       : null;
   }
@@ -81,7 +81,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   getAttr(
     keyOrCallback?: string | ((attr: { [key: string]: string }) => void),
-    callback?: (value: string | null) => void,
+    callback?: (value: string | null) => void
   ): { [key: string]: string } | string | null | FastjsDom {
     const getAttrProxy = (): { [key: string]: string } => {
       const arr = [...this._el.attributes];
@@ -93,7 +93,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
         set: (target, key: string, value) => {
           this.setAttr(key, value);
           return Reflect.set(target, key, value);
-        },
+        }
       });
     };
 
@@ -113,7 +113,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   setAttr(
     keyOrMap: string | { [key: string]: string | null },
-    value?: string | null,
+    value?: string | null
   ): FastjsDom {
     if (typeof keyOrMap === "object") {
       for (let key in keyOrMap) {
@@ -129,7 +129,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   addEvent(
     event: keyof HTMLElementEventMap = "click",
-    callback: EventCallback,
+    callback: EventCallback
   ): FastjsDom {
     let eventTrig: EventListener | EventListenerObject = (event: Event) =>
       callback(this as unknown as FastjsDom, event);
@@ -139,7 +139,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
       trigger: eventTrig,
       remove: () => {
         this.removeEvent(callback);
-      },
+      }
     });
 
     this._el.addEventListener(event, eventTrig);
@@ -153,7 +153,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   getStyle(
     keyOrCallback?: styleObjKeys | ((style: styleObj) => void),
-    callback?: (value: string) => void,
+    callback?: (value: string) => void
   ): styleObj | string | FastjsDom {
     const getStyleProxy = (): styleObj => {
       const handler: ProxyHandler<CSSStyleDeclaration> = {
@@ -161,7 +161,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
           if (!Number.isNaN(Number(key)))
             this.setStyle(key as styleObjKeys, value);
           return Reflect.set(target, key, value);
-        },
+        }
       };
       return new Proxy(this._el.style, handler);
     };
@@ -183,7 +183,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   setStyle(
     keyOrMapOrString: styleObjKeys | styleObj | string,
     value?: string,
-    other: boolean = false,
+    other: boolean = false
   ): FastjsDom {
     if (typeof keyOrMapOrString === "object") {
       let k: styleObjKeys;
@@ -197,7 +197,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
       this._el.style.setProperty(
         key as string,
         value,
-        other ? "important" : "",
+        other ? "important" : ""
       );
     }
     return this as unknown as FastjsDom;
@@ -212,19 +212,19 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
   getEvent(callback: (eventList: EventList) => void): FastjsDom;
   getEvent(
     type: keyof HTMLElementEventMap,
-    callback: (event: EventCallback | null) => void,
+    callback: (event: EventCallback | null) => void
   ): FastjsDom;
 
   getEvent(
     typeOrCallback?:
       | keyof HTMLElementEventMap
       | ((eventList: EventList) => void),
-    callback?: (event: EventCallback | null) => void,
+    callback?: (event: EventCallback | null) => void
   ): EventList | EventCallback | null | FastjsDom {
     if (typeof typeOrCallback === "string")
       if (callback)
         callback(
-          this._events.find((v) => v.type === typeOrCallback)?.callback || null,
+          this._events.find((v) => v.type === typeOrCallback)?.callback || null
         );
       else
         return (
@@ -244,7 +244,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   removeEvent(
     typeOrKeyOrCallback?: keyof HTMLElementEventMap | number | EventCallback,
-    key?: number,
+    key?: number
   ): FastjsDom {
     if (__DEV__) {
       if (isUndefined(typeOrKeyOrCallback)) {
@@ -252,7 +252,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
           "fastjs/dom/removeEvent",
           "You are removing **all events**, make sure you want to do this.",
           ["***No Any Argument", "*removeEvent(): Dom", "super: ", this],
-          ["fastjs.warn"],
+          ["fastjs.warn"]
         );
       }
       if (typeof typeOrKeyOrCallback === "string" && isUndefined(key)) {
@@ -265,9 +265,9 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
             "*type: " + typeOrKeyOrCallback,
             "*removeEvent(key: keyof HTMLElementEventMap): Dom",
             "super: ",
-            this,
+            this
           ],
-          ["fastjs.warn"],
+          ["fastjs.warn"]
         );
       }
     }
@@ -277,7 +277,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
         this._el.removeEventListener(
           typeOrKeyOrCallback,
           this._events.filter((v) => v.type === typeOrKeyOrCallback)[key]
-            .trigger as Function as EventListener,
+            .trigger as Function as EventListener
         );
         this._events.splice(key, 1);
       } else
@@ -286,14 +286,14 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
           .forEach((v) => {
             this._el.removeEventListener(
               v.type,
-              v.trigger as Function as EventListener,
+              v.trigger as Function as EventListener
             );
             this._events.splice(this._events.indexOf(v), 1);
           });
     else if (typeof typeOrKeyOrCallback === "number") {
       this._el.removeEventListener(
         this._events[typeOrKeyOrCallback].type,
-        this._events[typeOrKeyOrCallback].trigger as Function as EventListener,
+        this._events[typeOrKeyOrCallback].trigger as Function as EventListener
       );
       this._events.splice(typeOrKeyOrCallback, 1);
     } else if (typeof typeOrKeyOrCallback === "function") {
@@ -302,7 +302,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
         .forEach((v) => {
           this._el.removeEventListener(
             v.type,
-            v.trigger as Function as EventListener,
+            v.trigger as Function as EventListener
           );
           this._events.splice(this._events.indexOf(v), 1);
         });
@@ -330,15 +330,15 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
           "*key: " + key,
           "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): Dom",
           "super: ",
-          this,
+          this
         ],
-        ["fastjs.warn"],
+        ["fastjs.warn"]
       );
     return this as unknown as FastjsDom;
 
     function findPropInChain(
       obj: object,
-      prop: string,
+      prop: string
     ): PropertyDescriptor | null {
       while (obj !== null) {
         const desc = Object.getOwnPropertyDescriptor(obj, prop);
@@ -377,9 +377,9 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
           "val(): string",
           "val(val: string): Dom",
           "super: ",
-          this,
+          this
         ],
-        ["fastjs.right", "fastjs.warn"],
+        ["fastjs.right", "fastjs.warn"]
       );
     }
     return this as unknown as FastjsDom;
@@ -423,7 +423,7 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   setClass(
     classNames?: string | string[] | { [key: string]: boolean },
-    value: boolean = true,
+    value: boolean = true
   ): FastjsDom {
     if (typeof classNames === "string")
       this._el.classList[value ? "add" : "remove"](classNames);
@@ -447,14 +447,14 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
 
   getClass(
     classNameOrCallback?: string | ((classNames: string[]) => void),
-    callback?: (value: boolean) => void,
+    callback?: (value: boolean) => void
   ): string[] | boolean | FastjsDom {
     const getClassProxy = (): string[] => {
       const handler: ArrayProxyHandler<string> = {
         set: (target, key: PropertyKey, value) => {
           if (!Number.isNaN(Number(key))) this.setClass(value);
           return Reflect.set(target, key, value);
-        },
+        }
       };
       return new Proxy([...this._el.classList], handler);
     };

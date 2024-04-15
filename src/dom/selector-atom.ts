@@ -1,5 +1,5 @@
 import type FastjsDom from "./dom";
-import type FastjsDomList from "./dom-list";
+import type { FastjsDomList } from "./dom-list";
 
 import _dev from "../dev";
 
