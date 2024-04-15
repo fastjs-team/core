@@ -188,7 +188,8 @@ class DomAtom<T extends FastjsDom | FastjsDomList> extends FastjsBaseModule<T> {
     if (typeof keyOrMapOrString === "object") {
       let k: styleObjKeys;
       for (k in keyOrMapOrString) {
-        this.setStyle(k, keyOrMapOrString[k]);
+        const mapValue = keyOrMapOrString[k];
+        if (mapValue) this.setStyle(k, mapValue);
       }
     } else if (!value) {
       this._el.style.cssText = keyOrMapOrString as string;
