@@ -35,13 +35,13 @@
     "dev": "npm run rm && rollup -cw",
     "build": "npm run rm && rollup -c && npm run types",
     "rm": "rm -rf ./dist",
+    "test": "vitest",
     "prod": "npm run build && npm run test",
     "update": "ncu --upgrade",
     "dev:windows": "npm run rm:windows && rollup -cw",
     "build:windows": "npm run rm:windows && rollup -c && npm run types",
     "rm:windows": "if exist dist rmdir /s/q dist",
-    "test:windows": "",
-    "prod:windows": "npm run build:windows && npm run test:windows"
+    "prod:windows": "npm run build:windows && npm run test"
   },
   "bugs": {
     "url": "https://github.com/fastjs-team/core/issues",
@@ -67,6 +67,7 @@
     "cross-env": "^7.0.3",
     "rollup": "^4.9.6",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.5.0"
   }
 }
