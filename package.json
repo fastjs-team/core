@@ -35,7 +35,6 @@
     "dev": "npm run rm && rollup -cw",
     "build": "npm run rm && rollup -c && npm run types",
     "rm": "rm -rf ./dist",
-    "test": "",
     "prod": "npm run build && npm run test",
     "update": "ncu --upgrade",
     "dev:windows": "npm run rm:windows && rollup -cw",
