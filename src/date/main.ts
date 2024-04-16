@@ -39,8 +39,6 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         default: false
       }
     ], (params: { format: string, date: number | string, local: boolean }): FastjsDate => {
-      console.log("params.date", params.date);
-      
       if (typeof params.date === "string") params.date = this.parseFormatString(params.format, params.date);
       if (params.local) params.date += this.timezoneDiff;
       this.format = params.format;
