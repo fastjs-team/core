@@ -42,7 +42,6 @@ Object.keys(formatsExport).forEach(formatName => {
 export default packageConfig
 
 function generateConfig(formatName, rollupOutput, plugins = []) {
-  console.log(formatName, rollupOutput, plugins)
   const isBundlerESMBuild = /esm-bundler/.test(formatsExport[formatName].file)
   const isBrowserESMBuild = /esm-browser/.test(formatsExport[formatName].file)
   const isProductionBuild = process.env.__DEV__ === 'false' || /\.prod\.js$/.test(rollupOutput.file)
@@ -60,6 +59,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
         tsconfig: "tsconfig.json",
         target: "es2022",
         module: "esnext",
+        sourceMap: false,
         // declaration -> /dist/types
         declaration: true,
         declarationDir: "dist/types",
