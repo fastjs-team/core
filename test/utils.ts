@@ -1,3 +1,5 @@
+global.__DEV__ = true;
+
 export function setupDomEnvironment() {
   document.body.innerHTML = `
     <div id="root">
