@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Rollup check
-        run: npm run build-test
+        run: npm run build
 
   type-check:
     runs-on: ubuntu-latest

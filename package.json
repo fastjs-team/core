@@ -30,16 +30,14 @@
     "LICENSE"
   ],
   "scripts": {
-    "build-test": "rollup -c",
-    "types": "tsc --declaration --declarationMap --emitDeclarationOnly --allowJs --emitDeclarationOnly --declarationDir dist/types",
     "dev": "npm run rm && rollup -cw",
-    "build": "npm run rm && rollup -c && npm run types",
+    "build": "npm run rm && rollup -c",
     "rm": "rm -rf ./dist",
     "test": "vitest",
     "prod": "npm run build && npm run test",
     "update": "ncu --upgrade",
     "dev:windows": "npm run rm:windows && rollup -cw",
-    "build:windows": "npm run rm:windows && rollup -c && npm run types",
+    "build:windows": "npm run rm:windows && rollup -c",
     "rm:windows": "if exist dist rmdir /s/q dist",
     "prod:windows": "npm run build:windows && npm run test"
   },
