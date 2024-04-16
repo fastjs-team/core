@@ -20,11 +20,15 @@ export interface FastjsDomList extends FastjsDom {
   [key: number]: FastjsDom;
 }
 
-export function createFastjsDomList(list: Array<FastjsDom | HTMLElement | Element>) {
-  const domList: FastjsDom[] = list.map((e) => {
-    if (!isDom(e)) return new FastjsDom(e);
-    return e;
-  });
+export function createFastjsDomList(
+  list: Array<FastjsDom | HTMLElement | Element | null | undefined>
+) {
+  const domList: FastjsDom[] = list
+    .filter((e) => e)
+    .map((e) => {
+      if (!isDom(e)) return new FastjsDom(e as HTMLElement);
+      return e;
+    });
 
   return new Proxy(setupAtom(domList), {
     get(target, key) {
@@ -37,7 +41,8 @@ export function createFastjsDomList(list: Array<FastjsDom | HTMLElement | Elemen
             const proto = dom[key as keyof FastjsDom];
             if (typeof proto === "function") {
               const result = proto.bind(dom, ...arguments)();
-              if (!isUndefined(result) && result.constructor !== FastjsDom) return result;
+              if (!isUndefined(result) && result.constructor !== FastjsDom)
+                return result;
             }
           }
           return domList;
