@@ -39,18 +39,18 @@ test("Get current utc date", () => {
 
 test("Parse timestamp to date string", () => {
   const timestamp = 1666351246000
-  const dateNow = date.string(timestamp);
-  expect(dateNow).toBe("2022-10-21 19:20:46");
+  const dateNow = date.string("Y-M m:s", timestamp);
+  expect(dateNow).toBe("2022-10 20:46");
 })
 
 test("Parse timestamp with parseTime", () => {
   const timestamp = 1666351246000
-  const dateNow = date.parseTime(timestamp).dateString;
-  expect(dateNow).toBe("2022-10-21 19:20:46");
+  const dateNow = date.parseTime(timestamp, "Y-M m:s").dateString;
+  expect(dateNow).toBe("2022-10 20:46");
 })
 
 test("Reformat date string", () => {
   const timestamp = 1666351246000
-  const dateNow = date.reformat("<Now Date:> Y M D&h:m:s", "Now Date: 2022 10 21&19:20:46");
-  expect(dateNow).toBe(dateString(new Date(timestamp)));
+  const dateNow = date.reformat("<Now Date:> Y M & m:s", "Now Date: 2022 10 & 20:46", "Y-M m:s");
+  expect(dateNow).toBe("2022-10 20:46");
 })
