@@ -3,10 +3,11 @@
  */
 
 import { assert, test } from "vitest";
-import { dom } from "../../../";
 import { setupDomEnvironment } from "../../utils";
 
 setupDomEnvironment();
+
+import { dom } from "@/main";
 
 test("Create a FastjsDom element normally", () => {
   const el = dom.newEl("div");
