@@ -39,6 +39,8 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
         default: false
       }
     ], (params: { format: string, date: number | string, local: boolean }): FastjsDate => {
+      console.log("params.date", params.date);
+      
       if (typeof params.date === "string") params.date = this.parseFormatString(params.format, params.date);
       if (params.local) params.date += this.timezoneDiff;
       this.format = params.format;
@@ -170,19 +172,23 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
 
     for (let i = 0; i < formatString.length; i++) {
       dateStringPointer++;
+
       const char = formatString[i];
+
       if (char === "<" || char === ">") {
         isInIgnoreToken = char === "<";
         isToken = false;
+        dateStringPointer--;
         continue;
       }
       if (isInIgnoreToken) {
         continue;
       }
+
       if (allTokens.includes(char)) {
         if (isToken) {
           if (__DEV__) {
-            throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent", [
+            throw _dev.error("fastjs/date/FastjsDate", "Invalid format string, token cannot be adjacent, did you using the chars like 'hh', 'mm'?", [
               "***formatString: " + formatString,
               "***dateString: " + dateString,
               "private parseFormatString(formatString: string, dateString: string): number",
@@ -191,6 +197,7 @@ class FastjsDate extends FastjsBaseModule<FastjsDate> {
           }
           throw "fg3j"
         }
+        
         switch (char) {
           case "Y":
             parsedDate.setFullYear(Number(dateString.slice(dateStringPointer, dateStringPointer + 4)));
