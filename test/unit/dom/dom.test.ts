@@ -4,10 +4,9 @@
 
 import { assert, test } from "vitest";
 import { setupDomEnvironment } from "../../utils";
+import { dom } from "@/main";
 
 setupDomEnvironment();
-
-import { dom } from "@/main";
 
 test("Create a FastjsDom element normally", () => {
   const el = dom.newEl("div");
@@ -27,8 +26,14 @@ test("Create a FastjsDom element with class", () => {
   const el = dom.newEl("div", {
     class: ["test1", "test2"]
   });
-  assert(el.getClass().includes("test1"), "div should be created with test1 class");
-  assert(el.getClass().includes("test2"), "div should be created with test2 class");
+  assert(
+    el.getClass().includes("test1"),
+    "div should be created with test1 class"
+  );
+  assert(
+    el.getClass().includes("test2"),
+    "div should be created with test2 class"
+  );
 });
 
 test("Create a FastjsDom element with text", () => {
@@ -42,8 +47,14 @@ test("Create a FastjsDom element with html", () => {
   const el = dom.newEl("div", {
     html: "<span>test</span>"
   });
-  assert(el.html() === "<span>test</span>", "div should be created with html '<span>test</span>'");
-  assert(el.next("span")?.html() === "test", "span should be created with text 'test'");
+  assert(
+    el.html() === "<span>test</span>",
+    "div should be created with html '<span>test</span>'"
+  );
+  assert(
+    el.next("span")?.html() === "test",
+    "span should be created with text 'test'"
+  );
 });
 
 test("Create a FastjsDom element with input value", () => {
@@ -58,7 +69,7 @@ test("Create a FastjsDom element with textarea value", () => {
     value: "test"
   });
   assert(el.val() === "test", "textarea should be created with value 'test'");
-})
+});
 
 test("Create a FastjsDom element with attribute", () => {
   const el = dom.newEl("div", {
@@ -77,5 +88,8 @@ test("Create a FastjsDom element with multiple attributes", () => {
     }
   });
   assert(el.getAttr("id") === "test", "div should be created with id 'test'");
-  assert(el.getAttr("class") === "test", "div should be created with class 'test'");
-})
+  assert(
+    el.getAttr("class") === "test",
+    "div should be created with class 'test'"
+  );
+});
