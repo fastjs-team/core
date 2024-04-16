@@ -29,7 +29,6 @@ export function createFastjsDomList(list: Array<FastjsDom | HTMLElement | Elemen
   return new Proxy(setupAtom(domList), {
     get(target, key) {
       if (key in target) return target[key as keyof FastjsDomList];
-      if (key in target._list[0]) return target._list[0][key as string];
       if (key in target._list) return target._list[key as unknown as number];
       if (key in FastjsDom.prototype) {
         const domList = target;
@@ -44,6 +43,7 @@ export function createFastjsDomList(list: Array<FastjsDom | HTMLElement | Elemen
           return domList;
         };
       }
+      if (key in target._list[0]) return target._list[0][key as string];
     }
   });
 }
