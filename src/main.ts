@@ -5,8 +5,8 @@ import dom from "./dom";
 import {FastjsDom, createFastjsDomList} from "./dom";
 import request from "./request";
 import {FastjsRequest} from "./request"
-import utils from "./utils/";
-import {rand, copy} from "./utils/";
+import utils from "./utils/index";
+import {rand, copy} from "./utils/index";
 import {FastjsExpression} from "./base";
 
 import {PushTarget, InsertTarget} from "./dom/def";
