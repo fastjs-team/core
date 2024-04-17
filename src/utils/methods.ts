@@ -57,12 +57,13 @@ function rand(min: number, max: number, decimal: number = 0): number {
     }
   }
 
-  [min, max] = [min * (decimal * 10), max * (decimal * 10)];
+  const prefix = (decimal * 10) || 1;
+  [min, max] = [min * prefix, max * prefix];
   let num =
     (Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) %
       (max - min + 1)) +
     min;
-  return num / (decimal * 10);
+  return num / prefix;
 }
 
 export { copy, rand };
