@@ -1,10 +1,7 @@
 // all modules
 import date from "./date";
-import {FastjsDate} from "./date";
 import dom from "./dom";
-import {FastjsDom, createFastjsDomList} from "./dom";
 import request from "./request";
-import {FastjsRequest} from "./request"
 import utils from "./utils/index";
 import {rand, copy} from "./utils/index";
 import {FastjsExpression} from "./base";
@@ -18,16 +15,9 @@ if (__DEV__) {
 
 // export
 export {
-    /** @module date */
     date,
-    FastjsDate,
-    /** @module dom */
     dom,
-    FastjsDom,
-    createFastjsDomList,
-    /** @module request */
     request,
-    FastjsRequest,
     /** @module utils */
     utils,
     rand,
