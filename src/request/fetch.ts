@@ -128,25 +128,52 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
                     if (!moduleConfig.handler.responseCode(response.status, this)) return this.handleBadResponse(this.generateResponse(parse(await response.text()), method, response));
                     if (!hooks.success(response, this, moduleConfig)) return this.hookFailed("success", response);
 
-                    moduleConfig.handler.fetchReturn(response, this).then((data) => {
-                        if (!hooks.callback(response, this, data, moduleConfig)) return this.hookFailed("callback", response);
+                    await moduleConfig.handler.fetchReturn(response, this)
+                        .then(data => {
+                            if (!hooks.callback(response, this, data, moduleConfig)) return this.hookFailed("callback", response);
+                            const fullReturn: requestReturn = this.generateResponse(data, method, response)
 
-                        const fullReturn: requestReturn = this.generateResponse(data, method, response)
-                        if (this.config.callback) this.config.callback(data, fullReturn);
-                        this.callbacks.success.forEach((callback) => callback(data, fullReturn));
-                    }).catch((error) => {
-                        if (__DEV__) {
-                            _dev.warn("fastjs/request", `Failed to **parse** return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue with this error output to https://github.com/fastjs-team/core/issues.`, [
-                                `url: ${this.url}`,
-                                `method: ${method}`,
-                                `*body: `, this.config.body,
-                                `*response: `, response,
-                                `*error: `, error,
-                                "super: ", this
-                            ], ["fastjs.wrong"])
-                        }
-                        return;
-                    })
+                            try {
+                                if (this.config.callback) this.config.callback(data, fullReturn);
+                            } catch (e) {
+                                if (__DEV__) {
+                                    _dev.warn("fastjs/request", `Uncaught error when running **req.config.callback**`, [
+                                        `url: ${this.url}`,
+                                        `method: ${method}`,
+                                        `body: `, this.config.body,
+                                        `response: `, response,
+                                        `*error: `, e,
+                                        "super: ", this
+                                    ])
+                                }
+                            }
+
+                            try {
+                                this.callbacks.success.forEach((callback) => callback(data, fullReturn));
+                            } catch (e) {
+                                if (__DEV__) {
+                                    _dev.warn("fastjs/request", `Uncaught error when running promise callbacks`, [
+                                        `url: ${this.url}`,
+                                        `method: ${method}`,
+                                        `body: `, this.config.body,
+                                        `response: `, response,
+                                        `*error: `, e,
+                                        "super: ", this
+                                    ])
+                                }
+                            }
+                        }).catch(error => {
+                            if (__DEV__) {
+                                _dev.warn("fastjs/request", `Failed to **parse** return, if you are using custom handler(config.handler.fetchReturn), please check your hooks. If not, this may be a bug, check server response and submit an issue with this error output to https://github.com/fastjs-team/core/issues.`, [
+                                    `url: ${this.url}`,
+                                    `method: ${method}`,
+                                    `*body: `, this.config.body,
+                                    `*response: `, response,
+                                    `*error: `, error,
+                                    "super: ", this
+                                ], ["fastjs.wrong"])
+                            }
+                        })
                 }).catch((error: Error) => {
                     if (!hooks.failed(error, this, moduleConfig)) return this.hookFailed("failed");
 
@@ -159,8 +186,6 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
                             `*error: ${error.message}`,
                             "super: ", this
                         ], ["fastjs.wrong"]);
-                        console.error(_dev.error("fastjs/request", `Request failed with error`, [
-                            "url: " + this.url]))
                     }
 
                     if (this.config.failed) this.config.failed(error, this);
