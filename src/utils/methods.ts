@@ -39,8 +39,8 @@ async function copy(text: string): Promise<void> {
     }
 }
 
-function rand(min: number, max: number, decimal: number = 0): string {
-    return (Math.random() * (max - min) + min).toFixed(decimal);
+function rand(min: number, max: number, decimal: number = 0): number {
+    return Number((Math.random() * (max - min) + min).toFixed(decimal));
 }
 
 export {
