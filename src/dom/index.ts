@@ -11,7 +11,9 @@ export default {
     el: FastjsDom | HTMLElement | Element | string,
     properties?: FastjsDomProps
   ) => new FastjsDom(el, properties),
-  newElList: (list: Array<FastjsDom | HTMLElement | Element | null | undefined>): FastjsDomList =>
-    createFastjsDomList(list)
+  newElList: (
+    list: Array<FastjsDom | HTMLElement | Element | null | undefined>
+  ): FastjsDomList => createFastjsDomList(list)
 };
 export { selector, FastjsDom, createFastjsDomList };
+export type { FastjsDomList };
