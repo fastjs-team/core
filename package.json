@@ -1,6 +1,6 @@
 {
   "name": "jsfast",
-  "version": "v1.0.0-alpha.5",
+  "version": "v1.0.0-alpha.6",
   "description": "Fastjs(jsfast) is a useful, lightweight JavaScript library for any types of project.",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
