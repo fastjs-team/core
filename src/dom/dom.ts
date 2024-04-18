@@ -158,9 +158,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
     el = (
       el instanceof HTMLElement
         ? el
-        : el.construct === "FastjsDom"
-          ? el._el
-          : el._list[0]
+        : el.el()
     ) as HTMLElement;
     let node: HTMLElement;
     if (typeof target === "boolean" ? target : clone) {
