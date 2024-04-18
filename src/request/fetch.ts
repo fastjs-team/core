@@ -23,7 +23,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
 
     constructor(
         public url: string,
-        public data: data = {},
+        public data: data | null = {},
         config: Partial<requestConfig> = {}
     ) {
         super();
@@ -76,9 +76,9 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
 
     /*   Custom promise   */
 
-    send(method: "GET" | "HEAD" | "OPTIONS", data?: data): this;
-    send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data): this;
-    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data?: data | string): this {
+    send(method: "GET" | "HEAD" | "OPTIONS", data?: data | null): this;
+    send(method: "POST" | "PUT" | "DELETE" | "PATCH", data?: string | data | null): this;
+    send(method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS", data: data | string | null = this.data): this {
         const hooks = this.config.hooks
 
         if (__DEV__) {
@@ -113,7 +113,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
             null : (typeof data === "string" ? data : JSON.stringify(data || this.config.body));
         let queryData: data | string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
             data || this.config.query : this.config.query;
-
+        console.log(method, data, this.config.query, bodyData, queryData)
         const send = (): void => {
             if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
@@ -256,7 +256,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
     }
 
     /** @description This method purpose to avoid typescript error (can't automatically detect correct overload method) */
-    protected resend(method: string, data?: string | data) {
+    protected resend(method: string, data?: string | data | null) {
         // @ts-expect-error
         return this.send(method, data);
     }
@@ -274,27 +274,27 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
         return fullReturn;
     }
 
-    get(data: data = {}): this {
+    get(data: data | null = this.data): this {
         return this.send("GET", data);
     }
 
-    post(data: data = {}): this {
+    post(data: data | null = this.data): this {
         return this.send("POST", data);
     }
 
-    put(data: data = {}): this {
+    put(data: data | null = this.data): this {
         return this.send("PUT", data);
     }
 
-    delete(data: data = {}): this {
+    delete(data: data | null = this.data): this {
         return this.send("DELETE", data);
     }
 
-    patch(data: data = {}): this {
+    patch(data: data | null = this.data): this {
         return this.send("PATCH", data);
     }
 
-    head(data: data = {}): this {
+    head(data: data | null = this.data): this {
         return this.send("HEAD", data);
     }
 }
