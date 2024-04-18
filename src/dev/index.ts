@@ -1,4 +1,4 @@
-import {rand} from "../utils/";
+import {rand} from "../utils/index";
 
 function browserCheck(module: string): void {
     const isBrowser: boolean = typeof window !== "undefined";
