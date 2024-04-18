@@ -13,3 +13,42 @@ test("Send a get request with query", async () => {
   });
   expect(data.page).toBe(2);
 });
+
+test("Send a post request", async () => {
+  await request
+    .post("https://reqres.in/api/users", {
+      name: "XiaoDong",
+      job: "Software Engineer"
+    })
+    .then((data, req) => {
+      expect(req.status).toBe(201);
+    });
+});
+
+test("Send a put request", async () => {
+  await request
+    .put("https://reqres.in/api/users/2", {
+      name: "XiaoDong",
+      job: "Software Engineer"
+    })
+    .then((data, req) => {
+      expect(req.status).toBe(200);
+    });
+});
+
+test("Send a patch request", async () => {
+  await request
+    .patch("https://reqres.in/api/users/2", {
+      name: "XiaoDong",
+      job: "Software Engineer"
+    })
+    .then((data, req) => {
+      expect(req.status).toBe(200);
+    });
+});
+
+test("Send a delete request", async () => {
+  await request.delete("https://reqres.in/api/users/2").then((data, req) => {
+    expect(req.status).toBe(204);
+  });
+});
