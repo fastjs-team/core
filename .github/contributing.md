@@ -14,6 +14,12 @@ First, you should know that, issue is not a place to ask questions. If you have 
 
 Any inappropriate issues will be closed immediately, and we may take actions by the [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html) mentioned above.
 
+### Provide a Reproduction
+
+If this is a bug, you should provide a **minimal** reproduction. This helps us to understand the problem and fix it quickly.
+
+[Click here](https://stackblitz.com/edit/fastjs-reproduce?file=src%2Fmain.ts) and fork the template to create a reproduction.
+
 ### Before Submitting an Issue
 
 - Check if there is any similar issue has been submitted.
