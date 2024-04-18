@@ -113,7 +113,7 @@ class FastjsRequest extends FastjsBaseModule<FastjsRequest> {
             null : (typeof data === "string" ? data : JSON.stringify(data || this.config.body));
         let queryData: data | string | null = ["GET", "HEAD", "OPTIONS"].includes(method) ?
             data || this.config.query : this.config.query;
-        console.log(method, data, this.config.query, bodyData, queryData)
+            
         const send = (): void => {
             if (!hooks.before(this, moduleConfig)) return this.hookFailed("before");
 
