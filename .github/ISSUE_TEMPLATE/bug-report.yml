@@ -39,6 +39,13 @@ body:
       description: Describe the steps to reproduce the problem.
     validations:
       required: true
+  
+  - type: input
+    id: reproduce-link
+    attributes:
+      label: Link to minimal reproduction
+      description: If possible, please [create a minimal reproduction](https://stackblitz.com/edit/fastjs-reproduce?file=src%2Fmain.ts) and provide a link to it here.
+      placeholder:
 
   - type: textarea
     id: system-info
@@ -59,6 +66,8 @@ body:
       label: Confirmations
       description: Please check the following boxes after submitting your issue.
       options:
+        - label: I'm using/tried the latest version of fastjs and the bug is still there
+          required: true
         - label: I have read the [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html)
           required: true
         - label: I have read the [Issue Reporting Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#issue-reporting)
