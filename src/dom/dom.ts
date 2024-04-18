@@ -155,11 +155,8 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
 
     const _target: T =
       typeof callbackOrTarget === "function" ? (target as T) : callbackOrTarget;
-    el = (
-      el instanceof HTMLElement
-        ? el
-        : el.el()
-    ) as HTMLElement;
+    el = el instanceof HTMLElement ? el : el.el();
+
     let node: HTMLElement;
     if (typeof target === "boolean" ? target : clone) {
       node = this._el.cloneNode(true) as HTMLElement;
@@ -168,6 +165,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
         node.addEventListener(v.type, v.trigger);
       });
     } else node = this._el;
+
     if (el.parentElement === null) {
       if (__DEV__) {
         let callback =
@@ -188,7 +186,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
       }
       throw "hg42";
     }
-    // if replace
+
     if (_target === PushTarget.replaceElement) {
       const replaced = el.parentElement.replaceChild(node, el);
       const newEl = new FastjsDom(node as HTMLElement);
@@ -197,11 +195,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
         isReplace: true,
         newElement: newEl,
         oldElement: new FastjsDom(replaced),
-        index: newEl
-          .father()
-          ?.children()
-          .toElArray()
-          .indexOf(node),
+        index: newEl.father()?.children().toElArray().indexOf(node),
         el: newEl,
         origin: this,
         father: newEl.father()
@@ -265,13 +259,7 @@ class FastjsDom extends FastjsBaseModule<FastjsDom> {
 
     const _target: T =
       typeof callbackOrTarget === "function" ? (target as T) : callbackOrTarget;
-    el = (
-      el instanceof HTMLElement
-        ? el
-        : el.construct === "FastjsDom"
-          ? el._el
-          : el._list[0]
-    ) as HTMLElement;
+    el = el instanceof HTMLElement ? el : el.el();
     const node = (typeof target === "boolean" ? target : clone)
       ? (el.cloneNode(true) as HTMLElement)
       : el;
