@@ -6,7 +6,6 @@ import utils from "./utils/index";
 
 import { rand, copy } from "./utils/index";
 
-import { FastjsExpression } from "./base";
 import { PushTarget, InsertTarget } from "./dom/def";
 
 import type { FastjsDom, FastjsDomList } from "./dom";
@@ -31,11 +30,11 @@ export {
   copy,
   /** @description enums */
   PushTarget,
-  InsertTarget,
-  FastjsExpression
+  InsertTarget
 };
 export type { FastjsDom, FastjsDate, FastjsDomList, FastjsRequest };
 export type * from "./dom/def";
 export type * from "./dom/css";
 export type * from "./date/def";
+export type * from "./request/def";
 export type * from "./request/config";
