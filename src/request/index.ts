@@ -1,37 +1,37 @@
-import moduleConfig from './config';
-import FastjsRequest from "./fetch";
+import {globalConfig} from './config';
+import {createRequest} from "./fetch";
 
-import type {data} from "./def";
-import type {requestConfig} from "./def";
+import type {RequestData} from "./def";
+import type {RequestConfig} from "./config";
+import type {FastjsRequest} from "./fetch";
 
+const create = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config);
+}
+const get = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).get();
+}
+const post = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).post();
+}
+const put = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).put();
+}
+const del = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).delete();
+}
+const patch = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).patch();
+}
 
-const create = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config);
-}
-const get = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).get();
-}
-const post = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).post();
-}
-const put = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).put();
-}
-const del = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).delete();
-}
-const patch = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).patch();
-}
-
-const head = (url: string, data?: data, config?: Partial<requestConfig>): FastjsRequest => {
-    return new FastjsRequest(url, data, config).head();
+const head = (url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest => {
+    return createRequest(url, data, config).head();
 }
 
 export default {
-    request: FastjsRequest,
+    request: createRequest,
     create,
-    config: moduleConfig,
+    config: globalConfig,
     get,
     post,
     put,
@@ -40,4 +40,4 @@ export default {
     head
 };
 
-export {FastjsRequest}
+export type {FastjsRequest}
