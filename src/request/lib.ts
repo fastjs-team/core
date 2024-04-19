@@ -1,10 +1,10 @@
-import {data} from "./def";
+import {RequestData} from "./def";
 
-export function addQuery(url: string, query: string | data | null): string {
+export function addQuery(url: string, query: string | RequestData | null): string {
     if (!query) return url;
     if (typeof query === "string") {
         query[0] === "?" && (query = query.slice(1));
-        const queryObj: data = {};
+        const queryObj: RequestData = {};
         query.split("&").forEach((query) => {
             const [key, value] = query.split("=");
             queryObj[key] = value;
