@@ -1,4 +1,4 @@
-import type {FastjsRequest} from "./fetch"
+import type {FastjsRequest} from "./fetch-types"
 
 export interface RequestData {
     [key: string]: any;

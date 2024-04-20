@@ -1,4 +1,4 @@
-import {RequestData} from "./def";
+import type {RequestData} from "./def";
 
 export function addQuery(url: string, query: string | RequestData | null): string {
     if (!query) return url;
@@ -15,7 +15,7 @@ export function addQuery(url: string, query: string | RequestData | null): strin
     return url + (url.includes("?") ? "&" : "?") + query.toString();
 }
 
-export function parse(data: string): any {
+export function parse(data: string): string | RequestData {
     try {
         return JSON.parse(data);
     } catch (error) {

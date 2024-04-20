@@ -3,6 +3,7 @@ import { createModule } from "../base";
 import { createConfig, globalConfig } from "./config";
 import { addQuery, parse } from "./lib";
 
+import type { FastjsRequest, FastjsRequestAtom } from "./fetch-types";
 import type { RequestConfig } from "./config";
 import type {
   RequestData,
@@ -12,40 +13,6 @@ import type {
   FailedParams,
   RequestHooks
 } from "./def";
-import type { FastjsModuleBase } from "../base/def";
-
-interface FastjsRequestAtom {
-  readonly construct: "FastjsRequest";
-  url: string;
-  data: RequestData;
-  config: RequestConfig;
-  callback: RequestCallback;
-  request?: Request;
-  response?: Response;
-  wait?: NodeJS.Timeout | null;
-}
-
-interface FastjsRequestAPI {
-  send: (method: RequestMethod, data?: RequestData) => FastjsRequest;
-  get: (data?: RequestData) => FastjsRequest;
-  post: (data?: RequestData) => FastjsRequest;
-  put: (data?: RequestData) => FastjsRequest;
-  delete: (data?: RequestData) => FastjsRequest;
-  patch: (data?: RequestData) => FastjsRequest;
-  head: (data?: RequestData) => FastjsRequest;
-  options: (data?: RequestData) => FastjsRequest;
-  then: (
-    callback: (data: any, response: RequestReturn) => void
-  ) => FastjsRequest;
-  catch: (
-    callback: (error: FailedParams<Error | number | null>) => void
-  ) => FastjsRequest;
-  finally: (callback: (request: FastjsRequest) => void) => FastjsRequest;
-}
-
-export type FastjsRequest = FastjsRequestAtom &
-  FastjsRequestAPI &
-  FastjsModuleBase;
 
 export function createRequest(
   url: string,
@@ -184,10 +151,9 @@ function sendRequest(
         if (!hooks.success(requestReturn, globalConfig))
           return generateHookFailedResponse("success", request, requestReturn);
 
-        request.config.callback(data, requestReturn)
+        request.config.callback(data, requestReturn);
         request.callback.success.forEach((func) => func(data, requestReturn));
         request.callback.finally.forEach((func) => func(request));
-
       })
       .catch((error: Error) => {
         if (__DEV__)
