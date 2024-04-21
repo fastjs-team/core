@@ -1,10 +1,14 @@
 import type {
+  EachCallback,
   EventCallback,
   EventList,
   InsertReturn,
   InsertTarget,
   PushReturn,
-  PushTarget
+  PushTarget,
+  SetStyleObj,
+  StyleObj,
+  StyleObjKeys
 } from "./def";
 
 import type { FastjsModuleBase } from "../base/def";
@@ -17,6 +21,7 @@ export interface FastjsDomAtom {
 }
 
 export interface FastjsDomAPI {
+  get<T extends keyof HTMLElement>(key: T): HTMLElement[T];
   set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom;
   text: {
     (): string;
@@ -26,15 +31,53 @@ export interface FastjsDomAPI {
     (): string;
     (val: string): FastjsDom;
   };
+  val: {
+    (): string;
+    (val: string): FastjsDom;
+  };
   el(): HTMLElement;
+  remove(): FastjsDom;
   focus(): FastjsDom;
   first(): FastjsDom | null;
   last(): FastjsDom | null;
   father(): FastjsDom | null;
-  addEvent(
-    type: keyof HTMLElementEventMap,
-    callback: EventCallback
-  ): FastjsDom;
+  children(): FastjsDomList;
+  next(selector?: string): FastjsDom | FastjsDomList | null;
+  each(callback: EachCallback, deep?: boolean): FastjsDom;
+  addEvent(type: keyof HTMLElementEventMap, callback: EventCallback): FastjsDom;
+  removeEvent: {
+    (): FastjsDom;
+    (type: keyof HTMLElementEventMap): FastjsDom;
+    (callback: EventCallback): FastjsDom;
+    (type: keyof HTMLElementEventMap, key: number): FastjsDom;
+  };
+  getStyle: {
+    (): StyleObj;
+    (key: keyof CSSStyleDeclaration): string;
+    (callback: (style: StyleObj) => void): FastjsDom;
+  };
+  setStyle: {
+    (style: SetStyleObj): FastjsDom;
+    (style: string): FastjsDom;
+    (key: StyleObjKeys, val: string, important?: boolean): FastjsDom;
+  };
+  getClass: {
+    (): string[];
+    (callback: (classNames: string[]) => void): void;
+  }
+  setClass: {
+    (className: string, value?: boolean): FastjsDom;
+    (classNames: { [key: string]: boolean }): FastjsDom;
+  };
+  addClass: {
+    (className: string[]): FastjsDom;
+    (...className: string[]): FastjsDom;
+  };
+  removeClass: {
+    (className: string[]): FastjsDom;
+    (...className: string[]): FastjsDom;
+  };
+  clearClass(): FastjsDom;
   getAttr: {
     (): { [key: string]: string };
     (key: string): string;

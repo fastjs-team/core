@@ -55,7 +55,7 @@ export type EventList = Array<{
 export type CustomProps = {
   html?: string;
   text?: string;
-  css?: styleObj | string;
+  css?: StyleObj | string;
   class?: string[] | string;
   attr?: { [key: string]: string | null };
   value?: string;
@@ -69,5 +69,6 @@ export type FastjsDomProps = CustomProps & {
     | HTMLButtonElement[K];
 };
 
-export type styleObj = Partial<CSSStyleDeclaration>;
-export type styleObjKeys = keyof styleObj;
+export type StyleObj = Partial<CSSStyleDeclaration>;
+export type StyleObjKeys = keyof StyleObj;
+export type SetStyleObj = { [K in StyleObjKeys]?: StyleObj[K] | null };
