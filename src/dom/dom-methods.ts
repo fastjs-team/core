@@ -1,5 +1,5 @@
 import _dev from "../dev";
-import { rand } from "../utils/methods";
+import { rand } from "../utils/";
 import {
   EachCallback,
   EventCallback,

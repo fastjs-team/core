@@ -42,5 +42,3 @@ function mergeProps(el: FastjsDom, props: FastjsDomProps) {
     else if (key in el._el) el.set(key, props[key]);
   }
 }
-
-createFastjsDom().text();
