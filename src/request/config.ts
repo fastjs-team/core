@@ -1,6 +1,6 @@
 import _dev from "../dev";
 
-import type { FastjsRequest } from "./fetch";
+import type { FastjsRequest } from "./fetch-types";
 import type { FailedParams } from "./def";
 import type { RequestReturn } from "./def";
 
