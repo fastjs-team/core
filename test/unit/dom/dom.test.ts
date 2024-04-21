@@ -24,6 +24,16 @@ test("Create a FastjsDom element with style", () => {
 
 test("Create a FastjsDom element with class", () => {
   const el = dom.newEl("div", {
+    class: "test"
+  });
+  assert(
+    el.getClass().includes("test"),
+    "div should be created with test class"
+  );
+});
+
+test("Create a FastjsDom element with class list", () => {
+  const el = dom.newEl("div", {
     class: ["test1", "test2"]
   });
   assert(

@@ -36,7 +36,7 @@ function mergeProps(el: FastjsDom, props: FastjsDomProps) {
     if (key === "html") el.html(props.html!);
     else if (key === "text") el.text(props.text!);
     else if (key === "css") el.setStyle(props.css!);
-    else if (key === "class") el.addClass(...props.class!);
+    else if (key === "class") el.addClass(props.class!  as string);
     else if (key === "attr") el.setAttr(props.attr!);
     else if (key === "value") el.val(props.value!);
     else if (key in el._el) el.set(key, props[key]);
