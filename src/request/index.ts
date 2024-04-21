@@ -67,5 +67,5 @@ export default {
   patch,
   head
 };
-
+export { createRequest };
 export type { FastjsRequest };
