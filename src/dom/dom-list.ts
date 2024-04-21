@@ -1,54 +1,43 @@
-import FastjsDom from "./dom";
 import _dev from "../dev";
 import _selector from "./selector-atom";
-import type { EachCallback } from "./def";
 import { isUndefined, isDom } from "../utils";
 
-export interface FastjsDomList extends FastjsDom {
-  construct: "FastjsDomList";
-  _list: Array<FastjsDom>;
-  length: number;
-  add(el: FastjsDom): FastjsDomList;
-  delete(key: number, deleteDom?: boolean): FastjsDomList;
-  each(callback: EachCallback): FastjsDomList;
-  el(key?: number): HTMLElement;
-  getElement(key?: number): HTMLElement;
-  getDom(key?: number): FastjsDom;
-  next(el: string): FastjsDom | FastjsDomList | null;
-  toArray(): Array<FastjsDom>;
-  toElArray(): Array<HTMLElement>;
-  [key: number]: FastjsDom;
-}
+import { createFastjsDom } from "./dom";
+
+import type { FastjsDom } from "./dom-types";
+import type { FastjsDomList } from "./dom-list-types";
 
 export function createFastjsDomList(
   list: Array<FastjsDom | HTMLElement | Element | null | undefined>
-) {
+): FastjsDomList {
   const domList: FastjsDom[] = list
     .filter((e) => e)
     .map((e) => {
-      if (!isDom(e)) return new FastjsDom(e as HTMLElement);
+      if (!isDom(e)) return createFastjsDom(e as HTMLElement);
       return e;
     });
 
   return new Proxy(setupAtom(domList), {
     get(target, key) {
-      if (key in target) return target[key as keyof FastjsDomList];
       if (key in target._list) return target._list[key as unknown as number];
-      if (key in FastjsDom.prototype) {
-        const domList = target;
-        return function () {
-          for (const dom of domList._list) {
-            const proto = dom[key as keyof FastjsDom];
-            if (typeof proto === "function") {
-              const result = proto.bind(dom, ...arguments)();
-              if (!isUndefined(result) && result.constructor !== FastjsDom)
-                return result;
+      if (key in target._list[0]) {
+        const val = target._list[0][key as string];
+        if (typeof val === "function") {
+          return function () {
+            for (const dom of target._list) {
+              const proto = dom[key as keyof FastjsDom];
+              if (typeof proto === "function") {
+                const res = proto.bind(dom, ...arguments)();
+                if (!isUndefined(res) && res.construct !== "FastjsDom")
+                  return res;
+              }
             }
-          }
-          return domList;
-        };
+            return target;
+          };
+        } else return val;
       }
-      if (key in target._list[0]) return target._list[0][key as string];
+      // if (key in target) return target[key as keyof FastjsDomList];
+      return target[key as keyof FastjsDomList];
     }
   });
 }
@@ -63,41 +52,7 @@ export function setupAtom(list: FastjsDom[]): FastjsDomList {
       }
     }),
     get length() {
-      return this._list.length;
-    },
-    add(el: FastjsDom) {
-      this._list.push(el);
-      return this;
-    },
-    delete(key: number, deleteDom = true) {
-      if (deleteDom) this._list[key].remove();
-      this._list.splice(key, 1);
-      return this;
-    },
-    each(callback: EachCallback) {
-      this._list.forEach((el, i) => callback(el, el.el(), i));
-      return this;
-    },
-    el(key = 0) {
-      return this._list[key].el();
-    },
-    getElement(key = 0) {
-      return this.el(key);
-    },
-    getDom(key = 0) {
-      return this._list[key];
-    },
-    next(el: string) {
-      const result = _selector(el, this.toElArray());
-      if (result instanceof HTMLElement) return new FastjsDom(result);
-      if (Array.isArray(result)) return createFastjsDomList(result);
-      return null;
-    },
-    toArray() {
-      return this._list;
-    },
-    toElArray() {
-      return this._list.map((e) => e.el());
+      return list.length;
     }
   } as FastjsDomList;
 }
