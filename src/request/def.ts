@@ -5,7 +5,8 @@ export interface RequestData {
 }
 
 export interface RequestReturn {
-    headers: RequestData;
+    headers: Array<[string, string]>;
+    headersObj: Record<string, string>;
     response: any;
     data: any;
     status: number;

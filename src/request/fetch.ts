@@ -16,7 +16,7 @@ import type {
 
 export function createRequest(
   url: string,
-  data: RequestData | null = {},
+  data: RequestData | null = null,
   config?: Partial<RequestConfig>
 ): FastjsRequest {
   if (__DEV__ && typeof url !== "string") {
@@ -96,7 +96,7 @@ function sendRequest(
   }
 
   const data = {
-    body: isBodyAllowed(method) ? JSON.stringify(request.data) : null,
+    body: isBodyAllowed(method) ? request.data : null,
     query: (isBodyAllowed(method) ? null : request.data) || request.config.query
   };
 
@@ -123,7 +123,7 @@ function sendRequest(
     request.request = new Request(addQuery(request.url, data.query), {
       method,
       headers: request.config.headers,
-      body: data.body
+      body: data.body as BodyInit
     });
 
     if (!hooks.init(request, globalConfig))
@@ -137,7 +137,8 @@ function sendRequest(
         );
 
         const requestReturn: RequestReturn = {
-          headers: Object.fromEntries(response.headers.entries()),
+          headers: [...response.headers.entries()],
+          headersObj: Object.fromEntries(response.headers.entries()),
           response,
           data: parse(data),
           status: response.status,
