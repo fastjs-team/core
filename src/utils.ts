@@ -1,5 +1,5 @@
-import type FastjsDom from "./dom/dom";
-import type { FastjsDomList } from "./dom/dom-list";
+import type { FastjsDom } from "./dom/dom-types";
+import type { FastjsDomList } from "./dom/dom-list-types";
 
 export function isUndefined(value: any): value is undefined {
   return value === undefined;

@@ -1,4 +1,3 @@
-// all modules
 import dom from "./dom";
 import date from "./date";
 import request from "./request";
@@ -19,7 +18,6 @@ if (__DEV__) {
   );
 }
 
-// export
 export {
   dom,
   date,
@@ -34,7 +32,10 @@ export {
 };
 export type { FastjsDom, FastjsDate, FastjsDomList, FastjsRequest };
 export type * from "./dom/def";
-export type * from "./dom/css";
+export type * from "./dom/dom-types";
+export type * from "./dom/dom-list-types"
 export type * from "./date/def";
+export type * from "./date/date-types";
 export type * from "./request/def";
 export type * from "./request/config";
+export type * from "./request/fetch-types"
