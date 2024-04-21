@@ -6,6 +6,7 @@ import { createFastjsDom } from "./dom";
 
 import type { FastjsDom } from "./dom-types";
 import type { FastjsDomList } from "./dom-list-types";
+import { createMethods } from "./dom-list-methods";
 
 export function createFastjsDomList(
   list: Array<FastjsDom | HTMLElement | Element | null | undefined>
@@ -16,8 +17,8 @@ export function createFastjsDomList(
       if (!isDom(e)) return createFastjsDom(e as HTMLElement);
       return e;
     });
-
-  return new Proxy(setupAtom(domList), {
+  
+  const moduleAtom = new Proxy(setupAtom(domList), {
     get(target, key) {
       if (key in target._list) return target._list[key as unknown as number];
       if (key in target._list[0]) {
@@ -36,10 +37,14 @@ export function createFastjsDomList(
           };
         } else return val;
       }
-      // if (key in target) return target[key as keyof FastjsDomList];
       return target[key as keyof FastjsDomList];
     }
   });
+
+  return Object.assign(
+    moduleAtom,
+    createMethods(moduleAtom as FastjsDomList)
+  );
 }
 
 export function setupAtom(list: FastjsDom[]): FastjsDomList {
