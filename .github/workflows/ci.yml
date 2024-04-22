@@ -12,55 +12,73 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
+
       - name: Install dependencies
         run: npm i
+
       - name: Rollup check
         run: npm run build
 
   type-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
+
       - name: Install dependencies
         run: npm i
+
       - name: Install typescript
         run: npm install --global typescript
+
       - name: TypeScript check
         run: tsc --noEmit
 
   format-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
+
       - name: Install dependencies
         run: npm i
+
       - name: Run prettier check
         run: npm run format
 
   unit-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: 20
+
       - name: Install dependencies
         run: npm i
+
       - name: Build
         run: npm run build
+
       - name: Run vitest tests
         run: npm run test

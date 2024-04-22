@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "21.x"
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install
@@ -39,7 +39,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "build: bump package version to ${{ github.event.release.tag_name }}"
-          commit_options: "--no-verify"
 
       - name: Publish Package
         run: npm publish --access public
