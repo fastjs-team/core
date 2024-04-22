@@ -18,7 +18,7 @@ export function rand(min: number, max: number, decimal: number = 0): number {
     }
   }
 
-  const prefix = (decimal * 10) || 1;
+  const prefix = decimal * 10 || 1;
   [min, max] = [min * prefix, max * prefix];
   let num =
     (Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) %

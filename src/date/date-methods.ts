@@ -97,8 +97,11 @@ export function createMethods(date: FastjsDate): FastjsDateAPI {
     showOrFormat?: "utc" | "local" | number | string,
     format?: string
   ) {
-    if (typeof showOrFormat === "string" && !["utc", "local"].includes(showOrFormat)) {
-      format = showOrFormat
+    if (
+      typeof showOrFormat === "string" &&
+      !["utc", "local"].includes(showOrFormat)
+    ) {
+      format = showOrFormat;
     }
     return createFastjsDate(format || date.format, toActiveNumber()).toString();
   }

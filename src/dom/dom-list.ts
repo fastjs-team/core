@@ -17,7 +17,7 @@ export function createFastjsDomList(
       if (!isDom(e)) return createFastjsDom(e as HTMLElement);
       return e;
     });
-  
+
   const moduleAtom = new Proxy(setupAtom(domList), {
     get(target, key) {
       if (key in target._list) return target._list[key as unknown as number];
@@ -41,10 +41,7 @@ export function createFastjsDomList(
     }
   });
 
-  return Object.assign(
-    moduleAtom,
-    createMethods(moduleAtom as FastjsDomList)
-  );
+  return Object.assign(moduleAtom, createMethods(moduleAtom as FastjsDomList));
 }
 
 export function setupAtom(list: FastjsDom[]): FastjsDomList {

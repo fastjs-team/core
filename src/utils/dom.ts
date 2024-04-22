@@ -9,7 +9,9 @@ export async function copy(text: string): Promise<void> {
   async function createDomElement(text: string): Promise<HTMLElement> {
     const { createFastjsDom } = await import("../dom/dom");
     let input = createFastjsDom("span");
-    input.html(replaceNewLinesAndSpaces(text)).push(document.body, "lastElementChild");
+    input
+      .html(replaceNewLinesAndSpaces(text))
+      .push(document.body, "lastElementChild");
     return input.el();
 
     function replaceNewLinesAndSpaces(text: string): string {

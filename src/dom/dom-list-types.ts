@@ -19,4 +19,6 @@ export interface FastjsDomListAPI {
   toElArray(): Array<HTMLElement>;
 }
 
-export type FastjsDomList = FastjsDomListAtom & FastjsDomListAPI & Omit<FastjsDom, "construct">;
+export type FastjsDomList = FastjsDomListAtom &
+  FastjsDomListAPI &
+  Omit<FastjsDom, "construct">;

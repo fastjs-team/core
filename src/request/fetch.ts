@@ -117,8 +117,7 @@ function sendRequest(
 
   async function passthrough() {
     const hooks = request.config.hooks;
-    if (!hooks.before(request))
-      return request.hookFailed("before");
+    if (!hooks.before(request)) return request.hookFailed("before");
 
     request.request = new Request(addQuery(request.url, data.query), {
       method,

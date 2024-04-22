@@ -92,7 +92,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
   const remove = () => {
     dom._el.remove();
     return dom;
-  }
+  };
 
   const focus = () => {
     dom._el.focus();
@@ -249,7 +249,9 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
   function getClass(): string[];
   function getClass(callback: (classNames: string[]) => void): void;
 
-  function getClass(callback?: (classNames: string[]) => void): string[] | void {
+  function getClass(
+    callback?: (classNames: string[]) => void
+  ): string[] | void {
     const arr = [...dom._el.classList];
     if (callback) callback(arr);
     else return arr;
