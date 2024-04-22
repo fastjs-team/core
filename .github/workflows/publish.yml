@@ -7,20 +7,38 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "21.x"
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install
 
       - name: Build Package
         run: npm run prod
+
+      - name: Set Git Config
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Bump package version
+        continue-on-error: true
+        run: |
+          npm version ${{ github.event.release.tag_name }} -m "build: bump package version to ${{ github.event.release.tag_name }}"
+          git push
 
       - name: Create .npmrc file
         run: |
@@ -29,7 +47,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Package
-        uses: cycjimmy/semantic-release-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
