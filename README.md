@@ -52,7 +52,7 @@ const { request } = require('jsfast') // cjs
 
 ## Info
 
-- Author: xiaodong2008
+- Author: [xiaodong2008](https://github.com/xiaodong2008)
 - License: [MIT](https://opensource.org/licenses/MIT)
 
 ## Sponsors
