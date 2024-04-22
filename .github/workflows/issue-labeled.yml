@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Reply Issue
-        if: "${{ github.event.label.name == 'Resolution: To Be Discuss'}}"
+        if: "${{ github.event.label.name == 'Status: To Be Discuss'}}"
         uses: actions-cool/issues-helper@v3
         with:
           actions: "create-comment"
