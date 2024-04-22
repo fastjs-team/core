@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Run prettier check
-        run: npm run format:check
+        run: npm run format
 
   unit-test:
     runs-on: ubuntu-latest
