@@ -7,6 +7,10 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -28,8 +32,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Set package version
+        run: npm version ${{ github.event.release.tag_name }}
+
+      - name: Commit package version
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "build: bump package version to ${{ github.event.release.tag_name }}"
+          commit_options: '--no-verify'
+
       - name: Publish Package
-        uses: cycjimmy/semantic-release-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
