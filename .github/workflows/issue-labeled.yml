@@ -27,9 +27,9 @@ jobs:
 
   invalid:
     runs-on: ubuntu-latest
+    if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
     steps:
       - name: Reply Issue
-        if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment'
@@ -44,7 +44,7 @@ jobs:
             - This issue violates our [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html).
             - Other reasons.
       - name: Close Issue
-        if: "${{ github.event.label.name == 'Resolution: Invalid' && github.event.issue.state == 'open'}}"
+        if: "${{ github.event.issue.state == 'open'}}"
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issues'
