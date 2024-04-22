@@ -76,6 +76,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
   function resolveReplace() {
     const resolves = {
       __VERSION__: version,
+      __TEST__: false,
       __BROWSER__: isBrowserESMBuild,
       __GLOBAL__: isGlobalBuild,
       __ESM_BUNDLER__: isBundlerESMBuild,
