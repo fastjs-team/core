@@ -117,7 +117,7 @@ function sendRequest(
 
   async function passthrough() {
     const hooks = request.config.hooks;
-    if (!hooks.before(request, globalConfig))
+    if (!hooks.before(request))
       return request.hookFailed("before");
 
     request.request = new Request(addQuery(request.url, data.query), {
@@ -126,7 +126,7 @@ function sendRequest(
       body: data.body as BodyInit
     });
 
-    if (!hooks.init(request, globalConfig))
+    if (!hooks.init(request))
       return generateHookFailedResponse("init", request, null);
 
     fetch(request.request)
@@ -149,10 +149,9 @@ function sendRequest(
         if (!globalConfig.handler.responseCode(response.status, request))
           return handleBadResponse(requestReturn, request, passthrough);
 
-        if (!hooks.success(requestReturn, globalConfig))
+        if (!hooks.success(requestReturn))
           return generateHookFailedResponse("success", request, requestReturn);
 
-        request.config.callback(data, requestReturn);
         request.callback.success.forEach((func) => func(data, requestReturn));
         request.callback.finally.forEach((func) => func(request));
       })
@@ -173,7 +172,7 @@ function sendRequest(
             ["fastjs.wrong"]
           );
 
-        if (!hooks.failed(error, request, globalConfig))
+        if (!hooks.failed(error, request))
           return generateHookFailedResponse("failed", request, null);
 
         if (request.config.keepalive)
@@ -217,7 +216,7 @@ function handleBadResponse(
     );
   }
 
-  if (!request.config.hooks.failed(status, request, globalConfig))
+  if (!request.config.hooks.failed(status, request))
     return generateHookFailedResponse("failed", request, null);
 
   const failedParams: FailedParams<number> = {

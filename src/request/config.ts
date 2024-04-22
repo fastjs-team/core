@@ -36,8 +36,7 @@ export const globalConfig: GlobalConfig = {
         // before: (): boolean => true,
         // init: (): boolean => true,
         // success: (): boolean => true,
-        // failed: (): boolean => true,
-        // callback: (): boolean => true,
+        // failed: (): boolean => true
     },
     handler: {
         handleResponse: async (response: Response, request: FastjsRequest): Promise<object | string> => {
@@ -63,16 +62,13 @@ export function createConfig(config: Partial<RequestConfig> = {}): RequestConfig
         wait: config.wait || 0,
         failed: config.failed || (() => 0),
         callback: config.callback || (() => 0),
-        keepalive: config.keepalive || false,
-        keepaliveWait: config.keepaliveWait || 0,
         query: config.query || null,
         body: config.body || null,
         hooks: {
             before: config.hooks?.before || globalConfig.hooks.before || (() => true),
             init: config.hooks?.init || globalConfig.hooks.init || (() => true),
             success: config.hooks?.success || globalConfig.hooks.success || (() => true),
-            failed: config.hooks?.failed || globalConfig.hooks.failed || (() => true),
-            callback: config.hooks?.callback || globalConfig.hooks.callback || (() => true)
+            failed: config.hooks?.failed || globalConfig.hooks.failed || (() => true)
         }
     }
 }
@@ -95,16 +91,9 @@ export interface RequestConfig {
         [key: string]: any;
     } | string | null;
     hooks: {
-        before: (request: FastjsRequest, config: GlobalConfig) => boolean;
-        init: (request: FastjsRequest, config: GlobalConfig) => boolean;
-        success: (response: RequestReturn, config: GlobalConfig) => boolean;
-        failed: (error: any, request: FastjsRequest, config: GlobalConfig) => boolean;
-        callback: (
-            response: Response,
-            request: FastjsRequest,
-            data: {
-                [key: string]: any;
-            }, config: GlobalConfig
-        ) => boolean
+        before: (request: FastjsRequest) => boolean;
+        init: (request: FastjsRequest) => boolean;
+        success: (response: RequestReturn) => boolean;
+        failed: (error: any, request: FastjsRequest) => boolean;
     }
 }
