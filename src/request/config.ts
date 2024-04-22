@@ -7,10 +7,10 @@ import type { RequestReturn } from "./def";
 export interface GlobalConfig {
     timeout: number;
     hooks: {
-        before?: (request: FastjsRequest, config: GlobalConfig) => boolean;
-        init?: (request: FastjsRequest, config: GlobalConfig) => boolean;
-        success?: (response: RequestReturn, config: GlobalConfig) => boolean;
-        failed?: (error: Error | number, request: FastjsRequest, config: GlobalConfig) => boolean;
+        before?: (request: FastjsRequest) => boolean;
+        init?: (request: FastjsRequest) => boolean;
+        success?: (response: RequestReturn) => boolean;
+        failed?: (error: Error | number, request: FastjsRequest) => boolean;
         callback?: (
             response: Response,
             request: FastjsRequest,
