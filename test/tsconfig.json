@@ -11,13 +11,9 @@
     "lib": ["ES6", "dom", "DOM.Iterable"],
     "moduleResolution": "node",
     "paths": {
-      "@/*": ["../src/*"],
+      "@/*": ["../src/*"]
     }
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }
