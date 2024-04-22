@@ -33,7 +33,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Set package version
-        run: npm version ${{ github.event.release.tag_name }}
+        run: npm version ${{ github.event.release.tag_name }} --allow-same-version
 
       - name: Commit package version
         uses: stefanzweifel/git-auto-commit-action@v5
