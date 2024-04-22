@@ -37,6 +37,19 @@ jobs:
       - name: TypeScript check
         run: tsc --noEmit
 
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm i
+      - name: Run prettier check
+        run: npm run format:check
+
   unit-test:
     runs-on: ubuntu-latest
     steps:
