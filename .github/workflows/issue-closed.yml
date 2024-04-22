@@ -21,19 +21,35 @@ jobs:
               issue_number: issueNumber
             });
             
-            if (issue.state === 'closed' && issue.state_reason === 'completed') {
+            const workingLabels = ['Status: Pending', 'Status: In Progress', 'Status: Needs Triage', 'Status: To Be Discuss', 'Resolution: Cannot Replicate', 'Resolution: Needs More Information'];
+
+            for (const label of workingLabels) {
+              if (issue.labels.find(l => l.name === label)) {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: label
+                });
+              }
+            }
+
+            if (issue.state_reason === 'completed') {
               await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
                   labels: ["Status: Solved"]
                 });
-              if (issue.labels.find(label => label.name === 'Status: In Progress')) {
-                await github.rest.issues.removeLabel({
+            } else {
+              // Close as invalid
+              // If no 'Resolution: Invalid' label, add it and trigger the invalid workflow
+              if (!issue.labels.find(l => l.name === 'Resolution: Invalid')) {
+                await github.rest.issues.addLabels({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  name: 'Status: In Progress'
+                  labels: ["Resolution: Invalid"]
                 });
               }
             }
