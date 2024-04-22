@@ -32,8 +32,8 @@ npm install jsfast
 ```
 
 ```js
-import { dom } from 'jsfast' // esm
-const { request } = require('jsfast') // cjs
+import { dom } from "jsfast"; // esm
+const { request } = require("jsfast"); // cjs
 ```
 
 ### CDN (Global)
@@ -46,7 +46,7 @@ const { request } = require('jsfast') // cjs
 
 ```html
 <script type="module">
-  import { dom } from 'https://unpkg.com/jsfast/dist/fastjs.esm.browser.js'
+  import { dom } from "https://unpkg.com/jsfast/dist/fastjs.esm.browser.js";
 </script>
 ```
 
