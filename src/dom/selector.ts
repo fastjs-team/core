@@ -1,10 +1,10 @@
-import {createFastjsDom} from "./dom";
-import {createFastjsDomList} from "./dom-list";
+import { createFastjsDom } from "./dom";
+import { createFastjsDomList } from "./dom-list";
 import _selector from "./selector-atom";
 import _dev from "../dev";
 
-import type {FastjsDom} from "./dom-types";
-import type {FastjsDomList} from "./dom-list-types";
+import type { FastjsDom } from "./dom-types";
+import type { FastjsDomList } from "./dom-list-types";
 
 function selector(
   target: string = "body",
