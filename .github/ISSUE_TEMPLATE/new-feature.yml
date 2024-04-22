@@ -1,15 +1,15 @@
 name: "\U0001F680 New feature"
 description: Suggest a new feature for fastjs-next
 labels:
-  - 'Status: Needs Triage'
+  - "Status: Needs Triage"
 body:
   - type: markdown
     attributes:
       value: |
         **Before you start**
-        
+
         Please make sure you have read these guidelines:
-        
+
         - [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html)
         - [Issue Reporting Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#issue-reporting-guidelines)
         - [Pull Request Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#pull-request-guidelines)

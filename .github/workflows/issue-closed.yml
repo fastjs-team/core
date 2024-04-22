@@ -14,13 +14,13 @@ jobs:
           script: |
             const issueNumber = context.payload.issue.number;
             const github_token = process.env.GITHUB_TOKEN;
-            
+
             const { data: issue } = await github.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber
             });
-            
+
             const workingLabels = ['Status: Pending', 'Status: In Progress', 'Status: Needs Triage', 'Status: To Be Discuss', 'Resolution: Cannot Replicate', 'Resolution: Needs More Information'];
 
             for (const label of workingLabels) {

@@ -1,21 +1,21 @@
 name: "\U0001F41E Bug report"
 description: Report a bug with fastjs-next
 labels:
-  - 'Status: Needs Triage'
+  - "Status: Needs Triage"
 body:
   - type: markdown
     attributes:
       value: |
         **Before you start**
-        
+
         Please make sure you have read these guidelines:
-        
+
         - [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html)
         - [Issue Reporting Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#issue-reporting-guidelines)
         - [Pull Request Guidelines](https://github.com/fastjs-team/fastjs-next/blob/main/.github/contributing.md#pull-request-guidelines)
-        
+
         Also try to search for your issue, it may have already been answered or even fixed or maybe it's not a bug.
-        
+
   - type: textarea
     id: bug-description
     attributes:
@@ -39,7 +39,7 @@ body:
       description: Describe the steps to reproduce the problem.
     validations:
       required: true
-  
+
   - type: input
     id: reproduce-link
     attributes:
