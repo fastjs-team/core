@@ -44,14 +44,13 @@ jobs:
             - This issue violates our [Code of Conduct](https://docs.fastjs.dev/other/code-of-conduct.html).
             - Other reasons.
       - name: Close Issue
-        if: "${{ github.event.label.name == 'Resolution: Invalid'}}"
+        if: "${{ github.event.label.name == 'Resolution: Invalid' && github.event.issue.state == 'open'}}"
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issues'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           labels: 'Resolution: Invalid'
-          comment: 'This issue is closed because it is invalid.'
 
   to-be-discuss:
     runs-on: ubuntu-latest
