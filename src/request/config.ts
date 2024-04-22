@@ -82,8 +82,6 @@ export interface RequestConfig {
     wait: number;
     failed: (error: FailedParams<Error | number | null>) => void;
     callback: (data: any, response: RequestReturn) => void;
-    keepalive: boolean;
-    keepaliveWait: number;
     query: {
         [key: string]: any;
     } | string | null;

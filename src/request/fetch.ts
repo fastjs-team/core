@@ -175,9 +175,6 @@ function sendRequest(
         if (!hooks.failed(error, request))
           return generateHookFailedResponse("failed", request, null);
 
-        if (request.config.keepalive)
-          setTimeout(passthrough, request.config.keepaliveWait);
-
         const failedParams = {
           error,
           request,
@@ -230,9 +227,6 @@ function handleBadResponse(
   request.config.failed(failedParams);
   request.callback.failed.forEach((func) => func(failedParams));
   request.callback.finally.forEach((func) => func(request));
-
-  if (request.config.keepalive)
-    setTimeout(resend, request.config.keepaliveWait);
 }
 
 function generateHookFailedResponse(
