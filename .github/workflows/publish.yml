@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -26,24 +29,22 @@ jobs:
       - name: Build Package
         run: npm run prod
 
-      - name: Create .npmrc file
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Set Git Config
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Set package version
-        run: npm version ${{ github.event.release.tag_name }} --allow-same-version
+      - name: Bump package version
+        continue-on-error: true
+        run: |
+          npm version ${{ github.event.release.tag_name }} -m "build: bump package version to ${{ github.event.release.tag_name }}"
+          git push
 
-      - name: Commit package version
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "build: bump package version to ${{ github.event.release.tag_name }}"
+      - name: Create .npmrc file
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Package
         run: npm publish --access public
