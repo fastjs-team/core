@@ -30,6 +30,8 @@ export {
   PushTarget,
   InsertTarget
 };
+export * as cookie from "./cookie/index";
+export type * from "./cookie/index";
 export type { FastjsDom, FastjsDate, FastjsDomList, FastjsRequest };
 export type * from "./dom/def";
 export type * from "./dom/dom-types";
