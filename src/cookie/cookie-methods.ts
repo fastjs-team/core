@@ -15,7 +15,7 @@ export function createMethods(cookie: FastjsCookie): FastjsCookieAPI {
     name: string,
     value: string,
     options: CookieOptions = {}
-  ): FastjsCookieAPI {
+  ): FastjsCookie {
     if (!check()) return cookie;
 
     let str = `${name}=${value}`;
