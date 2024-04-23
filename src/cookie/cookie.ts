@@ -2,7 +2,7 @@ import { createModule } from "../base";
 import { createMethods } from "./cookie-methods";
 import { FastjsCookie, FastjsCookieAtom } from "./cookie-types";
 
-export default function createFastjsCookie(
+export function createFastjsCookie(
   path?: string,
   domain?: string
 ): FastjsCookie {

@@ -50,7 +50,7 @@ export function createMethods(cookie: FastjsCookie): FastjsCookieAPI {
 }
 
 function check(): boolean {
-  if (__DEV__) {
+  if (__DEV__ && typeof document === "undefined") {
     _dev.warn(
       "fastjs/cookie",
       "document is not defined. Cookie methods will not work.",
