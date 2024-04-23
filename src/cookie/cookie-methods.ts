@@ -46,7 +46,7 @@ export function createMethods(cookie: FastjsCookie): FastjsCookieAPI {
     return cookie;
   }
 
-  return { get, set, remove }; 
+  return { get, set, remove };
 }
 
 function check(): boolean {
