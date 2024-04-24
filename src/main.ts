@@ -1,5 +1,4 @@
 import dom from "./dom";
-import date from "./date";
 import request from "./request";
 import utils from "./utils/index";
 
@@ -14,13 +13,14 @@ if (__DEV__ && !__TEST__ && !__ESM_BUNDLER__) {
 }
 
 export {
-  date,
   request,
 };
 export type { FastjsDate, FastjsRequest };
 
 export * as dom from "./dom/index";
 export type * from "./dom/index";
+export * as date from "./date/index"
+export type * from "./date/index";
 export * as cookie from "./cookie/index";
 export type * from "./cookie/index";
 export type * from "./dom/def";
