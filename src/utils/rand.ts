@@ -36,13 +36,16 @@ export interface RandStringOptions {
   custom: string | string[];
 }
 
-export function randString(length: number, options: Partial<RandStringOptions> = {}) {
+export function randString(
+  length: number,
+  options: Partial<RandStringOptions> = {}
+) {
   const letters = "abcdefghijklmnopqrstuvwxyz";
   let choices: string = "";
   if (options.number) choices += "0123456789";
-  if (options.letter) {
+  if (options.letter !== false) {
     if (options.upper) choices += letters.toUpperCase();
-    if (options.lower) choices += letters;
+    if (options.lower !== false) choices += letters;
   }
   if (Array.isArray(options.custom)) choices += options.custom.join("");
   else if (options?.custom) choices += options.custom;
