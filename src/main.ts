@@ -1,4 +1,3 @@
-import dom from "./dom";
 import request from "./request";
 import utils from "./utils/index";
 
