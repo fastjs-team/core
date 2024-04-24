@@ -17,4 +17,6 @@ export default {
   ): FastjsDomList => createFastjsDomList(list)
 };
 export { selector, createFastjsDom, createFastjsDomList };
-export type { FastjsDom, FastjsDomList };
+export type * from "./def";
+export type * from "./dom-types";
+export type * from "./dom-list-types";

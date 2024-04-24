@@ -3,15 +3,10 @@ import date from "./date";
 import request from "./request";
 import utils from "./utils/index";
 
-import { rand, copy } from "./utils/index";
-
-import { PushTarget, InsertTarget } from "./dom/def";
-
-import type { FastjsDom, FastjsDomList } from "./dom";
 import type { FastjsDate } from "./date";
 import type { FastjsRequest } from "./request";
 
-if (__DEV__ && !__TEST__) {
+if (__DEV__ && !__TEST__ && !__ESM_BUNDLER__) {
   console.info(
     "You are running fastjs in development mode.\n" +
       "Make sure to use the production build (*.prod.js) when deploying for production."
@@ -19,20 +14,15 @@ if (__DEV__ && !__TEST__) {
 }
 
 export {
-  dom,
   date,
   request,
-  /** @module utils */
-  utils,
-  rand,
-  copy,
-  /** @description enums */
-  PushTarget,
-  InsertTarget
 };
+export type { FastjsDate, FastjsRequest };
+
+export * as dom from "./dom/index";
+export type * from "./dom/index";
 export * as cookie from "./cookie/index";
 export type * from "./cookie/index";
-export type { FastjsDom, FastjsDate, FastjsDomList, FastjsRequest };
 export type * from "./dom/def";
 export type * from "./dom/dom-types";
 export type * from "./dom/dom-list-types";
