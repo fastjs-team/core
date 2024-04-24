@@ -15,7 +15,7 @@ test("Send a get request with query", async () => {
 });
 
 test("Send a post request", async () => {
-  await request
+  request
     .post("https://reqres.in/api/users", {
       name: "XiaoDong",
       job: "Software Engineer"
@@ -26,7 +26,7 @@ test("Send a post request", async () => {
 });
 
 test("Send a put request", async () => {
-  await request
+  request
     .put("https://reqres.in/api/users/2", {
       name: "XiaoDong",
       job: "Software Engineer"
@@ -37,7 +37,7 @@ test("Send a put request", async () => {
 });
 
 test("Send a patch request", async () => {
-  await request
+  request
     .patch("https://reqres.in/api/users/2", {
       name: "XiaoDong",
       job: "Software Engineer"
@@ -48,7 +48,7 @@ test("Send a patch request", async () => {
 });
 
 test("Send a delete request", async () => {
-  await request.delete("https://reqres.in/api/users/2").then((data, req) => {
+  request.delete("https://reqres.in/api/users/2").then((data, req) => {
     expect(req.status).toBe(204);
   });
 });
