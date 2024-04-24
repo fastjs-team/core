@@ -1,9 +1,9 @@
 import * as dom from "./dom";
-import * as math from "./math";
+import * as rand from "./rand";
 
 export default {
   ...dom,
-  ...math
+  ...rand
 };
 export * from "./dom";
-export * from "./math";
+export * from "./rand";
