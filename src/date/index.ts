@@ -6,7 +6,7 @@ import type { parseReturn } from "./def";
  * @description
  * Parse a date string or timestamp into a parseReturn object
  */
-export const parse = (
+const parse = (
   time: string | number | Date,
   format: string = "Y-M-D h:m:s"
 ): parseReturn => {
@@ -30,13 +30,13 @@ export const parse = (
  * @description
  * Get a parseReturn object of timestamp or now
  */
-export const parseTime = (time: number, format?: string): parseReturn =>
+const parseTime = (time: number, format?: string): parseReturn =>
   parse(time, format);
 /**
  * @description
  * Get a parseReturn object of string or now
  */
-export const parseDate = (date: string, format?: string): parseReturn =>
+const parseDate = (date: string, format?: string): parseReturn =>
   parse(date, format);
 /**
  * @description
@@ -46,14 +46,14 @@ export const parseDate = (date: string, format?: string): parseReturn =>
  * - For other output, use parse(t, f?) instead
  */
 // const string = (format: string, date: number = Date.now()): string => parse(date, format).string;
-export const string = (format?: string, date: number = Date.now()): string =>
+const string = (format?: string, date: number = Date.now()): string =>
   parse(date, format).string;
 /**
  * @description
  * Reformat a date string into another format
  * - For other output, use parse(rf(), f?) instead
  */
-export const reformat = (
+const reformat = (
   format: string,
   date: string,
   newFormat: string = "Y-M-D h:m:s"
@@ -62,12 +62,21 @@ export const reformat = (
  * @description
  * Get a parseReturn object of now
  */
-export const now = (format?: string): parseReturn => parse(Date.now(), format);
+const now = (format?: string): parseReturn => parse(Date.now(), format);
 /**
  * @description
  * Create a FastjsDate instance
  */
-export const create = createFastjsDate;
+
+export default {
+  parse,
+  parseTime,
+  parseDate,
+  string,
+  reformat,
+  now,
+  create: createFastjsDate
+};
 
 export type * from "./def";
 export type * from "./date-types";

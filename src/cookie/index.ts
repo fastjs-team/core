@@ -18,7 +18,12 @@ export const remove = (name: string): FastjsCookie => {
   return createFastjsCookie().remove(name);
 };
 
-export default createFastjsCookie;
+export default {
+  get,
+  set,
+  remove,
+  create: createFastjsCookie
+};
 export * from "./cookie";
 export * from "./cookie-types";
 export * from "./def";
