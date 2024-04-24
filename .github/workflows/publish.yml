@@ -37,7 +37,7 @@ jobs:
       - name: Bump package version
         continue-on-error: true
         run: |
-          npm version ${{ github.event.release.tag_name }} -m "build: bump package version to ${{ github.event.release.tag_name }}"
+          npm version ${{ github.event.release.tag_name }} --no-git-tag-version -m "build: bump package version to ${{ github.event.release.tag_name }}"
           git push
 
       - name: Create .npmrc file
