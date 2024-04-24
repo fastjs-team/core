@@ -29,10 +29,16 @@ export interface FailedParams<T extends Error | number | null> {
   response: RequestReturn | null;
 }
 
+export interface CallbackObject<T> {
+  func: T;
+  once: boolean;
+  method: RequestMethod | null;
+}
+
 export interface RequestCallback {
-  success: ((data: any, response: RequestReturn) => void)[];
-  failed: ((err: FailedParams<Error | number | null>) => void)[];
-  finally: ((request: FastjsRequest) => void)[];
+  success: CallbackObject<(data: any, response: RequestReturn) => void>[];
+  failed: CallbackObject<(err: FailedParams<Error | number | null>) => void>[];
+  finally: CallbackObject<(request: FastjsRequest) => void>[];
 }
 
 export type RequestMethod =

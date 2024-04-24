@@ -21,14 +21,14 @@ export interface FastjsRequestAtom {
 }
 
 export interface FastjsRequestAPI {
-  send: (method: RequestMethod, data?: RequestData) => FastjsRequest;
-  get: (data?: RequestData) => FastjsRequest;
-  post: (data?: RequestData) => FastjsRequest;
-  put: (data?: RequestData) => FastjsRequest;
-  delete: (data?: RequestData) => FastjsRequest;
-  patch: (data?: RequestData) => FastjsRequest;
-  head: (data?: RequestData) => FastjsRequest;
-  options: (data?: RequestData) => FastjsRequest;
+  send: (method: RequestMethod, data?: RequestData, url?: string) => FastjsRequest;
+  get: (data?: RequestData, url?: string) => FastjsRequest;
+  post: (data?: RequestData, url?: string) => FastjsRequest;
+  put: (data?: RequestData, url?: string) => FastjsRequest;
+  delete: (data?: RequestData, url?: string) => FastjsRequest;
+  patch: (data?: RequestData, url?: string) => FastjsRequest;
+  head: (data?: RequestData, url?: string) => FastjsRequest;
+  options: (data?: RequestData, url?: string) => FastjsRequest;
   then: (
     callback: (data: any, response: RequestReturn) => void
   ) => FastjsRequest;

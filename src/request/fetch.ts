@@ -11,7 +11,8 @@ import type {
   RequestMethod,
   RequestReturn,
   FailedParams,
-  RequestHooks
+  RequestHooks,
+  CallbackObject
 } from "./def";
 
 export function createRequest(
@@ -37,27 +38,51 @@ export function createRequest(
   }));
 
   const module: FastjsRequest = Object.assign(moduleAtom, {
-    send: (method: RequestMethod, data: RequestData = {}) => {
+    send: (method: RequestMethod, data: RequestData = {}, url?: string) => {
       module.data = Object.assign(module.data, data);
-      return sendRequest(module, method);
+      return sendRequest(module, method, url);
     },
-    get: (data?: RequestData) => module.send("GET", data),
-    post: (data?: RequestData) => module.send("POST", data),
-    put: (data?: RequestData) => module.send("PUT", data),
-    delete: (data?: RequestData) => module.send("DELETE", data),
-    patch: (data?: RequestData) => module.send("PATCH", data),
-    head: (data?: RequestData) => module.send("HEAD", data),
-    options: (data?: RequestData) => module.send("OPTIONS", data),
-    then: (callback: (data: any, response: RequestReturn) => void) => {
-      module.callback.success.push(callback);
+    get: (data?: RequestData, url?: string) => module.send("GET", data, url),
+    post: (data?: RequestData, url?: string) => module.send("POST", data, url),
+    put: (data?: RequestData, url?: string) => module.send("PUT", data, url),
+    delete: (data?: RequestData, url?: string) => module.send("DELETE", data, url),
+    patch: (data?: RequestData, url?: string) => module.send("PATCH", data, url),
+    head: (data?: RequestData, url?: string) => module.send("HEAD", data, url),
+    options: (data?: RequestData, url?: string) => module.send("OPTIONS", data, url),
+    then: (
+      callback: (data: any, response: RequestReturn) => void,
+      repeat: boolean = false,
+      method: RequestMethod | null = null
+    ) => {
+      module.callback.success.push({
+        func: callback,
+        once: !repeat,
+        method
+      });
       return module;
     },
-    catch: (callback: (err: FailedParams<Error | number | null>) => void) => {
-      module.callback.failed.push(callback);
+    catch: (
+      callback: (err: FailedParams<Error | number | null>) => void,
+      repeat: boolean = false,
+      method: RequestMethod | null = null
+    ) => {
+      module.callback.failed.push({
+        func: callback,
+        once: !repeat,
+        method
+      });
       return module;
     },
-    finally: (callback: (request: FastjsRequest) => void) => {
-      module.callback.finally.push(callback);
+    finally: (
+      callback: (request: FastjsRequest) => void,
+      repeat: boolean = false,
+      method: RequestMethod | null = null
+    ) => {
+      module.callback.finally.push({
+        func: callback,
+        once: !repeat,
+        method
+      });
       return module;
     }
   });
@@ -75,7 +100,8 @@ function createCallback(): RequestCallback {
 
 function sendRequest(
   request: FastjsRequest,
-  method: RequestMethod
+  method: RequestMethod,
+  url?: string
 ): FastjsRequest {
   if (__DEV__) {
     if (["GET", "HEAD", "OPTIONS"].includes(method) && request.config.body) {
@@ -119,7 +145,7 @@ function sendRequest(
     const hooks = request.config.hooks;
     if (!hooks.before(request)) return request.hookFailed("before");
 
-    request.request = new Request(addQuery(request.url, data.query), {
+    request.request = new Request(addQuery(url || request.url, data.query), {
       method,
       headers: request.config.headers,
       body: data.body as BodyInit
@@ -151,8 +177,8 @@ function sendRequest(
         if (!hooks.success(requestReturn))
           return generateHookFailedResponse("success", request, requestReturn);
 
-        request.callback.success.forEach((func) => func(data, requestReturn));
-        request.callback.finally.forEach((func) => func(request));
+        matchCallback(request.callback.success, [data, requestReturn], method);
+        matchCallback(request.callback.finally, [request], method);
       })
       .catch((error: Error) => {
         if (__DEV__)
@@ -183,9 +209,22 @@ function sendRequest(
         };
 
         request.config.failed(failedParams);
-        request.callback.failed.forEach((func) => func(failedParams));
+        matchCallback(request.callback.failed, [failedParams], method);
+        matchCallback(request.callback.finally, [request], method);
       });
   }
+}
+
+function matchCallback(
+  callback: CallbackObject<any>[],
+  params: any[],
+  method: RequestMethod | null
+): void {
+  callback.forEach((call) => {
+    if (call.method && call.method !== method) return;
+    call.func(...params);
+    if (call.once) callback.splice(callback.indexOf(call), 1);
+  })
 }
 
 function handleBadResponse(
@@ -224,8 +263,8 @@ function handleBadResponse(
   };
 
   request.config.failed(failedParams);
-  request.callback.failed.forEach((func) => func(failedParams));
-  request.callback.finally.forEach((func) => func(request));
+  matchCallback(request.callback.failed, [failedParams], null);
+  matchCallback(request.callback.finally, [request], null);
 }
 
 function generateHookFailedResponse(
