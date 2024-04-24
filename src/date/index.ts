@@ -1,13 +1,12 @@
 import { createFastjsDate } from "./date";
 
-import type { FastjsDate } from "./date-types";
 import type { parseReturn } from "./def";
 
 /**
  * @description
  * Parse a date string or timestamp into a parseReturn object
  */
-const parse = (
+export const parse = (
   time: string | number | Date,
   format: string = "Y-M-D h:m:s"
 ): parseReturn => {
@@ -31,13 +30,13 @@ const parse = (
  * @description
  * Get a parseReturn object of timestamp or now
  */
-const parseTime = (time: number, format?: string): parseReturn =>
+export const parseTime = (time: number, format?: string): parseReturn =>
   parse(time, format);
 /**
  * @description
  * Get a parseReturn object of string or now
  */
-const parseDate = (date: string, format?: string): parseReturn =>
+export const parseDate = (date: string, format?: string): parseReturn =>
   parse(date, format);
 /**
  * @description
@@ -47,14 +46,14 @@ const parseDate = (date: string, format?: string): parseReturn =>
  * - For other output, use parse(t, f?) instead
  */
 // const string = (format: string, date: number = Date.now()): string => parse(date, format).string;
-const string = (format?: string, date: number = Date.now()): string =>
+export const string = (format?: string, date: number = Date.now()): string =>
   parse(date, format).string;
 /**
  * @description
  * Reformat a date string into another format
  * - For other output, use parse(rf(), f?) instead
  */
-const reformat = (
+export const reformat = (
   format: string,
   date: string,
   newFormat: string = "Y-M-D h:m:s"
@@ -63,17 +62,12 @@ const reformat = (
  * @description
  * Get a parseReturn object of now
  */
-const now = (format?: string): parseReturn => parse(Date.now(), format);
+export const now = (format?: string): parseReturn => parse(Date.now(), format);
+/**
+ * @description
+ * Create a FastjsDate instance
+ */
+export const create = createFastjsDate;
 
-export default {
-  parse,
-  parseDate,
-  parseTime,
-  string,
-  reformat,
-  now,
-  create: createFastjsDate
-};
-export { createFastjsDate };
-
-export type { FastjsDate };
+export type * from "./def";
+export type * from "./date-types";
