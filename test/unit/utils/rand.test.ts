@@ -21,7 +21,7 @@ test("Random string", () => {
 test("Random string with only uppercase letters", () => {
   const str = utils.randString(10, { upper: true, lower: false });
   expect(str).toMatch(/^[A-Z]{10}$/);
-})
+});
 
 test("Random string with all letters", () => {
   const str = utils.randString(10, { upper: true });
@@ -41,4 +41,4 @@ test("Random string with custom characters", () => {
 test("Random string with only custom characters", () => {
   const str = utils.randString(10, { custom: "!@#$", letter: false });
   expect(str).toMatch(/^[!@#$]{10}$/);
-})
+});
