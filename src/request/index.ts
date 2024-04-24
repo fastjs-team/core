@@ -1,4 +1,4 @@
-import { globalConfig } from "./config";
+import { createConfig, globalConfig } from "./config";
 import { createRequest } from "./fetch";
 
 import type { RequestData } from "./def";
@@ -57,15 +57,17 @@ const head = (
 };
 
 export default {
-  request: createRequest,
-  create,
-  config: globalConfig,
   get,
   post,
   put,
   delete: del,
   patch,
-  head
+  head,
+  create,
+  request: createConfig,
+  config: globalConfig
 };
-export { createRequest };
-export type { FastjsRequest };
+
+export type * from "./def";
+export type * from "./config";
+export type * from "./fetch-types";
