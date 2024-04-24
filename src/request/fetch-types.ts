@@ -21,7 +21,11 @@ export interface FastjsRequestAtom {
 }
 
 export interface FastjsRequestAPI {
-  send: (method: RequestMethod, data?: RequestData, url?: string) => FastjsRequest;
+  send: (
+    method: RequestMethod,
+    data?: RequestData,
+    url?: string
+  ) => FastjsRequest;
   get: (data?: RequestData, url?: string) => FastjsRequest;
   post: (data?: RequestData, url?: string) => FastjsRequest;
   put: (data?: RequestData, url?: string) => FastjsRequest;
