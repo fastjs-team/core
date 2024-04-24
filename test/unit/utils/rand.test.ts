@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
-import { rand } from "@/main";
+import { rand, utils } from "@/main";
 
 test("Random number", () => {
-  const num = rand(1, 10);
+  const num = utils.rand(1, 10);
   expect(num).toBeGreaterThanOrEqual(1);
   expect(num).toBeLessThanOrEqual(10);
 });
