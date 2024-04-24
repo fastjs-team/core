@@ -32,7 +32,7 @@ export interface FailedParams<T extends Error | number | null> {
 export interface CallbackObject<T> {
   func: T;
   once: boolean;
-  method: RequestMethod | null;
+  method?: RequestMethod;
 }
 
 export interface RequestCallback {

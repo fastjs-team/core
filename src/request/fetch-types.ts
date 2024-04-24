@@ -30,10 +30,14 @@ export interface FastjsRequestAPI {
   head: (data?: RequestData, url?: string) => FastjsRequest;
   options: (data?: RequestData, url?: string) => FastjsRequest;
   then: (
-    callback: (data: any, response: RequestReturn) => void
+    callback: (data: any, response: RequestReturn) => void,
+    repeat?: boolean,
+    method?: RequestMethod
   ) => FastjsRequest;
   catch: (
-    callback: (error: FailedParams<Error | number | null>) => void
+    callback: (error: FailedParams<Error | number | null>) => void,
+    repeat?: boolean,
+    method?: RequestMethod
   ) => FastjsRequest;
   finally: (callback: (request: FastjsRequest) => void) => FastjsRequest;
 }
