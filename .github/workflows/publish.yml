@@ -31,14 +31,14 @@ jobs:
 
       - name: Set Git Config
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
       - name: Bump package version
         continue-on-error: true
         run: |
           npm version ${{ github.event.release.tag_name }} --no-git-tag-version -m "build: bump package version to ${{ github.event.release.tag_name }}"
-          git push origin HEAD:main
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
 
       - name: Create .npmrc file
         run: |
