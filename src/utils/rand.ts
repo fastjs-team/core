@@ -58,3 +58,8 @@ export function randString(
 
   return result;
 }
+
+export function uuid(): string {
+  const s = (len: number) => randString(len, { number: true });
+  return `${s(8)}-${s(4)}-4${s(3)}-${s(4)}-${s(12)}`;
+}
