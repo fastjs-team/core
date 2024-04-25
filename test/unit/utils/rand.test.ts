@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, assert, test } from "vitest";
 import { rand, utils } from "@/main";
 
 test("Random number", () => {
@@ -41,4 +41,13 @@ test("Random string with custom characters", () => {
 test("Random string with only custom characters", () => {
   const str = utils.randString(10, { custom: "!@#$", letter: false });
   expect(str).toMatch(/^[!@#$]{10}$/);
+});
+
+test("Random uuid", () => {
+  const uuid = utils.uuid();
+  assert(
+    uuid.match(
+      /^[0-9a-z]{8}-[0-9a-z]{4}-4[0-9a-z]{3}-[0-9a-z]{4}-[0-9a-z]{12}$/
+    )
+  );
 });
