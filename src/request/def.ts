@@ -21,6 +21,12 @@ export type RequestHooks =
   | "failed"
   | "callback";
 
+export namespace RequestHooks {
+  export type BeforeSend = (request: FastjsRequest) => boolean;
+  export type RequestSuccess = (response: RequestReturn) => boolean;
+  export type RequestFailed = (error: any, request: FastjsRequest) => boolean;
+}
+
 export interface FailedParams<T extends Error | number | null> {
   error: T;
   request: FastjsRequest;

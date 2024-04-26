@@ -1,24 +1,16 @@
 import _dev from "../dev";
 
 import type { FastjsRequest } from "./fetch-types";
-import type { FailedParams } from "./def";
+import type { FailedParams, RequestHooks } from "./def";
 import type { RequestReturn } from "./def";
 
 export interface GlobalConfig {
   timeout: number;
   hooks: {
-    before?: (request: FastjsRequest) => boolean;
-    init?: (request: FastjsRequest) => boolean;
-    success?: (response: RequestReturn) => boolean;
-    failed?: (error: Error | number, request: FastjsRequest) => boolean;
-    callback?: (
-      response: Response,
-      request: FastjsRequest,
-      data: {
-        [key: string]: any;
-      },
-      config: GlobalConfig
-    ) => boolean;
+    before?: RequestHooks.BeforeSend;
+    init?: RequestHooks.BeforeSend;
+    success?: RequestHooks.RequestSuccess;
+    failed?: RequestHooks.RequestFailed;
   };
   handler: {
     handleResponse: (
@@ -36,12 +28,7 @@ export interface GlobalConfig {
 
 export const globalConfig: GlobalConfig = {
   timeout: 5000,
-  hooks: {
-    // before: (): boolean => true,
-    // init: (): boolean => true,
-    // success: (): boolean => true,
-    // failed: (): boolean => true
-  },
+  hooks: {},
   handler: {
     handleResponse: async (
       response: Response,
@@ -104,9 +91,9 @@ export interface RequestConfig {
     | string
     | null;
   hooks: {
-    before: (request: FastjsRequest) => boolean;
-    init: (request: FastjsRequest) => boolean;
-    success: (response: RequestReturn) => boolean;
-    failed: (error: any, request: FastjsRequest) => boolean;
+    before: RequestHooks.BeforeSend;
+    init: RequestHooks.BeforeSend;
+    success: RequestHooks.RequestSuccess;
+    failed: RequestHooks.RequestFailed;
   };
 }
