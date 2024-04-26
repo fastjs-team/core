@@ -1,17 +1,17 @@
 import _dev from "../dev";
 
 import type { FastjsRequest } from "./fetch-types";
-import type { FailedParams, RequestHooks } from "./def";
+import type {
+  FailedParams,
+  RequestHook,
+  RequestHookObject,
+  RequestHookParam
+} from "./def";
 import type { RequestReturn } from "./def";
 
 export interface GlobalConfig {
   timeout: number;
-  hooks: {
-    before?: RequestHooks.BeforeSend;
-    init?: RequestHooks.BeforeSend;
-    success?: RequestHooks.RequestSuccess;
-    failed?: RequestHooks.RequestFailed;
-  };
+  hooks: RequestHookParam;
   handler: {
     handleResponse: (
       response: Response,
@@ -60,14 +60,31 @@ export function createConfig(
     callback: config.callback || (() => 0),
     query: config.query || null,
     body: config.body || null,
-    hooks: {
-      before: config.hooks?.before || globalConfig.hooks.before || (() => true),
-      init: config.hooks?.init || globalConfig.hooks.init || (() => true),
-      success:
-        config.hooks?.success || globalConfig.hooks.success || (() => true),
-      failed: config.hooks?.failed || globalConfig.hooks.failed || (() => true)
-    }
+    hooks: generateHooks()
   };
+
+  function generateHooks(): RequestHookObject {
+    const requestHooks: RequestHookObject = {
+      before: [],
+      init: [],
+      success: [],
+      failed: []
+    };
+    let key: keyof RequestHookObject;
+    for (key in requestHooks) {
+      const addHooks = (hooks: RequestHookParam[keyof RequestHookParam]) => {
+        if (!hooks) return;
+        requestHooks[key].push(
+          ...(Array.isArray(hooks)
+            ? (hooks as RequestHook[])
+            : [hooks as RequestHook])
+        );
+      };
+      if (config.hooks?.[key]) addHooks(config.hooks[key]);
+      if (globalConfig.hooks[key]) addHooks(globalConfig.hooks[key]);
+    }
+    return requestHooks;
+  }
 }
 
 export interface RequestConfig {
@@ -90,10 +107,5 @@ export interface RequestConfig {
       }
     | string
     | null;
-  hooks: {
-    before: RequestHooks.BeforeSend;
-    init: RequestHooks.BeforeSend;
-    success: RequestHooks.RequestSuccess;
-    failed: RequestHooks.RequestFailed;
-  };
+  hooks: RequestHookParam;
 }
