@@ -1,3 +1,5 @@
+import dom, { FastjsDom } from "@/dom";
+
 global.__DEV__ = true;
 
 export function setupDomEnvironment() {
@@ -10,4 +12,8 @@ export function setupDomEnvironment() {
       <input id="input2" name="textinput" class="input-child" />
     </div>
   `;
+}
+
+export function getRoot(): FastjsDom {
+  return setupDomEnvironment(), dom.select("#root") as FastjsDom;
 }
