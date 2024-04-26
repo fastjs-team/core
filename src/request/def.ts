@@ -14,7 +14,6 @@ export interface RequestReturn {
   resend: () => FastjsRequest;
 }
 
-
 export namespace RequestHooks {
   export type BeforeSend = (request: FastjsRequest) => boolean;
   export type RequestSuccess = (response: RequestReturn) => boolean;
@@ -37,16 +36,12 @@ export interface RequestHookParam {
   runAll?: boolean;
 }
 
-export type RequestHook = RequestHooks.BeforeSend |
-  RequestHooks.RequestSuccess |
-  RequestHooks.RequestFailed;
+export type RequestHook =
+  | RequestHooks.BeforeSend
+  | RequestHooks.RequestSuccess
+  | RequestHooks.RequestFailed;
 
-export type RequestHookKey =
-  | "before"
-  | "init"
-  | "success"
-  | "failed";
-
+export type RequestHookKey = "before" | "init" | "success" | "failed";
 
 export interface FailedParams<T extends Error | number | null> {
   error: T;
