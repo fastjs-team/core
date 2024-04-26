@@ -14,12 +14,6 @@ export interface RequestReturn {
   resend: () => FastjsRequest;
 }
 
-export type RequestHooks =
-  | "before"
-  | "init"
-  | "success"
-  | "failed"
-  | "callback";
 
 export namespace RequestHooks {
   export type BeforeSend = (request: FastjsRequest) => boolean;
@@ -27,11 +21,36 @@ export namespace RequestHooks {
   export type RequestFailed = (error: any, request: FastjsRequest) => boolean;
 }
 
+export interface RequestHookObject {
+  before: RequestHooks.BeforeSend[];
+  init: RequestHooks.BeforeSend[];
+  success: RequestHooks.RequestSuccess[];
+  failed: RequestHooks.RequestFailed[];
+}
+
+export interface RequestHookParam {
+  before?: RequestHooks.BeforeSend[] | RequestHooks.BeforeSend;
+  init?: RequestHooks.BeforeSend[] | RequestHooks.BeforeSend;
+  success?: RequestHooks.RequestSuccess[] | RequestHooks.RequestSuccess;
+  failed?: RequestHooks.RequestFailed[] | RequestHooks.RequestFailed;
+}
+
+export type RequestHook = RequestHooks.BeforeSend &
+  RequestHooks.RequestSuccess &
+  RequestHooks.RequestFailed;
+
+export type RequestHookKey =
+  | "before"
+  | "init"
+  | "success"
+  | "failed";
+
+
 export interface FailedParams<T extends Error | number | null> {
   error: T;
   request: FastjsRequest;
   intercept: boolean;
-  hook: RequestHooks | null;
+  hook: RequestHookKey | null;
   response: RequestReturn | null;
 }
 
