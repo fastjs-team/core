@@ -114,7 +114,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   const children = () => createFastjsDomList([...dom._el.children]);
 
-  const next = (selector: string = "> *"): FastjsDom | FastjsDomList | null => {
+  const next = (selector: string = "*"): FastjsDom | FastjsDomList | null => {
     const result = _selector(selector, dom._el);
     if (result instanceof HTMLElement) return createFastjsDom(result);
     if (result === null) return null;
