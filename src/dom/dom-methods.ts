@@ -200,7 +200,10 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     keyOrCallback?: keyof CSSStyleDeclaration | ((style: StyleObj) => void)
   ) {
     const getStyleProxy = (): StyleObj => {
-      return new Proxy(dom._el.style, {
+      return new Proxy(styles, {
+        get: (target, key: string) => {
+          return target.getPropertyValue(key) || target[key as keyof CSSStyleDeclaration] || null;
+        },
         set: (target, key: string, value) => {
           dom.setStyle(key as keyof CSSStyleDeclaration, value);
           return Reflect.set(target, key, value);
@@ -208,7 +211,10 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
       });
     };
 
-    if (typeof keyOrCallback === "string") return dom._el.style[keyOrCallback];
+    const computedStyle = window.getComputedStyle(dom._el);
+    const styles: CSSStyleDeclaration = Object.assign(computedStyle, dom._el.style);
+    
+    if (typeof keyOrCallback === "string") return styles.getPropertyValue(keyOrCallback);
     else if (typeof keyOrCallback === "function")
       keyOrCallback(getStyleProxy());
     else return getStyleProxy();
