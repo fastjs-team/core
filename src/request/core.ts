@@ -202,10 +202,13 @@ function hookFailed(
 
 function runHooks<T extends RequestHook[] | RequestHook | undefined>(
   hooks: T,
-  params: T extends RequestHooks.BeforeSend ? [FastjsRequest] : [RequestReturn | Error | number, FastjsRequest]
+  params: T extends RequestHooks.BeforeSend
+    ? [FastjsRequest]
+    : [RequestReturn | Error | number, FastjsRequest]
 ): boolean {
   if (!hooks) return true;
-  if (typeof hooks === "function") return hooks(params[0], params[1] as FastjsRequest);
+  if (typeof hooks === "function")
+    return hooks(params[0], params[1] as FastjsRequest);
   let result = true;
   for (const hook of hooks as RequestHook[]) {
     if (!hook(params[0], params[1] as FastjsRequest)) {
