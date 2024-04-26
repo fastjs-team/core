@@ -40,8 +40,9 @@ jobs:
       - name: Bump package version
         continue-on-error: true
         run: |
-          npm version ${{ github.event.release.tag_name }} --no-git-tag-version -m "build: bump package version to ${{ github.event.release.tag_name }}"
-
+          npm version ${{ github.event.release.tag_name }} --no-git-tag-version
+          git add package.json
+          git commit -m "build: bump package version to ${{ github.event.release.tag_name }}"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
