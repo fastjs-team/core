@@ -34,6 +34,9 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
+      - name: Checkout Branch
+        run: git checkout main
+
       - name: Bump package version
         continue-on-error: true
         run: |
@@ -43,7 +46,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          branch: main
 
       - name: Create .npmrc file
         run: |
