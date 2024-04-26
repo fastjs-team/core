@@ -202,7 +202,11 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     const getStyleProxy = (): StyleObj => {
       return new Proxy(styles, {
         get: (target, key: string) => {
-          return target.getPropertyValue(key) || target[key as keyof CSSStyleDeclaration] || null;
+          return (
+            target.getPropertyValue(key) ||
+            target[key as keyof CSSStyleDeclaration] ||
+            null
+          );
         },
         set: (target, key: string, value) => {
           dom.setStyle(key as keyof CSSStyleDeclaration, value);
@@ -212,9 +216,13 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     };
 
     const computedStyle = window.getComputedStyle(dom._el);
-    const styles: CSSStyleDeclaration = Object.assign(computedStyle, dom._el.style);
-    
-    if (typeof keyOrCallback === "string") return styles.getPropertyValue(keyOrCallback);
+    const styles: CSSStyleDeclaration = Object.assign(
+      computedStyle,
+      dom._el.style
+    );
+
+    if (typeof keyOrCallback === "string")
+      return styles.getPropertyValue(keyOrCallback);
     else if (typeof keyOrCallback === "function")
       keyOrCallback(getStyleProxy());
     else return getStyleProxy();
