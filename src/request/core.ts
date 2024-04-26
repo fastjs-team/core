@@ -8,7 +8,9 @@ import type {
   RequestMethod,
   RequestReturn,
   CallbackObject,
-  FailedParams
+  FailedParams,
+  RequestHook,
+  RequestHookKey
 } from "./def";
 
 export function sendRequest(
@@ -56,7 +58,8 @@ export function sendRequest(
 
   async function passthrough() {
     const hooks = request.config.hooks;
-    if (!hooks.before(request)) return request.hookFailed("before");
+    if (!runHooks(hooks.before, [request]))
+      return hookFailed("before", request, null);
 
     request.request = new Request(addQuery(url || request.url, data.query), {
       method,
@@ -64,8 +67,8 @@ export function sendRequest(
       body: data.body as BodyInit
     });
 
-    if (!hooks.init(request))
-      return generateHookFailedResponse("init", request, null);
+    if (!runHooks(hooks.init, [request]))
+      return hookFailed("init", request, null);
 
     fetch(request.request)
       .then(async (response: Response) => {
@@ -87,8 +90,8 @@ export function sendRequest(
         if (!globalConfig.handler.responseCode(response.status, request))
           return handleBadResponse(requestReturn, request, passthrough);
 
-        if (!hooks.success(requestReturn))
-          return generateHookFailedResponse("success", request, requestReturn);
+        if (!runHooks(hooks.success, [requestReturn, request]))
+          return hookFailed("success", request, requestReturn);
 
         matchCallback(request.callback.success, [data, requestReturn], method);
         matchCallback(request.callback.finally, [request], method);
@@ -110,8 +113,8 @@ export function sendRequest(
             ["fastjs.wrong"]
           );
 
-        if (!hooks.failed(error, request))
-          return generateHookFailedResponse("failed", request, null);
+        if (!runHooks(hooks.failed, [error, request]))
+          return hookFailed("failed", request, null);
 
         const failedParams = {
           error,
@@ -164,8 +167,8 @@ function handleBadResponse(
     );
   }
 
-  if (!request.config.hooks.failed(status, request))
-    return generateHookFailedResponse("failed", request, null);
+  if (!runHooks(request.config.hooks.failed, [status, request]))
+    return hookFailed("failed", request, null);
 
   const failedParams: FailedParams<number> = {
     error: status,
@@ -180,16 +183,35 @@ function handleBadResponse(
   matchCallback(request.callback.finally, [request], null);
 }
 
-function generateHookFailedResponse(
-  hook: RequestHooks,
+function hookFailed(
+  hook: RequestHookKey,
   request: FastjsRequest,
   response: RequestReturn | null
-): FailedParams<Error> {
-  return {
+) {
+  const failedParams: FailedParams<Error> = {
     error: new Error(`Request interrupted by ${hook}`),
     request,
     intercept: true,
     hook,
     response
   };
+  request.config.failed(failedParams);
+  matchCallback(request.callback.failed, [failedParams], null);
+  matchCallback(request.callback.finally, [request], null);
+}
+
+function runHooks<T extends RequestHook[] | RequestHook | undefined>(
+  hooks: T,
+  params: T extends RequestHooks.BeforeSend ? [FastjsRequest] : [RequestReturn | Error | number, FastjsRequest]
+): boolean {
+  if (!hooks) return true;
+  if (typeof hooks === "function") return hooks(params[0], params[1] as FastjsRequest);
+  let result = true;
+  for (const hook of hooks as RequestHook[]) {
+    if (!hook(params[0], params[1] as FastjsRequest)) {
+      result = false;
+      if (!globalConfig.hooks.runAll) break;
+    }
+  }
+  return result;
 }

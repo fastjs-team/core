@@ -28,7 +28,9 @@ export interface GlobalConfig {
 
 export const globalConfig: GlobalConfig = {
   timeout: 5000,
-  hooks: {},
+  hooks: {
+    runAll: false
+  },
   handler: {
     handleResponse: async (
       response: Response,
@@ -64,17 +66,18 @@ export function createConfig(
   };
 
   function generateHooks(): RequestHookObject {
-    const requestHooks: RequestHookObject = {
+    const requestHooks: Omit<RequestHookObject, "runAll"> = {
       before: [],
       init: [],
       success: [],
       failed: []
     };
-    let key: keyof RequestHookObject;
+    let key: keyof Omit<RequestHookObject, "runAll">;
     for (key in requestHooks) {
       const addHooks = (hooks: RequestHookParam[keyof RequestHookParam]) => {
         if (!hooks) return;
         requestHooks[key].push(
+          // @ts-ignore
           ...(Array.isArray(hooks)
             ? (hooks as RequestHook[])
             : [hooks as RequestHook])
@@ -83,7 +86,9 @@ export function createConfig(
       if (config.hooks?.[key]) addHooks(config.hooks[key]);
       if (globalConfig.hooks[key]) addHooks(globalConfig.hooks[key]);
     }
-    return requestHooks;
+    return Object.assign(requestHooks, {
+      runAll: config.hooks?.runAll || globalConfig.hooks.runAll
+    }) as RequestHookObject;
   }
 }
 

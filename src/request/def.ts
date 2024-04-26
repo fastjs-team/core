@@ -26,6 +26,7 @@ export interface RequestHookObject {
   init: RequestHooks.BeforeSend[];
   success: RequestHooks.RequestSuccess[];
   failed: RequestHooks.RequestFailed[];
+  runAll: boolean;
 }
 
 export interface RequestHookParam {
@@ -33,10 +34,11 @@ export interface RequestHookParam {
   init?: RequestHooks.BeforeSend[] | RequestHooks.BeforeSend;
   success?: RequestHooks.RequestSuccess[] | RequestHooks.RequestSuccess;
   failed?: RequestHooks.RequestFailed[] | RequestHooks.RequestFailed;
+  runAll?: boolean;
 }
 
-export type RequestHook = RequestHooks.BeforeSend &
-  RequestHooks.RequestSuccess &
+export type RequestHook = RequestHooks.BeforeSend |
+  RequestHooks.RequestSuccess |
   RequestHooks.RequestFailed;
 
 export type RequestHookKey =
