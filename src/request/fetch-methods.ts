@@ -38,7 +38,7 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
       return request;
     },
     catch: (
-      callback: (err: FailedParams<Error | number | null>) => void,
+      callback: (err: FailedParams<Error | number>) => void,
       repeat: boolean = false,
       method?: RequestMethod
     ) => {

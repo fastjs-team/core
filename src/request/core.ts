@@ -206,12 +206,13 @@ function runHooks<T extends RequestHook[] | RequestHook | undefined>(
     ? [FastjsRequest]
     : [RequestReturn | Error | number, FastjsRequest]
 ): boolean {
+  type FirstParam = ((number & FastjsRequest) | (Error & FastjsRequest)) & RequestReturn
   if (!hooks) return true;
   if (typeof hooks === "function")
-    return hooks(params[0], params[1] as FastjsRequest);
+    return hooks(params[0] as FirstParam , params[1] as FastjsRequest);
   let result = true;
   for (const hook of hooks as RequestHook[]) {
-    if (!hook(params[0], params[1] as FastjsRequest)) {
+    if (!hook(params[0] as FirstParam, params[1] as FastjsRequest)) {
       result = false;
       if (!globalConfig.hooks.runAll) break;
     }
