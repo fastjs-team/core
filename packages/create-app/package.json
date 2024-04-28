@@ -1,0 +1,23 @@
+{
+  "name": "create-fastjs",
+  "version": "v1.0.0-alpha.17",
+  "description": "Create a fastjs project quickly",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --minify --sourcemap --outfile=cli.js"
+  },
+  "bin": {
+    "create-fastjs": "./cli.js"
+  },
+  "keywords": [
+    "fastjs",
+    "jsfast"
+  ],
+  "author": "xiaodong2008 <hi@xiaodong.moe>",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.2",
+    "esbuild": "^0.20.2",
+    "picocolors": "^1.0.0"
+  }
+}
