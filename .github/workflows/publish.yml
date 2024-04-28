@@ -23,11 +23,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup pnpm
+        run: npm install -g pnpm
+
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build Package
-        run: npm run prod
+        run: pnpm run build
 
       - name: Set Git Config
         run: |
@@ -40,7 +43,7 @@ jobs:
       - name: Bump package version
         continue-on-error: true
         run: |
-          npm version ${{ github.event.release.tag_name }} --no-git-tag-version
+          pnpm -r version --no-git-tag-version --no-git-checks ${{ github.event.release.tag_name }}
           git add package.json
           git commit -m "build: bump package version to ${{ github.event.release.tag_name }}"
       - name: Push changes
@@ -56,4 +59,4 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish Package
-        run: npm publish --access public
+        run: pnpm -r publish --access public --no-git-checks

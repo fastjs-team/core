@@ -42,7 +42,8 @@
     "dev:windows": "npm run rm:windows && rollup -cw",
     "build:windows": "npm run rm:windows && rollup -c",
     "rm:windows": "if exist dist rmdir /s/q dist",
-    "prod:windows": "npm run build:windows && npm run test"
+    "prod:windows": "npm run build:windows && npm run test",
+    "version": "npm version"
   },
   "bugs": {
     "url": "https://github.com/fastjs-team/core/issues",
