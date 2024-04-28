@@ -10,7 +10,7 @@
     "version": "npm version"
   },
   "bin": {
-    "create-fastjs": "./cli.js"
+    "create-fastjs": "./cli.cjs"
   },
   "keywords": [
     "fastjs",

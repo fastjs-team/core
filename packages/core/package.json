@@ -59,7 +59,7 @@
     "jsfast"
   ],
   "homepage": "https://fastjs.dev/",
-  "author": "xiaodong2008",
+  "author": "xiaodong2008 <hi@xiaodong.moe>",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
