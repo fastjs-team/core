@@ -20,8 +20,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Setup pnpm
         run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm i
 
       - name: Build
         run: pnpm run build
@@ -74,11 +77,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup pnpm
+        run: npm i -g pnpm
+          
       - name: Install dependencies
-        run: npm i
+        run: pnpm i
 
-      - name: Build
-        run: npm run build
-
-      - name: Run vitest tests
+      - name: Run tests
         run: npm run test
