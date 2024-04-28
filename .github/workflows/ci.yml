@@ -42,10 +42,10 @@ jobs:
 
       - name: Setup pnpm
         run: npm i -g pnpm
-      
+
       - name: Install dependencies
         run: pnpm i
-      
+
       - name: Run type check
         run: pnpm run type-check
 
