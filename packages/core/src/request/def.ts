@@ -17,7 +17,10 @@ export interface RequestReturn {
 export namespace RequestHooks {
   export type BeforeSend = (request: FastjsRequest) => boolean;
   export type RequestSuccess = (response: RequestReturn) => boolean;
-  export type RequestFailed = (error: Error | number, request: FastjsRequest) => boolean;
+  export type RequestFailed = (
+    error: Error | number,
+    request: FastjsRequest
+  ) => boolean;
 }
 
 export interface RequestHookObject {
