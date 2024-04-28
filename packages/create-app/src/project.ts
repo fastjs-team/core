@@ -1,9 +1,8 @@
-import { cmd } from "./utils";
 import pc from "picocolors";
 import ora from "ora";
 import * as iq from "@inquirer/prompts";
 import { TemplateType } from "../templates/config";
-import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, rmSync, cpSync } from "node:fs";
 import { installDependencies } from "./pkg";
 import { resolve } from "node:path";
 
@@ -60,8 +59,8 @@ export async function setupProject(
   console.log(pc.cyan(`${pkg} run dev`));
 }
 
-async function copyFiles(src: string, dest: string) {
+function copyFiles(src: string, dest: string) {
   const templatePath = resolve(__dirname, src);
   const targetPath = resolve(process.cwd(), dest);
-  await cmd(`cp -r ${templatePath}/* ${targetPath}`);
+  cpSync(templatePath, targetPath, { recursive: true });
 }
