@@ -6,6 +6,7 @@
     "build": "pnpm -r --filter=./packages/** run build",
     "dev": "pnpm -r --filter=./packages/** run dev --parallel",
     "test": "pnpm -r --filter=./packages/** run test",
+    "type-check": "pnpm -r --filter=./packages/** run type-check",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },

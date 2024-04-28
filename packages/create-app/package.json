@@ -4,7 +4,9 @@
   "description": "Create a fastjs project quickly",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --minify --sourcemap --outfile=cli.js"
+    "build": "esbuild src/index.ts --bundle --minify --sourcemap --outfile=cli.js",
+    "dev": "esbuild src/index.ts --bundle --sourcemap --outfile=cli.js --watch",
+    "type-check": "tsc --noEmit"
   },
   "bin": {
     "create-fastjs": "./cli.js"

@@ -40,14 +40,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup pnpm
+        run: npm i -g pnpm
+      
       - name: Install dependencies
-        run: npm i
-
-      - name: Install typescript
-        run: npm install --global typescript
-
-      - name: TypeScript check
-        run: tsc --noEmit
+        run: pnpm i
+      
+      - name: Run type check
+        run: pnpm run type-check
 
   format-check:
     runs-on: ubuntu-latest
@@ -79,7 +79,7 @@ jobs:
 
       - name: Setup pnpm
         run: npm i -g pnpm
-          
+
       - name: Install dependencies
         run: pnpm i
 

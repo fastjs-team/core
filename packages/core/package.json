@@ -32,6 +32,7 @@
   "scripts": {
     "dev": "npm run rm && rollup -cw",
     "build": "npm run rm && rollup -c",
+    "type-check": "tsc --noEmit",
     "rm": "rm -rf ./dist",
     "test": "vitest",
     "test:once": "vitest run",
