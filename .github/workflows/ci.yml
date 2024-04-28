@@ -21,10 +21,10 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm i
+        run: npm i -g pnpm
 
-      - name: Rollup check
-        run: npm run build
+      - name: Build
+        run: pnpm run build
 
   type-check:
     runs-on: ubuntu-latest
