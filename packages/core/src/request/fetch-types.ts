@@ -39,7 +39,7 @@ export interface FastjsRequestAPI {
     method?: RequestMethod
   ) => FastjsRequest;
   catch: (
-    callback: (error: FailedParams<Error | number | null>) => void,
+    callback: (error: FailedParams<Error | number>) => void,
     repeat?: boolean,
     method?: RequestMethod
   ) => FastjsRequest;

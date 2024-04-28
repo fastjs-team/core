@@ -98,7 +98,7 @@ export interface RequestConfig {
     [key: string]: string;
   };
   wait: number;
-  failed: (error: FailedParams<Error | number | null>) => void;
+  failed: (error: FailedParams<Error | number>) => void;
   callback: (data: any, response: RequestReturn) => void;
   query:
     | {
