@@ -4,9 +4,10 @@
   "description": "Create a fastjs project quickly",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --minify --outfile=cli.js",
-    "dev": "esbuild src/index.ts --bundle --sourcemap --outfile=cli.js --watch",
-    "type-check": "tsc --noEmit"
+    "build": "esbuild index.ts --bundle --platform=node --minify --outfile=cli.cjs",
+    "dev": "esbuild index.ts --bundle --platform=node --minify --outfile=cli.cjs --watch",
+    "type-check": "tsc --noEmit",
+    "version": "npm version"
   },
   "bin": {
     "create-fastjs": "./cli.js"
@@ -21,6 +22,7 @@
     "@inquirer/prompts": "^5.0.2",
     "commander": "^12.0.0",
     "esbuild": "^0.20.2",
+    "ora": "^8.0.1",
     "picocolors": "^1.0.0"
   }
 }
