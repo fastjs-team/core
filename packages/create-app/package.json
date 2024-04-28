@@ -1,6 +1,6 @@
 {
   "name": "create-fastjs",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Create a fastjs project quickly",
   "main": "index.js",
   "scripts": {
