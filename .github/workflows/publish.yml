@@ -44,7 +44,7 @@ jobs:
         continue-on-error: true
         run: |
           pnpm -r version --no-git-tag-version --no-git-checks ${{ github.event.release.tag_name }}
-          git add package.json
+          git add **/package.json
           git commit -m "build: bump package version to ${{ github.event.release.tag_name }}"
       - name: Push changes
         uses: ad-m/github-push-action@master
