@@ -5,6 +5,7 @@
   "scripts": {
     "build": "pnpm -r --filter=./packages/** run build",
     "dev": "pnpm -r --filter=./packages/** run dev --parallel",
+    "test": "pnpm -r --filter=./packages/** run test",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
