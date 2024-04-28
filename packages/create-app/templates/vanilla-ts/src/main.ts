@@ -11,7 +11,7 @@ dom.select("#app")?.html(`
     <a href="https://docs.fastjs.dev" target="_blank">
       <img src="${logo}" class="logo" alt="Fastjs logo" />
     </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
+    <a href="https://developer.mozilla.org/en-US/docs/Glossary/TypeScript" target="_blank">
       <img src="${typescriptLogo}" class="logo vanilla" alt="JavaScript logo" />
     </a>
     <h1>Hello, Fastjs.</h1>
