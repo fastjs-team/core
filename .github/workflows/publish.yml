@@ -29,9 +29,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Build Package
-        run: pnpm run prod
-
       - name: Set Git Config
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -46,6 +43,10 @@ jobs:
           pnpm -r version --no-git-tag-version --no-git-checks ${{ github.event.release.tag_name }}
           git add **/package.json
           git commit -m "build: bump package version to ${{ github.event.release.tag_name }}"
+
+      - name: Build Package
+        run: pnpm run prod
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
