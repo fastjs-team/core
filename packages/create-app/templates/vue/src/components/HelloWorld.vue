@@ -1,16 +1,15 @@
 <script setup>
-import { ref } from 'vue'
-import { request } from 'jsfast'
+import { ref } from "vue";
+import { request } from "jsfast";
 
-const msg = ref('Click the button to send a request')
+const msg = ref("Click the button to send a request");
 
 const send = () => {
-  msg.value = 'Sending request...'
-  request.get('https://catfact.ninja/fact')
-    .then((data) => {
-      msg.value = data.fact
-    })
-}
+  msg.value = "Sending request...";
+  request.get("https://catfact.ninja/fact").then((data) => {
+    msg.value = data.fact;
+  });
+};
 </script>
 
 <template>
