@@ -37,6 +37,22 @@ export const templates: TemplateConfig[] = [
         path: "./templates/vanilla-ts/"
       }
     ]
+  },
+  {
+    name: "vue",
+    label: "Vue",
+    types: [
+      {
+        name: "vue-js",
+        label: "JavaScript",
+        path: "./templates/vue/"
+      },
+      {
+        name: "vue-ts",
+        label: "TypeScript",
+        path: "./templates/vue-ts/"
+      }
+    ]
   }
 ];
 
