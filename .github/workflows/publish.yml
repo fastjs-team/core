@@ -30,7 +30,7 @@ jobs:
         run: pnpm install
 
       - name: Build Package
-        run: pnpm run build
+        run: pnpm run prod
 
       - name: Set Git Config
         run: |

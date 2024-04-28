@@ -5,6 +5,7 @@ import * as iq from "@inquirer/prompts";
 import { TemplateType } from "../templates/config";
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import { installDependencies } from "./pkg";
+import { resolve } from "node:path";
 
 export async function checkPath(path: string) {
   if (existsSync(path)) {
@@ -60,5 +61,7 @@ export async function setupProject(
 }
 
 async function copyFiles(src: string, dest: string) {
-  await cmd(`cp -r ${src}/* ${dest}`);
+  const templatePath = resolve(__dirname, src);
+  const targetPath = resolve(process.cwd(), dest);
+  await cmd(`cp -r ${templatePath}/* ${targetPath}`);
 }
