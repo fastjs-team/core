@@ -15,7 +15,7 @@ export async function copy(text: string): Promise<void> {
       );
     }
   }
-  
+
   async function createDomElement(text: string): Promise<HTMLElement> {
     const { createFastjsDom } = await import("../dom/dom");
     let input = createFastjsDom("span");
@@ -23,12 +23,12 @@ export async function copy(text: string): Promise<void> {
       .html(replaceNewLinesAndSpaces(text))
       .push(document.body, "lastElementChild");
     return input.el();
-  
+
     function replaceNewLinesAndSpaces(text: string): string {
       return text.replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
     }
   }
-  
+
   function selectText(element: HTMLElement): Selection | null {
     const range: Range = document.createRange();
     range.setStart(element, 0);
@@ -39,7 +39,7 @@ export async function copy(text: string): Promise<void> {
     selection.addRange(range);
     return selection;
   }
-  
+
   function copyToClipboard(selection: Selection | null): void {
     if (!selection) {
       if (__DEV__) {
