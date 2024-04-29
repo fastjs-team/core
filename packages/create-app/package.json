@@ -6,10 +6,11 @@
   "author": "xiaodong2008 <hi@xiaodong.moe>",
   "bugs": "https://github.com/fastjs-team/core/issues",
   "funding": "https://github.com/sponsors/xiaodong2008",
+  "type": "module",
   "scripts": {
-    "build": "esbuild index.ts --bundle --platform=node --outfile=cli.cjs",
-    "dev": "esbuild index.ts --bundle --platform=node --minify --outfile=cli.cjs --watch",
-    "prod": "esbuild index.ts --bundle --platform=node --minify --outfile=cli.cjs",
+    "build": "node scripts/build.js",
+    "dev": "esbuild index.ts --bundle --platform=node --outfile=cli.cjs --watch",
+    "prod": "node scripts/build.js",
     "type-check": "tsc --noEmit",
     "version": "npm version"
   },
@@ -31,8 +32,12 @@
   "dependencies": {
     "@inquirer/prompts": "^5.0.2",
     "commander": "^12.0.0",
-    "esbuild": "^0.20.2",
+    "events": "^3.3.0",
+    "fs": "0.0.1-security",
     "ora": "^8.0.1",
     "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.2"
   }
 }
