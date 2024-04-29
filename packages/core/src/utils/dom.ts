@@ -1,10 +1,20 @@
 import _dev from "../dev";
 
 export async function copy(text: string): Promise<void> {
-  const input = await createDomElement(text);
-  const selection = selectText(input);
-  copyToClipboard(selection);
-  input.remove();
+  try {
+    const input = await createDomElement(text);
+    const selection = selectText(input);
+    copyToClipboard(selection);
+    input.remove();
+  } catch (error: any) {
+    if (__DEV__) {
+      _dev.warn(
+        "fastjs/utils/copy",
+        "An error occurred while copying text to clipboard",
+        error
+      );
+    }
+  }
 
   async function createDomElement(text: string): Promise<HTMLElement> {
     const { createFastjsDom } = await import("../dom/dom");
