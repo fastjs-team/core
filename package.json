@@ -2,11 +2,12 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "pnpm -r --filter=./packages/** run build",
-    "prod": "pnpm -r --filter=./packages/** run prod",
-    "dev": "pnpm -r --filter=./packages/** run dev",
-    "test": "pnpm -r --filter=./packages/** run test",
-    "type-check": "pnpm -r --filter=./packages/** run type-check",
+    "workspace:run": "pnpm -r --filter=./packages/** run",
+    "build": "npm run workspace:run build",
+    "prod": "npm run workspace:run prod",
+    "dev": "npm run workspace:run dev",
+    "test": "npm run workspace:run test",
+    "type-check": "npm run workspace:run type-check",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
