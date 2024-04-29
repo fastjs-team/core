@@ -2,6 +2,9 @@
   "name": "jsfast",
   "version": "1.0.0-beta.3",
   "description": "Fastjs(jsfast) is a useful, lightweight JavaScript library for any types of project.",
+  "author": "xiaodong2008 <hi@xiaodong.moe>",
+  "bugs": "https://github.com/fastjs-team/core/issues",
+  "funding": "https://github.com/sponsors/xiaodong2008",
   "main": "index.js",
   "module": "dist/fastjs.esm-bundler.js",
   "types": "dist/types/main.d.ts",
@@ -45,10 +48,6 @@
     "prod:windows": "npm run build:windows && npm run test",
     "version": "npm version"
   },
-  "bugs": {
-    "url": "https://github.com/fastjs-team/core/issues",
-    "email": "hi@xiaodong.moe"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/fastjs-team/core.git"
@@ -59,7 +58,6 @@
     "jsfast"
   ],
   "homepage": "https://fastjs.dev/",
-  "author": "xiaodong2008 <hi@xiaodong.moe>",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.5",
