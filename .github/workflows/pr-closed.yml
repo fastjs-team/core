@@ -1,0 +1,21 @@
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  remove-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Remove Labels
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: |
+            Status: Pending
+            Status: In Progress
+            Status: Needs Triage
+            Status: To Be Discuss
+            Resolution: Cannot Replicate
+            Resolution: Needs More Information
