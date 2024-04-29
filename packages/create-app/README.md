@@ -27,7 +27,7 @@ This is the offical CLI for Fastjs. For the core library, please visit [fastjs-t
 pnpm create fastjs
 ```
 
-```
+```bash
 yarn create fastjs
 ```
 
