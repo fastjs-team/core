@@ -28,7 +28,27 @@ It is designed to be easy to use. Fastjs can be with any framework or just pure 
 ### Bundler/CommonJS
 
 ```bash
+npm install jsfast
+```
 
+```js
+import { dom } from "jsfast"; // esm
+const { request } = require("jsfast"); // cjs
+```
+
+### CDN (Global)
+
+```html
+<script src="https://unpkg.com/jsfast/dist/fastjs.global.js"></script>
+```
+
+### Browser (ES Module)
+
+```html
+<script type="module">
+  import { dom } from "https://unpkg.com/jsfast/dist/fastjs.esm.browser.js";
+</script>
+```
 
 ## Info
 
