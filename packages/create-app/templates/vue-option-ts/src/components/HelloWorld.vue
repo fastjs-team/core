@@ -1,23 +1,22 @@
 <script lang="ts">
-import { request } from 'jsfast'
+import { request } from "jsfast";
 
 export default {
   data() {
     return {
-      msg: 'Click the button to send a request',
-    }
+      msg: "Click the button to send a request"
+    };
   },
   methods: {
     send() {
-      this.msg = 'Sending request...'
-      request.get('https://catfact.ninja/fact').then((data) => {
-        this.msg = data.fact
-      })
-    },
-  },
-}
+      this.msg = "Sending request...";
+      request.get("https://catfact.ninja/fact").then((data) => {
+        this.msg = data.fact;
+      });
+    }
+  }
+};
 </script>
-
 
 <template>
   <h1>{{ msg }}</h1>
