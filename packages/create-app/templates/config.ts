@@ -51,6 +51,16 @@ export const templates: TemplateConfig[] = [
         name: "vue-ts",
         label: "TypeScript",
         path: "./templates/vue-ts/"
+      },
+      {
+        name: "vue-option-js",
+        label: "Vue Option API (JavaScript)",
+        path: "./templates/vue-option/"
+      },
+      {
+        name: "vue-option-ts",
+        label: "Vue Option API (TypeScript)",
+        path: "./templates/vue-option-ts/"
       }
     ]
   }
