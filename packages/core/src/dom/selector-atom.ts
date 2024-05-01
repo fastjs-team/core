@@ -24,7 +24,7 @@ function _selector(
   if (parent?.construct === "FastjsDomList") parent = parent._list;
 
   Array.isArray(parent)
-    ? parent.forEach((e: HTMLElement) => {
+    ? (parent as HTMLElement[]).forEach((e: HTMLElement) => {
         result.push(...queryResultToArray(e.querySelectorAll(selector)));
       })
     : result.push(...queryResultToArray(parent.querySelectorAll(selector)));

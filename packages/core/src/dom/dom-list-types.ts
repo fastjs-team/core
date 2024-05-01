@@ -23,5 +23,6 @@ export interface FastjsDomListAPI {
 export type FastjsDomList = FastjsDomListAtom &
   FastjsDomListAPI &
   Omit<FastjsDomAtom, "construct"> &
-  FastjsDomAPI &
-  FastjsModuleBase;
+  Omit<FastjsDomAPI, keyof Array<FastjsDom>> &
+  FastjsModuleBase &
+  Array<FastjsDom>;

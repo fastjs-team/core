@@ -451,7 +451,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     };
 
     function randomElementChild() {
-      const children = [...el.children];
+      const children = [...(el as HTMLElement).children];
       if (children.length === 0) el.appendChild(dom._el);
       else {
         const pos = rand(0, children.length);
