@@ -1,5 +1,6 @@
-import type { FastjsDom } from "./dom-types";
+import type { FastjsDom, FastjsDomAPI, FastjsDomAtom } from "./dom-types";
 import type { EachCallback } from "./def";
+import { FastjsModuleBase } from "../base/def";
 
 export interface FastjsDomListAtom {
   construct: "FastjsDomList";
@@ -21,4 +22,6 @@ export interface FastjsDomListAPI {
 
 export type FastjsDomList = FastjsDomListAtom &
   FastjsDomListAPI &
-  Omit<FastjsDom, "construct">;
+  Omit<FastjsDomAtom, "construct"> &
+  FastjsDomAPI &
+  FastjsModuleBase;
