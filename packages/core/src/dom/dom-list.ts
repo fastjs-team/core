@@ -5,7 +5,7 @@ import { isUndefined, isDom } from "../utils";
 import { createFastjsDom } from "./dom";
 
 import type { FastjsDom } from "./dom-types";
-import type { FastjsDomList } from "./dom-list-types";
+import type { FastjsDomList, FastjsDomListAPI } from "./dom-list-types";
 import { createMethods } from "./dom-list-methods";
 
 export function createFastjsDomList(
@@ -18,8 +18,10 @@ export function createFastjsDomList(
       return e;
     });
 
-  const moduleAtom = new Proxy(setupAtom(domList), {
+  const _atom = setupAtom(domList);
+  const moduleAtom = new Proxy(_atom, {
     get(target, key) {
+      if (key in target) return target[key as keyof FastjsDomList];
       if (key in target._list) return target._list[key as unknown as number];
       if (key in target._list[0]) {
         const val = target._list[0][key as string];
@@ -38,7 +40,26 @@ export function createFastjsDomList(
         } else return val;
       }
       return target[key as keyof FastjsDomList];
+    },
+    set(target, key, value) {
+      target[key as any] = value;
+      if (Number.isInteger(Number(key))) {
+        _atom._list[key as unknown as number] = value;
+        target[key as unknown as number] = value;
+      }
+      return true;
     }
+  }) as FastjsDomList;
+
+  moduleAtom._list = new Proxy(domList, {
+    set(target, key, value) {
+      target[Number(key)] = value;
+      _atom[Number(key)] = value;
+      return true;
+    }
+  });
+  domList.forEach((e, i) => {
+    moduleAtom[i] = e;
   });
 
   return Object.assign(moduleAtom, createMethods(moduleAtom as FastjsDomList));
@@ -47,14 +68,19 @@ export function createFastjsDomList(
 export function setupAtom(list: FastjsDom[]): FastjsDomList {
   return {
     construct: "FastjsDomList",
-    _list: new Proxy(list, {
-      set(target, key, value) {
-        target[Number(key)] = value;
-        return true;
-      }
-    }),
+    // _list: new Proxy(list, {
+    //   set(target, key, value) {
+    //     target[Number(key)] = value;
+    //     list[Number(key)] = value;
+    //     return true;
+    //   }
+    // }),
+    // _list: [],
     get length() {
       return list.length;
+    },
+    set length(value) {
+      list.length = value;
     }
   } as FastjsDomList;
 }

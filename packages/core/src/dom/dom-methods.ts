@@ -378,7 +378,6 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     clone?: boolean
   ): PushReturn<T> {
     el = el instanceof HTMLElement ? el : el.el();
-    console.log(dom._el);
 
     type IsReplace<T> = T extends "replaceElement" ? true : false;
     const isReplace = (target === "replaceElement") as IsReplace<T>;
