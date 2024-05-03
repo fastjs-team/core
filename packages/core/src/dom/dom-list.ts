@@ -1,5 +1,4 @@
 import _dev from "../dev";
-import _selector from "./selector-atom";
 import { isUndefined, isDom } from "../utils";
 
 import { createFastjsDom } from "./dom";

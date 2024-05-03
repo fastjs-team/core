@@ -31,11 +31,11 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
     getDom(key = 0) {
       return list[key];
     },
-    next(el: string) {
+    next<T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null>(el?: string = "*"): T {
       const result = _selector(el, this.toElArray());
       if (result instanceof HTMLElement) return createFastjsDom(result) as FastjsDom as T;
-      if (Array.isArray(result)) return createFastjsDomList(result) as FastjsDomList as T;
-      return null as T;
+      if (result === null) return null as T;
+      return createFastjsDomList(result) as FastjsDomList as T;
     },
     toArray() {
       return list;
