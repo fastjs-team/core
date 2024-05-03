@@ -1,6 +1,6 @@
 {
   "name": "create-fastjs",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "Create a fastjs project quickly",
   "main": "./cli.cjs",
   "author": "xiaodong2008 <hi@xiaodong.moe>",
