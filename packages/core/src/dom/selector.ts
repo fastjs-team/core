@@ -6,14 +6,14 @@ import _dev from "../dev";
 import type { FastjsDom } from "./dom-types";
 import type { FastjsDomList } from "./dom-list-types";
 
-function selector(
+function selector<T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null>(
   target: string = "body",
   parent: Document | HTMLElement | HTMLElement[] = document
-): FastjsDom | FastjsDomList | null {
+): T {
   const result = _selector(target, parent);
-  if (result instanceof HTMLElement) return createFastjsDom(result);
-  if (Array.isArray(result)) return createFastjsDomList(result);
-  return null;
+  if (result instanceof HTMLElement) return createFastjsDom(result) as FastjsDom as T;
+  if (Array.isArray(result)) return createFastjsDomList(result) as FastjsDomList as T;
+  return null as T;
 }
 
 export default selector;

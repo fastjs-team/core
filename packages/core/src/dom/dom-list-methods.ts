@@ -33,9 +33,9 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
     },
     next(el: string) {
       const result = _selector(el, this.toElArray());
-      if (result instanceof HTMLElement) return createFastjsDom(result);
-      if (Array.isArray(result)) return createFastjsDomList(result);
-      return null;
+      if (result instanceof HTMLElement) return createFastjsDom(result) as FastjsDom as T;
+      if (Array.isArray(result)) return createFastjsDomList(result) as FastjsDomList as T;
+      return null as T;
     },
     toArray() {
       return list;
