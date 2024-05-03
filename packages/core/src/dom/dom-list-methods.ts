@@ -33,9 +33,9 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
     },
     next<
       T extends FastjsDom | FastjsDomList | null =
-      | FastjsDom
-      | FastjsDomList
-      | null
+        | FastjsDom
+        | FastjsDomList
+        | null
     >(el: string = "*"): T {
       const result = _selector(el, this.toElArray());
       if (result instanceof HTMLElement)
