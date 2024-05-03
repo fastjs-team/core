@@ -21,7 +21,7 @@ jobs:
               issue_number: issueNumber
             });
 
-            const workingLabels = ['Status: Pending', 'Status: In Progress', 'Status: Needs Triage', 'Status: To Be Discuss', 'Resolution: Cannot Replicate', 'Resolution: Needs More Information'];
+            const workingLabels = ['Status: Pending', 'Status: In Progress', 'Status: Needs Triage', 'Status: To Be Discuss', 'Resolution: Cannot Replicate', 'Resolution: Needs More Information', 'Contribution Welcome'];
 
             for (const label of workingLabels) {
               if (issue.labels.find(l => l.name === label)) {
