@@ -33,22 +33,19 @@ export function createModule<T extends { [key: string]: any }>(
       return this;
     },
     then(func: (e: any) => void, time: number = 0) {
-      if (_dev) {
+      if (__DEV__) {
         if (typeof func !== "function") {
-          if (_dev) {
-            throw _dev.error(
-              "fastjs/base/FastjsBaseModule",
-              "Invalid function, **a function is required**.",
-              [
-                `***func: ${func}`,
-                `time: ${time}`,
-                "then(**func: (e: T) => void**, time: number = 0): T",
-                "FastjsBaseModule.then"
-              ],
-              ["fastjs.wrong"]
-            );
-          }
-          throw "t33q";
+          throw _dev.error(
+            "fastjs/base/FastjsBaseModule",
+            "Invalid function, **a function is required**.",
+            [
+              `***func: ${func}`,
+              `time: ${time}`,
+              "then(**func: (e: T) => void**, time: number = 0): T",
+              "FastjsBaseModule.then"
+            ],
+            ["fastjs.wrong"]
+          );
         }
         if (typeof time !== "number") {
           _dev.warn(
