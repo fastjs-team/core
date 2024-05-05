@@ -36,7 +36,9 @@ export interface FastjsDomAPI {
   last(): FastjsDom | null;
   father(): FastjsDom | null;
   children(): FastjsDomList;
-  next(selector?: string): FastjsDom | FastjsDomList | null;
+  next<T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null>(
+    selector?: string
+  ): T;
   each(callback: EachCallback, deep?: boolean): FastjsDom;
   addEvent(type: keyof HTMLElementEventMap, callback: EventCallback): FastjsDom;
   removeEvent(): FastjsDom;

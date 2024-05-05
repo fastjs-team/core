@@ -15,7 +15,9 @@ export interface FastjsDomListAPI {
   el(key?: number): HTMLElement;
   getElement(key?: number): HTMLElement;
   getDom(key?: number): FastjsDom;
-  next(el: string): FastjsDom | FastjsDomList | null;
+  next<T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null>(
+    selector: string
+  ): T;
   toArray(): FastjsDomList;
   toElArray(): Array<HTMLElement>;
 }
