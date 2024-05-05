@@ -18,10 +18,7 @@ export interface Router {
 let isNavigating = false;
 
 export function setupRouter(root: FastjsDom, pages: Page[], notFound: Page) {
-  root = dom
-    .newEl("div")
-    .set("id", "router")
-    .push(root, "firstElementChild").el;
+  root = dom.newEl("div").set("id", "router").push(root, "lastElementChild").el;
 
   const setup = (page: Page, withTransition = true) => {
     router.location = {
@@ -54,7 +51,7 @@ export function setupRouter(root: FastjsDom, pages: Page[], notFound: Page) {
   };
 
   const router: Router = {
-    navigate: () => {},
+    navigate: () => { },
     location: {
       path: "",
       realPath: ""
