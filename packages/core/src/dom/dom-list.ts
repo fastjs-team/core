@@ -67,14 +67,6 @@ export function createFastjsDomList(
 export function setupAtom(list: FastjsDom[]): FastjsDomList {
   return {
     construct: "FastjsDomList",
-    // _list: new Proxy(list, {
-    //   set(target, key, value) {
-    //     target[Number(key)] = value;
-    //     list[Number(key)] = value;
-    //     return true;
-    //   }
-    // }),
-    // _list: [],
     get length() {
       return list.length;
     },
