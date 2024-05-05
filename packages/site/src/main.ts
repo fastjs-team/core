@@ -4,9 +4,10 @@ import { setupTopbar } from "./components/topbar";
 import { setupRouter } from "./router";
 
 import Home from "./pages/home/";
+import Sponsor from "./pages/sponsor/";
 import NotFound from "./pages/404";
 
 const root = dom.select<FastjsDom>("#app");
 
 setupTopbar(root);
-setupRouter(root, [Home], NotFound);
+setupRouter(root, [Home, Sponsor], NotFound).render(root);
