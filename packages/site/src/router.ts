@@ -51,7 +51,7 @@ export function setupRouter(root: FastjsDom, pages: Page[], notFound: Page) {
   };
 
   const router: Router = {
-    navigate: () => { },
+    navigate: () => {},
     location: {
       path: "",
       realPath: ""
