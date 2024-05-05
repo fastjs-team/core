@@ -12,20 +12,27 @@ export type LangFile = {
   name: string;
   list: LangComponent[];
 };
+interface fileIndex {
+  _fileName: string;
+  [key: string]: string;
+}
 
 interface I18n {
   [key: string]: LangComponent;
 }
 
-export function getI18n(name: string): I18n {
+export function getI18n(name: string): fileIndex {
   const fileList = [topbar];
-  const i18n: I18n = {};
+  const i18n: fileIndex = {
+    _fileName: name
+  };
 
   fileList.forEach((file) => {
     if (file.name !== name) return;
     file.list.forEach((component) => {
       // Base: en, if the language is not fully translated, use en as the fallback(base language)
-      if (component.lang === getCurrentLang() || component.lang === "en") i18n[component.lang] = component;
+      if (component.lang === getCurrentLang() || component.lang === "en")
+        Object.assign(i18n, component.index);
     });
   });
 

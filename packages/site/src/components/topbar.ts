@@ -2,6 +2,7 @@ import "./style.scss";
 import { FastjsDom, dom } from "jsfast";
 import fastjs from "../../public/fastjs.svg";
 import github from "@/assets/github.svg";
+import { getI18n } from "@/lang";
 
 interface TopbarItem {
   name: string;
@@ -11,6 +12,9 @@ interface TopbarItem {
   position?: "left" | "right";
 }
 
+const lang = getI18n("topbar");
+console.log(lang);
+
 const topbar: TopbarItem[] = [
   {
     name: "Icon",
@@ -19,22 +23,22 @@ const topbar: TopbarItem[] = [
   },
   {
     name: "Home",
-    content: "Home",
+    content: lang.home,
     path: "/"
   },
   {
     name: "Sponsor",
-    content: "Sponsor",
+    content: lang.sponsor,
     path: "/sponsor"
   },
   {
     name: "Playground",
-    content: "Playground",
+    content: lang.playground,
     path: "https://stackblitz.com/edit/fastjs-playground?file=src%2Fmain.ts"
   },
   {
     name: "Docs",
-    content: "Docs",
+    content: lang.docs,
     path: "https://docs.fastjs.dev",
     position: "right"
   },
