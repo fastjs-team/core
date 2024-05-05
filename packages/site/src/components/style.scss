@@ -1,0 +1,56 @@
+#topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 42px;
+  width: 100%;
+  font-size: 13px;
+
+  .container {
+    position: relative;
+    margin: 0 10vw;
+    padding: 0 2vw;
+    display: flex;
+
+    > div {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      > * {
+        display: flex;
+        align-items: center;
+        line-height: 42px;
+        padding: 0 6px;
+      }
+    }
+
+    .right {
+      margin-left: auto;
+    }
+
+    img {
+      height: 20px;
+    }
+  }
+
+  .line {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: #ffffff;
+    animation: lineFadeIn 0.8s;
+    width: 100%;
+  }
+}
+
+@keyframes lineFadeIn {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
