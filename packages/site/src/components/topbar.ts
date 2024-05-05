@@ -1,6 +1,6 @@
 import "./style.scss";
 import { FastjsDom, dom } from "jsfast";
-import fastjs from "../../public/fastjs.svg"
+import fastjs from "../../public/fastjs.svg";
 import github from "@/assets/github.svg";
 
 interface TopbarItem {
@@ -15,7 +15,7 @@ const topbar: TopbarItem[] = [
   {
     name: "Icon",
     type: "icon",
-    content: fastjs,
+    content: fastjs
   },
   {
     name: "Home",
@@ -25,12 +25,12 @@ const topbar: TopbarItem[] = [
   {
     name: "Sponsor",
     content: "Sponsor",
-    path: "/sponsor",
+    path: "/sponsor"
   },
   {
     name: "Playground",
     content: "Playground",
-    path: "https://stackblitz.com/edit/fastjs-playground?file=src%2Fmain.ts",
+    path: "https://stackblitz.com/edit/fastjs-playground?file=src%2Fmain.ts"
   },
   {
     name: "Docs",
