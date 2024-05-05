@@ -10,7 +10,11 @@ import type {
 } from "./def";
 
 export function createMethods(request: FastjsRequest): FastjsRequestAPI {
-  const send = (method: RequestMethod, data: RequestData = {}, url?: string) => {
+  const send = (
+    method: RequestMethod,
+    data: RequestData = {},
+    url?: string
+  ) => {
     request.data = Object.assign(request.data, data);
     return sendRequest(request, method, url);
   };
