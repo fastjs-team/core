@@ -4,7 +4,7 @@
   "scripts": {
     "build": "pnpm -r --filter=./packages/** run build",
     "prod": "pnpm -r --filter=./packages/** run prod",
-    "dev": "pnpm -r --filter=./packages/** run dev",
+    "dev": "pnpm --parallel --filter=./packages/** run dev",
     "test": "pnpm -r --filter=./packages/** run test",
     "type-check": "pnpm -r --filter=./packages/** run type-check",
     "format": "prettier --check .",
