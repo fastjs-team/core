@@ -1,0 +1,29 @@
+.main {
+  text-align: center;
+  padding: 20vh 0;
+
+  #title-movie {
+    font-weight: 700;
+    display: inline-block;
+    font-size: 0;
+
+    * {
+      font-size: 3rem;
+      display: inline-block;
+      transition: transform 0.4s, width 0.2s;
+      overflow: hidden;
+    }
+
+    [move] {
+      display: inline-block;
+    }
+
+    [move-target] {
+      width: 0;
+    }
+
+    [hide] {
+      opacity: 0;
+    }
+  }
+}
