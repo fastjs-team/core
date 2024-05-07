@@ -8,7 +8,7 @@ export function createMethods(cookie: FastjsCookie): FastjsCookieAPI {
     if (!check()) return null;
 
     const cookie = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
-    return cookie ? cookie[2] : null;
+    return cookie ? decodeURIComponent(cookie[2]) : null;
   }
 
   function set(
@@ -18,7 +18,7 @@ export function createMethods(cookie: FastjsCookie): FastjsCookieAPI {
   ): FastjsCookie {
     if (!check()) return cookie;
 
-    let str = `${name}=${value}`;
+    let str = `${name}=${encodeURIComponent(value)}`;
 
     if (options.expires) {
       let date = new Date();
