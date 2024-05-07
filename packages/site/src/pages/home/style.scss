@@ -10,7 +10,9 @@
     * {
       font-size: 3rem;
       display: inline-block;
-      transition: transform 0.4s, width 0.2s;
+      transition:
+        transform 0.4s,
+        width 0.2s;
       overflow: hidden;
     }
 

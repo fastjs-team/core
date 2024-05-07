@@ -20,7 +20,7 @@ test("Check if cookie exists", () => {
   assert.equal(cookie.exists("test"), false);
   cookie.set("test", "test");
   assert.equal(cookie.exists("test"), true);
-})
+});
 
 test("Add cookie with expires", () => {
   cookie.remove("test");

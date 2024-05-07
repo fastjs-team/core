@@ -1,10 +1,12 @@
 import { Page } from "@/router";
-import "./style.scss"
+import "./style.scss";
 import { FastjsDom, FastjsDomList, dom } from "jsfast";
 
 async function animation(root: FastjsDom) {
   const animationList = root.next<FastjsDomList>("[key]");
-  animationList.sort((a, b) => Number(a.getAttr("key") || "0") - Number(b.getAttr("key") || "0"));
+  animationList.sort(
+    (a, b) => Number(a.getAttr("key") || "0") - Number(b.getAttr("key") || "0")
+  );
 
   for (let key = 0; key < animationList.length; key++) {
     const el = animationList[key];
@@ -49,7 +51,7 @@ async function startRollText(root: FastjsDom) {
 }
 
 function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function typeText(text: string, el: FastjsDom) {
@@ -68,13 +70,12 @@ async function deleteText(el: FastjsDom) {
   }
 }
 
-
 const page: Page = {
   path: "/",
   load: (root) => {
     setTimeout(() => {
       animation(root);
-    }, 1000)
+    }, 1000);
   },
   template: `
     <div class="main">

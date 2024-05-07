@@ -8,7 +8,7 @@ export const get = (name: string): string | null => {
 
 export const exists = (name: string): boolean => {
   return get(name) !== null;
-}
+};
 
 export const set = (
   name: string,
