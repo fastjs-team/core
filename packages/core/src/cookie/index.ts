@@ -6,6 +6,10 @@ export const get = (name: string): string | null => {
   return createFastjsCookie().get(name);
 };
 
+export const exists = (name: string): boolean => {
+  return get(name) !== null;
+}
+
 export const set = (
   name: string,
   value: string,
@@ -20,6 +24,7 @@ export const remove = (name: string): FastjsCookie => {
 
 export default {
   get,
+  exists,
   set,
   remove,
   create: createFastjsCookie
