@@ -1,4 +1,4 @@
-import { Page } from "../../router";
+import { Page } from "@/router";
 
 const page: Page = {
   path: "/sponsor",

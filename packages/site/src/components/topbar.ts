@@ -13,7 +13,6 @@ interface TopbarItem {
 }
 
 const lang = getI18n("topbar");
-console.log(lang);
 
 const topbar: TopbarItem[] = [
   {
