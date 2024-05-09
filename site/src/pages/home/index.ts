@@ -1,6 +1,9 @@
 import { Page } from "@/router";
 import "./style.scss";
 import { FastjsDom, FastjsDomList, dom } from "jsfast";
+import copy from "@/assets/copy.svg"
+import { utils } from "jsfast";
+import { success } from "@/message";
 
 async function animation(root: FastjsDom) {
   const animationList = root.next<FastjsDomList>("[key]");
@@ -76,6 +79,10 @@ const page: Page = {
     setTimeout(() => {
       animation(root);
     }, 1000);
+    dom.select(".code")?.addEvent("click", () => {
+      utils.copy("npm create fastjs");
+      success("Copied to clipboard");
+    })
   },
   template: `
     <div class="main">
@@ -86,6 +93,17 @@ const page: Page = {
         <div key="1" move="70">&nbsp;JS</div>
       </div>
       <p>Fly again, with our dream.</p> 
+      <div class="code-container">
+      <span class="code">
+        <span>shell</span>
+        <span class="divider"></span>
+        <span style="color: #aa6e6a">npm</span>
+        <span style="color: #dfbc67">create</span>
+        <span style="color: #84d681;">fastjs</span>
+        <span class="divider"></span>
+        <img src="${copy}" />
+      </span>
+      </div>
     </div>
   `
 };

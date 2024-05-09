@@ -15,7 +15,9 @@
   "devDependencies": {
     "@types/node": "^20.11.15",
     "cross-env": "^7.0.3",
+    "markdown-table": "^3.0.3",
     "prettier": "^3.2.5",
+    "pretty-bytes": "^6.1.1",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5"
   }

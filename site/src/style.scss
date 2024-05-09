@@ -56,3 +56,8 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.code,
+.mono {
+  font-family: "JetBrains Mono", monospace !important;
+}

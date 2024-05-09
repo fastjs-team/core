@@ -28,4 +28,36 @@
       opacity: 0;
     }
   }
+
+  .code-container {
+    display: inline-block;
+
+    .code {
+      display: flex;
+      align-items: center;
+      margin: 1vh auto auto;
+      border-radius: 8px;
+      background: #2b2b2b;
+      font-size: .9rem;
+      padding: 8px 12px;
+      line-height: 20px;
+      gap: 9px;
+      cursor: pointer;
+
+      .divider {
+        display: inline-block;
+        width: 1px;
+        height: 18px;
+        background: #a8a8a8;
+      }
+
+      span {
+        display: inline-block;
+      }
+
+      img {
+        width: 14px;
+      }
+    }
+  }
 }
