@@ -1,0 +1,63 @@
+#message-container {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .box {
+    display: flex;
+    justify-content: center;
+
+    &.hide {
+      animation: messageOut 0.3s;
+    }
+
+    .message {
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #2b2b2b;
+      font-size: 0.9rem;
+      line-height: 20px;
+      gap: 9px;
+      cursor: pointer;
+      display: inline-block;
+      align-items: center;
+      margin-bottom: 12px;
+      animation: messageIn 0.2s;
+      margin: 5px auto;
+
+      span {
+        display: inline-block;
+      }
+
+      img {
+        width: 14px;
+      }
+    }
+  }
+}
+
+@keyframes messageIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes messageOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+    margin-bottom: 0px;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+    margin-bottom: -36px;
+  }
+}
