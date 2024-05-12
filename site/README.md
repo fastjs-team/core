@@ -18,4 +18,3 @@ This repo is auto-deployed to [fastjs.dev](https://fastjs.dev) by Github Action 
 <div align="center">
   <img src="https://raw.githubusercontent.com/xiaodong2008/sponsors/main/sponsors.wide.svg" />
 </div>
-
