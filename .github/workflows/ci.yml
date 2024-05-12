@@ -48,8 +48,11 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Build
+      - name: Build Packages
         run: pnpm run build
+
+      - name: Build Site
+        run: pnpm run build:site
 
   type-check:
     name: Type Check
@@ -91,6 +94,7 @@ jobs:
         run: npm run format
 
   unit-test:
+    name: Unit Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
