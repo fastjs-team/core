@@ -3,7 +3,7 @@ import "./style.scss";
 import { FastjsDom, FastjsDomList, dom } from "jsfast";
 import copy from "@/assets/copy.svg"
 import { utils } from "jsfast";
-import { success } from "@/message";
+import { success } from "@/components/message";
 
 async function animation(root: FastjsDom) {
   const animationList = root.next<FastjsDomList>("[key]");
