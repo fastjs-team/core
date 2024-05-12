@@ -1,6 +1,6 @@
 import { dom, FastjsDom } from "jsfast";
 import { rand } from "jsfast";
-import "./background.scss";
+import "./star.scss";
 
 export function mountBackground(container: FastjsDom) {
   container = dom
