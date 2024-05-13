@@ -33,6 +33,6 @@ function createStar(): FastjsDom {
       },
       rand(3000, 15000)
     );
-  }, 10);
+  }, 100);
   return star;
 }
