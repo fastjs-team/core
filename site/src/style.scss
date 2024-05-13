@@ -20,6 +20,7 @@ a:hover {
 }
 
 body {
+  filter: brightness(0.9);
   margin: 0;
   display: flex;
   min-width: 320px;
@@ -60,4 +61,16 @@ button:focus-visible {
 .code,
 .mono {
   font-family: "JetBrains Mono", monospace !important;
+}
+
+#router {
+  height: 100%;
+}
+
+.center-box {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }

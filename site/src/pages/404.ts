@@ -8,10 +8,10 @@ const page: Page = {
       .html(`The page at <b>${router.location.realPath}</b> does not exist.`);
   },
   template: `
-    <div>
+    <div class="center-box">
       <h1>404</h1>
       <p id="error-msg"></p>
-      <a href="/">Go back home</a>
+      <b><a href="/">Go back home &gt;</a></b>
     </div>
   `
 };
