@@ -37,7 +37,9 @@ jobs:
         run: npm run build:site
 
       - name: Ready to Upload
-        run: mv site/dist _site
+        run: |
+          mv site/dist _site
+          mv 404.html _site/404.html
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v2
