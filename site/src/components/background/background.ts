@@ -20,7 +20,7 @@ function createStar(): FastjsDom {
     class: "star",
     css: {
       left: rand(0, 100) + "vw",
-      top: rand(0, 100) + "vh",
+      top: rand(0, 90) + "vh",
       transform: `scale(${rand(0, 150) / 100 + 0.5})`
     }
   });
