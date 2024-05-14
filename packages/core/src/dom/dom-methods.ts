@@ -1,6 +1,7 @@
 import _dev from "../dev";
 import { rand } from "../utils/";
 import {
+  BasicElement,
   EachCallback,
   EventCallback,
   InsertTarget,
@@ -18,19 +19,19 @@ import type { FastjsDom, FastjsDomAPI } from "./dom-types";
 import _selector from "./selector-atom";
 
 export function createMethods(dom: FastjsDom): FastjsDomAPI {
-  function get<T extends keyof HTMLElement>(key: T): HTMLElement[T] {
-    return dom._el[key];
+  function get<T extends keyof BasicElement>(key: T): BasicElement[T] {
+    return (dom._el as BasicElement)[key];
   }
 
-  function set<T extends keyof HTMLElement>(
+  function set<T extends keyof BasicElement>(
     key: T,
-    val: HTMLElement[T]
+    val: BasicElement[T]
   ): FastjsDom {
     if (
       findPropInChain(dom._el.constructor.prototype, key)?.writable ||
       findPropInChain(dom._el.constructor.prototype, key)?.set
     ) {
-      dom._el[key] = val;
+      (dom._el as BasicElement)[key] = val;
     } else if (__DEV__)
       _dev.warn(
         "fastjs/dom/set",

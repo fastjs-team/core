@@ -1,4 +1,5 @@
 import type {
+  BasicElement,
   EachCallback,
   EventCallback,
   EventList,
@@ -21,8 +22,8 @@ export interface FastjsDomAtom {
 }
 
 export interface FastjsDomAPI {
-  get<T extends keyof HTMLElement>(key: T): HTMLElement[T];
-  set<T extends keyof HTMLElement>(key: T, val: HTMLElement[T]): FastjsDom;
+  get<T extends keyof BasicElement>(key: T): BasicElement[T];
+  set<T extends keyof BasicElement>(key: T, val: BasicElement[T]): FastjsDom;
   text(): string;
   text(val: string): FastjsDom;
   html(): string;

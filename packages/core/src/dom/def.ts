@@ -52,6 +52,33 @@ export type EventList = Array<{
   remove: () => void;
 }>;
 
+export type BasicElement =
+  | HTMLElement
+  | HTMLAnchorElement
+  | HTMLButtonElement
+  | HTMLCanvasElement
+  | HTMLDivElement
+  | HTMLFormElement
+  | HTMLHeadingElement
+  | HTMLImageElement
+  | HTMLInputElement
+  | HTMLLabelElement
+  | HTMLLIElement
+  | HTMLLinkElement
+  | HTMLMetaElement
+  | HTMLParagraphElement
+  | HTMLPreElement
+  | HTMLScriptElement
+  | HTMLSelectElement
+  | HTMLSpanElement
+  | HTMLTableElement
+  | HTMLTableRowElement
+  | HTMLTableCellElement
+  | HTMLTextAreaElement
+  | HTMLUListElement
+  | HTMLVideoElement
+  | SVGElement;
+
 export type CustomProps = {
   html?: string;
   text?: string;
@@ -62,11 +89,7 @@ export type CustomProps = {
 };
 
 export type FastjsDomProps = CustomProps & {
-  [K in keyof HTMLElement]?:
-    | HTMLElement[K]
-    | HTMLInputElement[K]
-    | HTMLTextAreaElement[K]
-    | HTMLButtonElement[K];
+  [K in keyof BasicElement]?: BasicElement[K];
 };
 
 export type StyleObj = Partial<CSSStyleDeclaration>;
