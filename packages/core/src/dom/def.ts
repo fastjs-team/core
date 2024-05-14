@@ -53,31 +53,31 @@ export type EventList = Array<{
 }>;
 
 export type BasicElement =
-  | HTMLElement
-  | HTMLAnchorElement
-  | HTMLButtonElement
-  | HTMLCanvasElement
-  | HTMLDivElement
-  | HTMLFormElement
-  | HTMLHeadingElement
-  | HTMLImageElement
-  | HTMLInputElement
-  | HTMLLabelElement
-  | HTMLLIElement
-  | HTMLLinkElement
-  | HTMLMetaElement
-  | HTMLParagraphElement
-  | HTMLPreElement
-  | HTMLScriptElement
-  | HTMLSelectElement
-  | HTMLSpanElement
-  | HTMLTableElement
-  | HTMLTableRowElement
-  | HTMLTableCellElement
-  | HTMLTextAreaElement
-  | HTMLUListElement
-  | HTMLVideoElement
-  | SVGElement;
+  & HTMLElement
+  & HTMLAnchorElement
+  & HTMLButtonElement
+  & HTMLCanvasElement
+  & HTMLDivElement
+  & HTMLFormElement
+  & HTMLHeadingElement
+  & HTMLImageElement
+  & HTMLInputElement
+  & HTMLLabelElement
+  & HTMLLIElement
+  & HTMLLinkElement
+  & HTMLMetaElement
+  & HTMLParagraphElement
+  & HTMLPreElement
+  & HTMLScriptElement
+  & HTMLSelectElement
+  & HTMLSpanElement
+  & HTMLTableElement
+  & HTMLTableRowElement
+  & HTMLTableCellElement
+  & HTMLTextAreaElement
+  & HTMLUListElement
+  & HTMLVideoElement
+  & SVGElement;
 
 export type CustomProps = {
   html?: string;
