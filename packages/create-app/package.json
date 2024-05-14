@@ -32,8 +32,6 @@
   "dependencies": {
     "@inquirer/prompts": "^5.0.2",
     "commander": "^12.0.0",
-    "events": "^3.3.0",
-    "fs": "0.0.1-security",
     "ora": "^8.0.1",
     "picocolors": "^1.0.0"
   },
