@@ -1,6 +1,5 @@
 import "./style.scss";
 import { FastjsDom, dom } from "jsfast";
-import fastjs from "../../public/fastjs.svg";
 import github from "@/assets/github.svg";
 import { getI18n } from "@/lang";
 
@@ -18,7 +17,7 @@ const topbar: TopbarItem[] = [
   {
     name: "Icon",
     type: "icon",
-    content: fastjs
+    content: "/fastjs.svg",
   },
   {
     name: "Home",
