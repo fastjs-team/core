@@ -1,5 +1,3 @@
-import _dev from "../dev";
-import { rand } from "../utils/";
 import {
   BasicElement,
   EachCallback,
@@ -11,12 +9,14 @@ import {
   StyleObj,
   StyleObjKeys
 } from "./def";
+import type { FastjsDom, FastjsDomAPI } from "./dom-types";
+
+import { FastjsDomList } from "./dom-list-types";
+import _dev from "../dev";
+import _selector from "./selector-atom";
 import { createFastjsDom } from "./dom";
 import { createFastjsDomList } from "./dom-list";
-import { FastjsDomList } from "./dom-list-types";
-
-import type { FastjsDom, FastjsDomAPI } from "./dom-types";
-import _selector from "./selector-atom";
+import { rand } from "../utils/";
 
 export function createMethods(dom: FastjsDom): FastjsDomAPI {
   function get<T extends keyof BasicElement>(key: T): BasicElement[T] {
@@ -28,16 +28,16 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     val: BasicElement[T]
   ): FastjsDom {
     if (
-      findPropInChain(dom._el.constructor.prototype, key)?.writable ||
-      findPropInChain(dom._el.constructor.prototype, key)?.set
+      findPropInChain(dom._el.constructor.prototype, key as string)?.writable ||
+      findPropInChain(dom._el.constructor.prototype, key as string)?.set
     ) {
       (dom._el as BasicElement)[key] = val;
     } else if (__DEV__)
       _dev.warn(
         "fastjs/dom/set",
-        `key **${key}** is not writable`,
+        `key **${key as string}** is not writable`,
         [
-          "*key: " + key,
+          "*key: " + (key as string),
           "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): Dom",
           "super: ",
           dom
