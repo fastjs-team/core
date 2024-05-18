@@ -17,7 +17,7 @@ const topbar: TopbarItem[] = [
   {
     name: "Icon",
     type: "icon",
-    content: "/fastjs.svg",
+    content: "/fastjs.svg"
   },
   {
     name: "Home",
