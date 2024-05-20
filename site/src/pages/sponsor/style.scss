@@ -1,0 +1,11 @@
+.flex {
+  gap: 20px;
+  text-align: left;
+  > * {
+    flex: 1;
+  }
+  > p {
+    line-height: 1.6;
+    margin: 0;
+  }
+}

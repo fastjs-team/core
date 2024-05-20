@@ -1,0 +1,83 @@
+.card {
+  box-shadow: 0 0 1px rgba(169, 169, 169, 0.531);
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+  padding: 20px;
+  display: flex;
+
+  > img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+
+  .info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .btn-list {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .button {
+    width: max-content;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+
+    img {
+      width: 15px;
+      margin-right: 5px;
+    }
+
+    &:hover {
+      filter: brightness(1.8);
+    }
+  }
+
+  .social {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+
+    img {
+      width: 20px;
+      height: 20px;
+      transition: all 0.2s;
+
+      &:hover {
+        filter: brightness(0.7);
+      }
+    }
+  }
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+
+    a {
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(169, 169, 169, 0.652);
+  }
+}
