@@ -9,7 +9,7 @@ export default [
     username: "xiaodong2008",
     avatar: "https://avatars.githubusercontent.com/u/84657208?v=4",
     description:
-      "Author, maintainer of <a href='https://github.com/fastjs-team/core' target='_blank'>@Fastjs</a>.",
+      "Creator, maintainer of <a href='https://github.com/fastjs-team/core' target='_blank'>@Fastjs</a>.",
     button: [
       {
         text: "Sponsor",
