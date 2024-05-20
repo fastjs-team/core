@@ -58,9 +58,24 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+h1,
+p,
+span:not(.clean) {
+  background-color: #1a1a1a;
+  display: inline;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  padding: 20vh 0;
+  align-items: center;
+  text-align: center;
+}
+
 .code,
 .mono {
-  font-family: "JetBrains Mono", monospace !important;
+  font-family: monospace !important;
 }
 
 #router {
