@@ -79,13 +79,18 @@ const page: Page = {
     setTimeout(() => {
       animation(root);
     }, 1000);
-    dom.select(".code")?.addEvent("click", () => {
-      utils.copy("npm create fastjs");
-      success("Copied to clipboard");
-    });
+    dom
+      .select<FastjsDomList>(".code")[0]
+      .addEvent("click", () => {
+        utils.copy("npm create fastjs");
+        success("Copied to clipboard");
+      })
+      .each((el) => {
+        el.addClass("clean");
+      });
   },
   template: `
-    <div class="main">
+    <div class="page">
       <div id="title-movie">
         <span key="0" content="Write"></span>
         <div move-target="1" hide="85">JS</div>
