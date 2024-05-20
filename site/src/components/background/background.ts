@@ -1,6 +1,8 @@
-import { dom, FastjsDom } from "jsfast";
+import "./style.scss";
+
+import { FastjsDom, dom } from "jsfast";
+
 import { rand } from "jsfast";
-import "./star.scss";
 
 export function mountBackground(container: FastjsDom) {
   container = dom
@@ -20,7 +22,7 @@ function createStar(): FastjsDom {
     class: "star",
     css: {
       left: rand(0, 100) + "vw",
-      top: rand(0, 90) + "vh",
+      top: rand(0, 100) + "vh",
       transform: `scale(${rand(0, 150) / 100 + 0.5})`
     }
   });
