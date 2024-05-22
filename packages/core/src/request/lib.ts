@@ -2,20 +2,13 @@ import type { RequestData } from "./def";
 
 export function addQuery(
   url: string,
-  query: string | RequestData | null,
-  body: RequestData | null
-): [string, string[]] {
-  let paramMatches: string[] = [];
-  console.log(body);
-  [url, paramMatches] = transformPathParams(
-    url,
-    Object.assign(body || {}, query)
-  );
-  if (!query || Object.keys(query).length === 0) return [url, []];
+  query: string | RequestData | null
+): string {
+  if (!query || Object.keys(query).length === 0) return url;
   const urlSearchParams = queryToUrlParams(query);
   if (urlSearchParams.size > 0)
     url = url + (url.includes("?") ? "&" : "?") + urlSearchParams.toString();
-  return [url, paramMatches];
+  return url;
 }
 
 function queryToUrlParams(query: string | RequestData) {
@@ -31,9 +24,9 @@ function queryToUrlParams(query: string | RequestData) {
   return urlSearchParams;
 }
 
-function transformPathParams(
+export function transformPathParams(
   url: string,
-  query: Record<string, string>
+  query: Record<string, any>
 ): [string, string[]] {
   const urlComponents = url.split("/");
   const pathReg = /^:/;

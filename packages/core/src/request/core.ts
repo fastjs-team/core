@@ -7,7 +7,7 @@ import type {
   RequestMethod,
   RequestReturn
 } from "./def";
-import { addQuery, parse } from "./lib";
+import { addQuery, parse, transformPathParams } from "./lib";
 
 import type { FastjsRequest } from "./fetch-types";
 import _dev from "../dev";
@@ -16,7 +16,7 @@ import { globalConfig } from "./config";
 export function sendRequest(
   request: FastjsRequest,
   method: RequestMethod,
-  url?: string
+  url: string = request.url
 ): FastjsRequest {
   if (__DEV__) {
     if (["GET", "HEAD", "OPTIONS"].includes(method) && request.config.body) {
@@ -24,7 +24,7 @@ export function sendRequest(
         "fastjs/request",
         `Body is not allowed in ${method} request, use POST instead. (HTTP 1.1)`,
         [
-          `url: ${request.url}`,
+          `url: ${url}`,
           `*method: ${method}`,
           `*body: `,
           request.body,
@@ -41,7 +41,6 @@ export function sendRequest(
     query: (isBodyAllowed(method) ? null : request.data) || request.config.query
   };
 
-  // Debounce
   if (request.config.wait) {
     if (request.wait) clearTimeout(request.wait);
     request.wait = setTimeout(() => {
@@ -62,16 +61,12 @@ export function sendRequest(
       return hookFailed("before", request, null);
 
     let pathParamMatches: string[] = [];
-    [url, pathParamMatches] = addQuery(
-      url || request.url,
-      data.query,
-      data.body
-    );
+    [url, pathParamMatches] = transformPathParams(url, request.data);
     for (const match of pathParamMatches) {
       delete request.data[match];
     }
 
-    request.request = new Request(url, {
+    request.request = new Request(addQuery(url, data.query), {
       method,
       headers: request.config.headers,
       body: data.body as BodyInit
@@ -112,7 +107,7 @@ export function sendRequest(
             "fastjs/request",
             "Failed to send request.",
             [
-              `url: ${request.url}`,
+              `url: ${url}`,
               `method: ${method}`,
               `body: `,
               request.body,
@@ -166,7 +161,7 @@ function handleBadResponse(
       "fastjs/request",
       `Request failed with status code ${status}`,
       [
-        `url: ${request.url}`,
+        `url: ${request.request?.url}`,
         `method: ${request.request?.method}`,
         `*code: ${status}`,
         `*response: `,
