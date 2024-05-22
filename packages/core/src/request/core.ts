@@ -142,11 +142,12 @@ function matchCallback(
   params: any[],
   method: RequestMethod | null
 ): void {
-  callback.forEach((call) => {
-    if (call.method && call.method !== method) return;
+  for (let i = 0; i < callback.length; i++) {
+    const call = callback[i];
+    if (call.method && call.method !== method) continue;
     call.func(...params);
-    if (call.once) callback.splice(callback.indexOf(call), 1);
-  });
+    if (call.once) callback.splice(i, 1), i--;
+  }
 }
 
 function handleBadResponse(
