@@ -62,7 +62,11 @@ export function sendRequest(
       return hookFailed("before", request, null);
 
     let pathParamMatches: string[] = [];
-    [url, pathParamMatches] = addQuery(url || request.url, data.query);
+    [url, pathParamMatches] = addQuery(
+      url || request.url,
+      data.query,
+      data.body
+    );
     for (const match of pathParamMatches) {
       delete request.data[match];
     }

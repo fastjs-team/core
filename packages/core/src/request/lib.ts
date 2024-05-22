@@ -2,12 +2,17 @@ import type { RequestData } from "./def";
 
 export function addQuery(
   url: string,
-  query: string | RequestData | null
+  query: string | RequestData | null,
+  body: RequestData | null
 ): [string, string[]] {
+  let paramMatches: string[] = [];
+  console.log(body);
+  [url, paramMatches] = transformPathParams(
+    url,
+    Object.assign(body || {}, query)
+  );
   if (!query || Object.keys(query).length === 0) return [url, []];
   const urlSearchParams = queryToUrlParams(query);
-  let paramMatches: string[] = [];
-  [url, paramMatches] = transformPathParams(url, urlSearchParams);
   if (urlSearchParams.size > 0)
     url = url + (url.includes("?") ? "&" : "?") + urlSearchParams.toString();
   return [url, paramMatches];
@@ -28,7 +33,7 @@ function queryToUrlParams(query: string | RequestData) {
 
 function transformPathParams(
   url: string,
-  query: URLSearchParams
+  query: Record<string, string>
 ): [string, string[]] {
   const urlComponents = url.split("/");
   const pathReg = /^:/;
@@ -37,10 +42,10 @@ function transformPathParams(
     urlComponents
       .map((component) => {
         const key = component.replace(":", "");
-        if (pathReg.test(component) && query.has(key)) {
+        if (pathReg.test(component) && query[key]) {
           matchs.push(key);
-          const data = query.get(key);
-          query.delete(key);
+          const data = query[key];
+          delete query[key];
           return data;
         }
         return component;
