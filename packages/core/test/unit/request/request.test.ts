@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { request } from "@/main";
-import { addQuery } from '@/request/lib'
+import { addQuery } from "@/request/lib";
 
 test("Get a json response and use", async () => {
   const data = await request.get("https://reqres.in/api/users");
@@ -51,27 +51,31 @@ test("Send a patch request", async () => {
 });
 
 test("Send a delete request", async () => {
-  request.delete("https://reqres.in/api/users/:id", {
-    id: 2
-  }).then((data, req) => {
-    expect(req.status).toBe(204);
-  });
+  request
+    .delete("https://reqres.in/api/users/:id", {
+      id: 2
+    })
+    .then((data, req) => {
+      expect(req.status).toBe(204);
+    });
 });
 
-test('Should add query to url', () => {
-  const url = addQuery('https://reqres.in/api/users', {
+test("Should add query to url", () => {
+  const url = addQuery("https://reqres.in/api/users", {
     page: 2
-  })
-  expect(url).toMatchInlineSnapshot(`"https://reqres.in/api/users?page=2"`)
+  });
+  expect(url).toMatchInlineSnapshot(`"https://reqres.in/api/users?page=2"`);
 
-  const url2 = addQuery('https://reqres.in/api/users/:id',{
+  const url2 = addQuery("https://reqres.in/api/users/:id", {
     id: 2
-  })
-  expect(url2).toMatchInlineSnapshot(`"https://reqres.in/api/users/2"`)
+  });
+  expect(url2).toMatchInlineSnapshot(`"https://reqres.in/api/users/2"`);
 
-  const url3 = addQuery('https://reqres.in/api/users/:id/:name',{
+  const url3 = addQuery("https://reqres.in/api/users/:id/:name", {
     id: 2,
-    name: 'XiaoDong'
-  })
-  expect(url3).toMatchInlineSnapshot(`"https://reqres.in/api/users/2/XiaoDong"`)
-})
+    name: "XiaoDong"
+  });
+  expect(url3).toMatchInlineSnapshot(
+    `"https://reqres.in/api/users/2/XiaoDong"`
+  );
+});
