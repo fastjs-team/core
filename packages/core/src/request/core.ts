@@ -1,17 +1,17 @@
-import _dev from "../dev";
-import { addQuery, parse } from "./lib";
-import { globalConfig } from "./config";
-
-import type { FastjsRequest } from "./fetch-types";
 import type {
-  RequestHooks,
-  RequestMethod,
-  RequestReturn,
   CallbackObject,
   FailedParams,
   RequestHook,
-  RequestHookKey
+  RequestHookKey,
+  RequestHooks,
+  RequestMethod,
+  RequestReturn
 } from "./def";
+import { addQuery, parse } from "./lib";
+
+import type { FastjsRequest } from "./fetch-types";
+import _dev from "../dev";
+import { globalConfig } from "./config";
 
 export function sendRequest(
   request: FastjsRequest,
@@ -61,7 +61,13 @@ export function sendRequest(
     if (!runHooks(hooks.before, [request]))
       return hookFailed("before", request, null);
 
-    request.request = new Request(addQuery(url || request.url, data.query), {
+    let pathParamMatches: string[] = [];
+    [url, pathParamMatches] = addQuery(url || request.url, data.query);
+    for (const match of pathParamMatches) {
+      delete request.data[match];
+    }
+
+    request.request = new Request(url, {
       method,
       headers: request.config.headers,
       body: data.body as BodyInit

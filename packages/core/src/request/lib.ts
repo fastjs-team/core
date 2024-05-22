@@ -3,12 +3,14 @@ import type { RequestData } from "./def";
 export function addQuery(
   url: string,
   query: string | RequestData | null
-): string {
-  if (!query || Object.keys(query).length === 0) return url;
+): [string, string[]] {
+  if (!query || Object.keys(query).length === 0) return [url, []];
   const urlSearchParams = queryToUrlParams(query);
-  url = transformPathParams(url, urlSearchParams);
-  if (urlSearchParams.size === 0) return url;
-  return url + (url.includes("?") ? "&" : "?") + urlSearchParams.toString();
+  let paramMatches: string[] = [];
+  [url, paramMatches] = transformPathParams(url, urlSearchParams);
+  if (urlSearchParams.size > 0)
+    url = url + (url.includes("?") ? "&" : "?") + urlSearchParams.toString();
+  return [url, paramMatches];
 }
 
 function queryToUrlParams(query: string | RequestData) {
@@ -24,20 +26,28 @@ function queryToUrlParams(query: string | RequestData) {
   return urlSearchParams;
 }
 
-function transformPathParams(url: string, query: URLSearchParams): string {
+function transformPathParams(
+  url: string,
+  query: URLSearchParams
+): [string, string[]] {
   const urlComponents = url.split("/");
   const pathReg = /^:/;
-  return urlComponents
-    .map((component) => {
-      const value = component.replace(":", "");
-      if (pathReg.test(component) && query.has(value)) {
-        const data = query.get(value);
-        query.delete(value);
-        return data;
-      }
-      return component;
-    })
-    .join("/");
+  const matchs: string[] = [];
+  return [
+    urlComponents
+      .map((component) => {
+        const key = component.replace(":", "");
+        if (pathReg.test(component) && query.has(key)) {
+          matchs.push(key);
+          const data = query.get(key);
+          query.delete(key);
+          return data;
+        }
+        return component;
+      })
+      .join("/"),
+    matchs
+  ];
 }
 
 export function parse(data: string): string | RequestData {
