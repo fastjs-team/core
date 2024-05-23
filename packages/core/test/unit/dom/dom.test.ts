@@ -28,7 +28,7 @@ test("dom.newEl: with style string", () => {
     css: "color: red;"
   });
   assert(el.el().style.color === "red", "div should be created with red color");
-})
+});
 
 test("dom.newEl: with class", () => {
   const el = dom.newEl("div", {

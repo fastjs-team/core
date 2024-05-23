@@ -116,9 +116,9 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   const next = <
     T extends FastjsDom | FastjsDomList | null =
-    | FastjsDom
-    | FastjsDomList
-    | null
+      | FastjsDom
+      | FastjsDomList
+      | null
   >(
     selector: string = "*"
   ): T => {

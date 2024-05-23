@@ -39,9 +39,9 @@ export interface FastjsDomAPI {
   children(): FastjsDomList;
   next<
     T extends FastjsDom | FastjsDomList | null =
-    | FastjsDom
-    | FastjsDomList
-    | null
+      | FastjsDom
+      | FastjsDomList
+      | null
   >(
     selector?: string
   ): T;
