@@ -89,3 +89,16 @@ span:not(.clean) {
   justify-content: center;
   flex-direction: column;
 }
+
+*[fade-in] {
+  transform: translateY(1em);
+  opacity: 0;
+  transition:
+    transform 0.5s,
+    opacity 0.5s;
+
+  &[fade-in="true"] {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

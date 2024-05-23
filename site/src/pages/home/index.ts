@@ -1,9 +1,11 @@
-import { Page } from "@/router";
 import "./style.scss";
+
 import { FastjsDom, FastjsDomList, dom } from "jsfast";
+
+import { Page } from "@/router";
 import copy from "@/assets/copy.svg";
-import { utils } from "jsfast";
 import { success } from "@/components/message/message";
+import { utils } from "jsfast";
 
 async function animation(root: FastjsDom) {
   const animationList = root.next<FastjsDomList>("[key]");
@@ -97,17 +99,17 @@ const page: Page = {
         <span change>Fast</span><span key="2" content="er"></span>
         <div key="1" move="70">&nbsp;JS</div>
       </div>
-      <p>Fly again, with our dream.</p> 
-      <div class="code-container">
-      <span class="code">
-        <span>shell</span>
-        <span class="divider"></span>
-        <span style="color: #aa6e6a">npm</span>
-        <span style="color: #dfbc67">create</span>
-        <span style="color: #84d681;">fastjs</span>
-        <span class="divider"></span>
-        <img src="${copy}" />
-      </span>
+      <p fade-in="500">Fly again, with our dream.</p> 
+      <div class="code-container" fade-in="1200">
+        <span class="code">
+          <span>shell</span>
+          <span class="divider"></span>
+          <span style="color: #aa6e6a">npm</span>
+          <span style="color: #dfbc67">create</span>
+          <span style="color: #84d681;">fastjs</span>
+          <span class="divider"></span>
+          <img src="${copy}" />
+        </span>
       </div>
     </div>
   `
