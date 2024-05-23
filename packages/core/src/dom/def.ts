@@ -78,32 +78,6 @@ export type BasicElement = HTMLElement &
   HTMLVideoElement &
   SVGElement;
 
-export type KeyofBasicElement = keyof HTMLElement &
-  keyof HTMLAnchorElement &
-  keyof HTMLButtonElement &
-  keyof HTMLCanvasElement &
-  keyof HTMLDivElement &
-  keyof HTMLFormElement &
-  keyof HTMLHeadingElement &
-  keyof HTMLImageElement &
-  keyof HTMLInputElement &
-  keyof HTMLLabelElement &
-  keyof HTMLLIElement &
-  keyof HTMLLinkElement &
-  keyof HTMLMetaElement &
-  keyof HTMLParagraphElement &
-  keyof HTMLPreElement &
-  keyof HTMLScriptElement &
-  keyof HTMLSelectElement &
-  keyof HTMLSpanElement &
-  keyof HTMLTableElement &
-  keyof HTMLTableRowElement &
-  keyof HTMLTableCellElement &
-  keyof HTMLTextAreaElement &
-  keyof HTMLUListElement &
-  keyof HTMLVideoElement &
-  keyof SVGElement;
-
 export type CustomProps = {
   html?: string;
   text?: string;
@@ -114,7 +88,7 @@ export type CustomProps = {
 };
 
 export type FastjsDomProps = CustomProps & {
-  [K in KeyofBasicElement]?: BasicElement[K];
+  [K in keyof BasicElement]?: BasicElement[K];
 };
 
 export type StyleObj = Partial<CSSStyleDeclaration>;
