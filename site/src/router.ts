@@ -1,4 +1,4 @@
-import { dom, FastjsDom } from "jsfast";
+import { FastjsDom, dom } from "jsfast";
 
 export interface Page {
   path: string;
@@ -16,13 +16,18 @@ export interface Router {
   };
 }
 
+interface Config {
+  pages: Page[];
+  notFound: Page;
+  hooks?: {
+    beforeNavigate?: () => void | boolean;
+    afterNavigate?: () => void;
+  };
+}
+
 let isNavigating = false;
 
-export function setupRouter(
-  root: FastjsDom,
-  pages: Page[],
-  notFound: Page
-): Router {
+export function setupRouter(root: FastjsDom, config: Config): Router {
   root = dom.newEl("div").set("id", "router").push(root, "lastElementChild").el;
 
   const setup = (page: Page, withTransition = true) => {
@@ -36,6 +41,7 @@ export function setupRouter(
         page.load(root.html(page.template), router);
         root.removeClass("fade");
         isNavigating = false;
+        config.hooks?.afterNavigate?.();
       }, 300);
     } else page.load(root.html(page.template), router), (isNavigating = false);
 
@@ -59,10 +65,11 @@ export function setupRouter(
     const path = window.location.pathname;
     if (router.location.realPath === path) return;
 
+    if (config.hooks?.beforeNavigate?.() === false) return;
     isNavigating = true;
-    const page = pages.find((p) => p.path === path);
+    const page = config.pages.find((p) => p.path === path);
     if (page) setup(page, !isInit);
-    else setup(notFound, false);
+    else setup(config.notFound, false);
   };
 
   const router: Router = {
