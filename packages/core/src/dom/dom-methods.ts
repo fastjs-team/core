@@ -81,7 +81,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
   function val(val?: string): string | FastjsDom {
     const key = (
       dom._el.tagName === "TEXTAREA" ? "textContent" : "value"
-    ) as keyof BasicElement;
+    ) as keyof HTMLElement;
     if (val === undefined) return dom._el[key] as string;
     set(key, val);
     return dom;
@@ -116,9 +116,9 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   const next = <
     T extends FastjsDom | FastjsDomList | null =
-      | FastjsDom
-      | FastjsDomList
-      | null
+    | FastjsDom
+    | FastjsDomList
+    | null
   >(
     selector: string = "*"
   ): T => {
