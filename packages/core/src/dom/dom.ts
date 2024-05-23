@@ -1,11 +1,10 @@
+import type { FastjsDom, FastjsDomAtom } from "./dom-types";
+
+import type { FastjsDomProps } from "./def";
 import _dev from "../dev";
 import _selector from "./selector-atom";
-import { createModule } from "../base";
-
-import type { FastjsDom, FastjsDomAtom } from "./dom-types";
-import type { FastjsDomProps } from "./def";
-
 import { createMethods } from "./dom-methods";
+import { createModule } from "../base";
 
 export function createFastjsDom(
   el: FastjsDom | Element | HTMLElement | string = document.body,
@@ -38,7 +37,7 @@ function mergeProps(el: FastjsDom, props: FastjsDomProps) {
     else if (key === "css") el.setStyle(props.css!);
     else if (key === "class") el.addClass(props.class! as string);
     else if (key === "attr") el.setAttr(props.attr!);
-    else if (key === "value") el.val(props.value!);
+    else if (key === "val") el.val(props.val!);
     else if (key in el._el) el.set(key, props[key]);
   }
 }

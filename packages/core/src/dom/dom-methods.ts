@@ -3,6 +3,7 @@ import {
   EachCallback,
   EventCallback,
   InsertTarget,
+  KeyofBasicElement,
   PushReturn,
   PushTarget,
   SetStyleObj,
@@ -19,11 +20,11 @@ import { createFastjsDomList } from "./dom-list";
 import { rand } from "../utils/";
 
 export function createMethods(dom: FastjsDom): FastjsDomAPI {
-  function get<T extends keyof BasicElement>(key: T): BasicElement[T] {
+  function get<T extends KeyofBasicElement>(key: T): BasicElement[T] {
     return (dom._el as BasicElement)[key];
   }
 
-  function set<T extends keyof BasicElement>(
+  function set<T extends KeyofBasicElement>(
     key: T,
     val: BasicElement[T]
   ): FastjsDom {
@@ -38,7 +39,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
         `key **${key as string}** is not writable`,
         [
           "*key: " + (key as string),
-          "set<T extends keyof HTMLElement>(**key: T**, val: HTMLElement[T]): Dom",
+          "set<T extends KeyofBasicElement>(**key: T**, val: HTMLElement[T]): Dom",
           "super: ",
           dom
         ],
@@ -80,11 +81,10 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   function val(val?: string): string | FastjsDom {
     const key = (
-      dom._el.tagName === "INPUT" ? "value" : "textContent"
-    ) as keyof HTMLElement;
+      dom._el.tagName === "TEXTAREA" ? "textContent" : "value"
+    ) as KeyofBasicElement;
     if (val === undefined) return dom._el[key] as string;
-    // @ts-expect-error
-    dom._el[key] = val;
+    set(key, val);
     return dom;
   }
 
@@ -117,9 +117,9 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   const next = <
     T extends FastjsDom | FastjsDomList | null =
-      | FastjsDom
-      | FastjsDomList
-      | null
+    | FastjsDom
+    | FastjsDomList
+    | null
   >(
     selector: string = "*"
   ): T => {

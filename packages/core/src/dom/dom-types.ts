@@ -5,6 +5,7 @@ import type {
   EventList,
   InsertReturn,
   InsertTarget,
+  KeyofBasicElement,
   PushReturn,
   PushTarget,
   SetStyleObj,
@@ -12,8 +13,8 @@ import type {
   StyleObjKeys
 } from "./def";
 
-import type { FastjsModuleBase } from "../base/def";
 import { FastjsDomList } from "./dom-list-types";
+import type { FastjsModuleBase } from "../base/def";
 
 export interface FastjsDomAtom {
   construct: "FastjsDom";
@@ -22,8 +23,8 @@ export interface FastjsDomAtom {
 }
 
 export interface FastjsDomAPI {
-  get<T extends keyof BasicElement>(key: T): BasicElement[T];
-  set<T extends keyof BasicElement>(key: T, val: BasicElement[T]): FastjsDom;
+  get<T extends KeyofBasicElement>(key: T): BasicElement[T];
+  set<T extends KeyofBasicElement>(key: T, val: BasicElement[T]): FastjsDom;
   text(): string;
   text(val: string): FastjsDom;
   html(): string;
