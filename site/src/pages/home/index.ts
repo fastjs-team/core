@@ -95,7 +95,7 @@ const page: Page = {
     <div class="page">
       <div id="title-movie">
         <span key="0" content="Write"></span>
-        <div move-target="1" hide="85">JS</div>
+        <span move-target="1" hide="85">JS</span>
         <span change>Fast</span><span key="2" content="er"></span>
         <div key="1" move="70">&nbsp;JS</div>
       </div>
