@@ -1,8 +1,11 @@
 .flex {
-  gap: 20px;
+  gap: 40px;
   text-align: left;
+  padding: 0 40px;
+  flex-wrap: wrap;
   > * {
     flex: 1;
+    min-width: 300px;
   }
   > p {
     line-height: 1.6;
