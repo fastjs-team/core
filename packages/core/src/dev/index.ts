@@ -10,35 +10,65 @@ function browserCheck(module: string): void {
   }
 }
 
-enum style {
-  "fastjs.bold" = "\u001b[1m",
-  "fastjs.reverse" = "\u001b[7m",
-  "fastjs.red" = "\u001b[31m",
-  "fastjs.green" = "\u001b[32m",
-  "fastjs.yellow" = "\u001b[33m",
-  "fastjs.blue" = "\u001b[34m",
-  "fastjs.magenta" = "\u001b[35m",
-  "fastjs.cyan" = "\u001b[36m",
-  "fastjs.white" = "\u001b[37m",
-  "fastjs.gray" = "\u001b[90m",
-  "fastjs.bgRed" = "\u001b[41m",
-  "fastjs.bgGreen" = "\u001b[42m",
-  "fastjs.bgYellow" = "\u001b[43m",
-  "fastjs.bgBlue" = "\u001b[44m",
-  "fastjs.bgMagenta" = "\u001b[45m",
-  "fastjs.bgCyan" = "\u001b[46m",
-  "fastjs.bgWhite" = "\u001b[47m",
-  "fastjs.bgGray" = "\u001b[100m",
-  "fastjs.wrong" = "\u001b[41m\u001b[37m\u001b[1m",
-  "fastjs.right" = "\u001b[42m\u001b[37m\u001b[1m",
-  "fastjs.warn" = "\u001b[43m\u001b[90m\u001b[1m"
+type style =
+  | "fastjs.bold"
+  | "fastjs.reverse"
+  | "fastjs.red"
+  | "fastjs.green"
+  | "fastjs.yellow"
+  | "fastjs.blue"
+  | "fastjs.magenta"
+  | "fastjs.cyan"
+  | "fastjs.white"
+  | "fastjs.gray"
+  | "fastjs.bgRed"
+  | "fastjs.bgGreen"
+  | "fastjs.bgYellow"
+  | "fastjs.bgBlue"
+  | "fastjs.bgMagenta"
+  | "fastjs.bgCyan"
+  | "fastjs.bgWhite"
+  | "fastjs.bgGray"
+  | "fastjs.wrong"
+  | "fastjs.right"
+  | "fastjs.warn";
+
+function getStyle(key: style | style[]): string {
+  const style = {
+    "fastjs.bold": "\u001b[1m",
+    "fastjs.reverse": "\u001b[7m",
+    "fastjs.red": "\u001b[31m",
+    "fastjs.green": "\u001b[32m",
+    "fastjs.yellow": "\u001b[33m",
+    "fastjs.blue": "\u001b[34m",
+    "fastjs.magenta": "\u001b[35m",
+    "fastjs.cyan": "\u001b[36m",
+    "fastjs.white": "\u001b[37m",
+    "fastjs.gray": "\u001b[90m",
+    "fastjs.bgRed": "\u001b[41m",
+    "fastjs.bgGreen": "\u001b[42m",
+    "fastjs.bgYellow": "\u001b[43m",
+    "fastjs.bgBlue": "\u001b[44m",
+    "fastjs.bgMagenta": "\u001b[45m",
+    "fastjs.bgCyan": "\u001b[46m",
+    "fastjs.bgWhite": "\u001b[47m",
+    "fastjs.bgGray": "\u001b[100m",
+    "fastjs.wrong": "\u001b[41m\u001b[37m\u001b[1m",
+    "fastjs.right": "\u001b[42m\u001b[37m\u001b[1m",
+    "fastjs.warn": "\u001b[43m\u001b[90m\u001b[1m"
+  };
+  if (!key) return "";
+  if (Array.isArray(key)) {
+    return key.map((e) => style[e]).join("");
+  }
+  return style[key] || "";
 }
 
 function warn(
   module: string,
   message: string,
   args: Array<any> = [],
-  styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []
+  styleArgs: Array<style | Array<style>> = []
 ): void {
   args = args.filter((arg) => arg !== "");
   args = args.map((arg, k) =>
@@ -94,23 +124,13 @@ function warn(
     outputMessage += arg;
   });
   console.warn(outputMessage, ...outputObjects);
-
-  function getStyle(
-    key: keyof typeof style | Array<keyof typeof style>
-  ): string {
-    if (!key) return lastStyle;
-    if (Array.isArray(key)) {
-      return key.map((e) => style[e]).join("");
-    }
-    return style[key] || "";
-  }
 }
 
 function error(
   module: string,
   message: string,
   args: Array<any> = [],
-  styleArgs: Array<keyof typeof style | Array<keyof typeof style>> = []
+  styleArgs: Array<style | Array<style>> = []
 ): Error {
   // Note: Called utils.rand, but it should be tree-shaked after build(prod mode)
   const eid = rand(1e7, 1e8 - 1);
