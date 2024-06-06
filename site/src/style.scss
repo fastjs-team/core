@@ -2,25 +2,23 @@
   font-family: sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #111010;
-
+  color: var(--text);
+  background: var(--background);
+  --text: rgba(255, 255, 255, 0.721);
   --rem: 16px;
+  --background: #111010;
 }
 
 a {
-  color: #d4d4d4;
+  color: var(--text);
   text-decoration: none;
-  transition: color 0.25s;
+  transition: all 0.25s;
 }
 a:hover {
-  color: #d6d6d8;
+  filter: brightness(1.2);
 }
 
 body {
-  filter: brightness(0.9);
   margin: 0;
   display: flex;
   min-width: 320px;
@@ -61,7 +59,7 @@ button:focus-visible {
 h1,
 p,
 span:not(.clean) {
-  background-color: #111010;
+  background-color: var(--background);
   display: inline;
 }
 
