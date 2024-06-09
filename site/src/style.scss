@@ -63,7 +63,7 @@ span:not(.clean) {
   display: inline;
 }
 
-.page {
+#router > div {
   display: flex;
   flex-direction: column;
   padding: 20vh 0;

@@ -2,7 +2,7 @@ import { FastjsDom, dom } from "jsfast";
 
 export interface Page {
   path: string;
-  template: string;
+  template?: string;
   load: (root: FastjsDom, router: Router) => void;
   unload?: () => void;
 }
@@ -38,12 +38,12 @@ export function setupRouter(root: FastjsDom, config: Config): Router {
 
     if (withTransition) {
       root.addClass("fade").then(() => {
-        page.load(root.html(page.template), router);
+        page.load(root.html(page.template || ""), router);
         root.removeClass("fade");
         isNavigating = false;
         config.hooks?.afterNavigate?.();
       }, 300);
-    } else page.load(root.html(page.template), router), (isNavigating = false);
+    } else page.load(root.html(page.template || ""), router), (isNavigating = false);
 
     resolveRouterLink(root);
   };
@@ -73,7 +73,7 @@ export function setupRouter(root: FastjsDom, config: Config): Router {
   };
 
   const router: Router = {
-    navigate: () => {},
+    navigate: () => { },
     render: resolveRouterLink,
     location: {
       path: "",
