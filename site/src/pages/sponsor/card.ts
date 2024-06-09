@@ -34,7 +34,6 @@ export function newCard(params: Member): FastjsDom {
       <div class="social"></div>
     </div>
   `);
-  console.log(params.button);
 
   params.button?.forEach((button) => {
     const color = button.color || "white";

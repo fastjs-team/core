@@ -67,6 +67,7 @@ async function typeText(text: string, el: FastjsDom) {
 }
 
 async function deleteText(el: FastjsDom) {
+  if (!el) return;
   let text = el.html();
   for (let i = text.length; i >= 0; i--) {
     el.html(text.slice(0, i));

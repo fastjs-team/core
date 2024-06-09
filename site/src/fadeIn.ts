@@ -8,7 +8,7 @@ export function renderFadeIn() {
     .filter((el) => {
       return el.getAttr("fade-in") !== "true";
     });
-  console.log(fadeInElements);
+
   for (const el of fadeInElements) {
     let params = el
       .getAttr("fade-in")!
@@ -22,11 +22,6 @@ export function renderFadeIn() {
       delay = calc * 500;
       calc++;
     }
-
-    console.log(
-      window.scrollY <= offset &&
-        window.scrollY + window.innerHeight > offset + el.get("offsetHeight")
-    );
 
     if (el.getAttr("fade-in-done")) continue;
     if (
