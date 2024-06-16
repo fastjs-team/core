@@ -1,5 +1,7 @@
 import { FastjsDom, dom } from "jsfast";
 
+import { renderFadeIn } from "./fadeIn";
+
 export interface Page {
   path: string;
   template?: string;
@@ -40,12 +42,19 @@ export function setupRouter(root: FastjsDom, config: Config): Router {
       root.addClass("fade").then(() => {
         page.load(root.html(page.template || ""), router);
         root.removeClass("fade");
-        isNavigating = false;
         config.hooks?.afterNavigate?.();
+        end();
       }, 300);
-    } else page.load(root.html(page.template || ""), router), (isNavigating = false);
+    } else {
+      page.load(root.html(page.template || ""), router);
+      end();
+    }
 
-    resolveRouterLink(root);
+    function end() {
+      isNavigating = false;
+      resolveRouterLink(root);
+      renderFadeIn();
+    }
   };
 
   function resolveRouterLink(root: FastjsDom) {
@@ -73,7 +82,7 @@ export function setupRouter(root: FastjsDom, config: Config): Router {
   };
 
   const router: Router = {
-    navigate: () => { },
+    navigate: () => {},
     render: resolveRouterLink,
     location: {
       path: "",
