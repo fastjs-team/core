@@ -53,12 +53,12 @@ export interface FastjsDomAPI {
   removeEvent(type: keyof HTMLElementEventMap, key: number): FastjsDom;
   getStyle(): StyleObj;
   getStyle(key: keyof CSSStyleDeclaration): string;
-  getStyle(callback: (style: StyleObj) => void): FastjsDom;
+  getStyle(callback: (style: StyleObj, dom: FastjsDom) => void): FastjsDom;
   setStyle(style: SetStyleObj): FastjsDom;
   setStyle(style: string): FastjsDom;
   setStyle(key: StyleObjKeys, val: string, important?: boolean): FastjsDom;
   getClass(): string[];
-  getClass(callback: (classNames: string[]) => void): void;
+  getClass(callback: (classNames: string[], dom: FastjsDom) => void): void;
   setClass(className: string, value?: boolean): FastjsDom;
   setClass(classNames: { [key: string]: boolean }): FastjsDom;
   addClass(className: string[]): FastjsDom;
@@ -68,8 +68,9 @@ export interface FastjsDomAPI {
   clearClass(): FastjsDom;
   getAttr(): { [key: string]: string };
   getAttr(key: string): string;
-  getAttr(callback: (attr: { [key: string]: string }) => void): void;
-  getAttr(key: string, callback: (val: string | null) => void): void;
+  getAttr(
+    callback: (attr: { [key: string]: string }, dom: FastjsDom) => void
+  ): void;
   setAttr(attr: { [key: string]: string | null }): FastjsDom;
   setAttr(key: string, val: string | null): FastjsDom;
   push<T extends PushTarget>(

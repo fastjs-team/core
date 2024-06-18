@@ -202,10 +202,14 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   function getStyle(): StyleObj;
   function getStyle(key: keyof CSSStyleDeclaration): string;
-  function getStyle(callback: (style: StyleObj) => void): FastjsDom;
+  function getStyle(
+    callback: (style: StyleObj, dom: FastjsDom) => void
+  ): FastjsDom;
 
   function getStyle(
-    keyOrCallback?: keyof CSSStyleDeclaration | ((style: StyleObj) => void)
+    keyOrCallback?:
+      | keyof CSSStyleDeclaration
+      | ((style: StyleObj, dom: FastjsDom) => void)
   ) {
     const getStyleProxy = (): StyleObj => {
       return new Proxy(styles, {
@@ -232,7 +236,7 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     if (typeof keyOrCallback === "string")
       return styles.getPropertyValue(keyOrCallback);
     else if (typeof keyOrCallback === "function")
-      keyOrCallback(getStyleProxy());
+      keyOrCallback(getStyleProxy(), dom);
     else return getStyleProxy();
 
     return dom;
@@ -329,12 +333,12 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
 
   function getAttr(): { [key: string]: string };
   function getAttr(key: string): string;
-  function getAttr(callback: (attr: { [key: string]: string }) => void): void;
-  function getAttr(key: string, callback: (val: string | null) => void): void;
+  function getAttr(
+    callback: (attr: { [key: string]: string }, dom: FastjsDom) => void
+  ): void;
 
   function getAttr(
-    keyOrCallback?: string | ((attr: { [key: string]: string }) => void),
-    callback?: (value: string | null) => void
+    param?: string | ((attr: { [key: string]: string }, dom: FastjsDom) => void)
   ): { [key: string]: string } | string | null | FastjsDom {
     const getAttrProxy = (): { [key: string]: string } => {
       const arr = [...dom._el.attributes];
@@ -350,13 +354,15 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
       });
     };
 
-    if (typeof keyOrCallback === "string")
-      if (callback) callback(dom._el.getAttribute(keyOrCallback));
-      else return dom._el.getAttribute(keyOrCallback);
-    else if (typeof keyOrCallback === "function") keyOrCallback(getAttrProxy());
-    else return getAttrProxy();
-
-    return dom;
+    switch (typeof param) {
+      case "string":
+        return dom._el.getAttribute(param);
+      case "function":
+        param(getAttrProxy(), dom);
+        return dom;
+      default:
+        return getAttrProxy();
+    }
   }
 
   function setAttr(attr: { [key: string]: string | null }): FastjsDom;
