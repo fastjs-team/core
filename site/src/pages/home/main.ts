@@ -76,9 +76,11 @@ async function deleteText(el: FastjsDom) {
 }
 
 export default function setup(container: FastjsDom) {
-  const el = dom.newEl("div", {
-    id: "content-main"
-  }).push(container, "lastElementChild").el
+  const el = dom
+    .newEl("div", {
+      id: "content-main"
+    })
+    .push(container, "lastElementChild").el;
 
   el.html(`
     <div id="title-movie">
@@ -99,7 +101,7 @@ export default function setup(container: FastjsDom) {
         <img src="${copy}" />
      </span>
   </div>
-  `)
+  `);
 
   setTimeout(() => {
     animation(container);
