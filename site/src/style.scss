@@ -63,7 +63,7 @@ span:not(.clean) {
   display: inline;
 }
 
-#router > div {
+#router > div:first-child {
   display: flex;
   flex-direction: column;
   padding: 20vh 0 0 0;
