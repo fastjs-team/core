@@ -99,8 +99,8 @@ export default function setup(container: FastjsDom) {
         <span style="color: #84d681;">fastjs</span>
         <span class="divider"></span>
         <img src="${copy}" />
-     </span>
-  </div>
+      </span>
+    </div>
   `);
 
   setTimeout(() => {

@@ -8,6 +8,5 @@ export default function setup(container: FastjsDom) {
   });
 
   el.html(`
-  
-  1`);
+`);
 }
