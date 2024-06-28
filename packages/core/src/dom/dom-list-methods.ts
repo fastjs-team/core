@@ -1,11 +1,10 @@
+import type { FastjsDomList, FastjsDomListAPI } from "./dom-list-types";
+
+import type { EachCallback } from "./def";
+import type { FastjsDom } from "./dom-types";
 import _selector from "./selector-atom";
 import { createFastjsDom } from "./dom";
 import { createFastjsDomList } from "./dom-list";
-
-import type { EachCallback } from "./def";
-
-import type { FastjsDom } from "./dom-types";
-import type { FastjsDomList, FastjsDomListAPI } from "./dom-list-types";
 
 export function createMethods(list: FastjsDomList): FastjsDomListAPI {
   return {
@@ -38,10 +37,10 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
         | null
     >(el: string = "*"): T {
       const result = _selector(el, this.toElArray());
-      if (result instanceof HTMLElement)
-        return createFastjsDom(result) as FastjsDom as T;
+      if (Array.isArray(result))
+        return createFastjsDomList(result) as FastjsDomList as T;
       if (result === null) return null as T;
-      return createFastjsDomList(result) as FastjsDomList as T;
+      return createFastjsDom(result) as FastjsDom as T;
     },
     toArray() {
       return list;

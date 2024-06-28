@@ -123,10 +123,10 @@ export function createMethods(dom: FastjsDom): FastjsDomAPI {
     selector: string = "*"
   ): T => {
     const result = _selector(selector, dom._el);
-    if (result instanceof HTMLElement)
-      return createFastjsDom(result) as FastjsDom as T;
+    if (Array.isArray(result))
+      return createFastjsDomList(result) as FastjsDomList as T;
     if (result === null) return null as T;
-    return createFastjsDomList(result) as FastjsDomList as T;
+    return createFastjsDom(result) as FastjsDom as T;
   };
 
   const each = (callback: EachCallback, deep: boolean = false): FastjsDom => {
