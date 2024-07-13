@@ -1,6 +1,7 @@
 src/
 modules/
 node_modules/
+__tests__/
 .github/
 .gitignore
 CONTRIBUTE.md
