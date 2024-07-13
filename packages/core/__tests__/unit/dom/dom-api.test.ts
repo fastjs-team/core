@@ -3,8 +3,9 @@
  */
 
 import { expect, test } from "vitest";
-import { getRoot } from "../../utils";
+
 import { dom } from "@/main";
+import { getRoot } from "../../utils";
 
 test("Test FastjsDom.get", () => {
   expect(getRoot().get("id")).toBe("root");
@@ -185,18 +186,10 @@ test("Test FastjsDom.getAttr.key", () => {
   expect(root.getAttr("data-test")).toBe("test");
 });
 
-test("Test FastjsDom.getAttr.obj", () => {
+test("Test FastjsDom.getAttr", () => {
   const root = getRoot();
   root.get("dataset").test = "test";
   expect(root.getAttr()).toEqual({ id: "root", "data-test": "test" });
-});
-
-test("Test FastjsDom.getAttr.key.callback", () => {
-  const root = getRoot();
-  root.get("dataset").test = "test";
-  root.getAttr("data-test", (val) => {
-    expect(val).toBe("test");
-  });
 });
 
 test("Test FastjsDom.getAttr.obj.callback", () => {

@@ -1,6 +1,6 @@
+import type { EachCallback, ElementList } from "./def";
 import type { FastjsDomList, FastjsDomListAPI } from "./dom-list-types";
 
-import type { EachCallback } from "./def";
 import type { FastjsDom } from "./dom-types";
 import _selector from "./selector-atom";
 import { createFastjsDom } from "./dom";
@@ -17,7 +17,7 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
       list.splice(key, 1);
       return list;
     },
-    each(callback: EachCallback) {
+    each(callback: EachCallback<ElementList>) {
       list.forEach((el: FastjsDom, i: number) => callback(el, el.el(), i));
       return list;
     },

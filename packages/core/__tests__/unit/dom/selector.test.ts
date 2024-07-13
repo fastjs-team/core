@@ -3,10 +3,16 @@
  */
 
 import { assert, test } from "vitest";
+
 import { dom } from "@/main";
 import { setupDomEnvironment } from "../../utils";
 
 setupDomEnvironment();
+
+test("Select body with default export selctor", () => {
+  const el = dom();
+  assert(el?.el() === document.body, "body should be selected");
+});
 
 test("Select body with selector 'body'", () => {
   const el = dom.select("body");

@@ -3,9 +3,10 @@
  */
 
 import { assert, test } from "vitest";
-import { setupDomEnvironment } from "../../utils";
-import { dom } from "@/main";
+
 import type { FastjsDom } from "@/dom";
+import { dom } from "@/main";
+import { setupDomEnvironment } from "../../utils";
 
 setupDomEnvironment();
 

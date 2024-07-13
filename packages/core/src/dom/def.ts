@@ -9,16 +9,16 @@ export type PushTarget =
   | "replaceElement"
   | number;
 
-export type PushReturn<T> = {
+export type PushReturn<T, ElementType extends ElementList> = {
   isReplace: T extends "replaceElement" ? true : false;
-  newElement: T extends "replaceElement" ? FastjsDom : never;
-  oldElement: T extends "replaceElement" ? FastjsDom : never;
+  newElement: T extends "replaceElement" ? FastjsDom<ElementList> : never;
+  oldElement: T extends "replaceElement" ? FastjsDom<ElementType> : never;
   /** @description index to parent -> children, start with 0 */
   index: number;
   /** @description FastjsDom point to the new element */
-  el: FastjsDom;
+  el: FastjsDom<ElementList>;
   /** @description FastjsDom point to the origin element when you call(this) */
-  origin: FastjsDom;
+  origin: FastjsDom<ElementType>;
   father: FastjsDom | null;
 };
 
@@ -30,53 +30,154 @@ export type InsertTarget =
   | "after"
   | number;
 
-export type InsertReturn = {
+export type InsertReturn<ElementType extends ElementList> = {
   /** @description index to parent -> children, start with 0 */
   index: number;
   /** @description FastjsDom point to the new element */
   added: FastjsDom;
   /** @description FastjsDom point to the origin element when you call(this) */
-  origin: FastjsDom;
+  origin: FastjsDom<ElementType>;
 };
 
-export type EventCallback = (el: FastjsDom, event: Event) => void;
-export type EachCallback = (
-  el: FastjsDom,
-  dom: HTMLElement,
+export type EventCallback<ElementType extends ElementList> = (
+  el: FastjsDom<ElementType>,
+  event: Event
+) => void;
+export type EachCallback<ElementType extends ElementList> = (
+  el: FastjsDom<ElementType>,
+  dom: ElementType,
   index: number
 ) => void;
-export type EventList = Array<{
+export type EventList<ElementType extends ElementList> = Array<{
   type: keyof HTMLElementEventMap;
-  callback: EventCallback;
+  callback: EventCallback<ElementType>;
   trigger: EventListener;
   remove: () => void;
 }>;
 
-export type BasicElement = HTMLElement &
-  HTMLAnchorElement &
-  HTMLButtonElement &
-  HTMLCanvasElement &
-  HTMLDivElement &
-  HTMLFormElement &
-  HTMLHeadingElement &
-  HTMLImageElement &
-  HTMLInputElement &
-  HTMLLabelElement &
-  HTMLLIElement &
-  HTMLLinkElement &
-  HTMLMetaElement &
-  HTMLParagraphElement &
-  HTMLPreElement &
-  HTMLScriptElement &
-  HTMLSelectElement &
-  HTMLSpanElement &
-  HTMLTableElement &
-  HTMLTableRowElement &
-  HTMLTableCellElement &
-  HTMLTextAreaElement &
-  HTMLUListElement &
-  HTMLVideoElement &
-  SVGElement;
+export type ElementList =
+  | HTMLElement
+  | HTMLAnchorElement
+  | HTMLAreaElement
+  | HTMLAudioElement
+  | HTMLBodyElement
+  | HTMLBaseElement
+  | HTMLBRElement
+  | HTMLButtonElement
+  | HTMLCanvasElement
+  | HTMLDivElement
+  | HTMLDListElement
+  | HTMLDataElement
+  | HTMLDataListElement
+  | HTMLDialogElement
+  | HTMLDetailsElement
+  | HTMLEmbedElement
+  | HTMLFormElement
+  | HTMLFieldSetElement
+  | HTMLHRElement
+  | HTMLHeadingElement
+  | HTMLHtmlElement
+  | HTMLHeadingElement
+  | HTMLIFrameElement
+  | HTMLImageElement
+  | HTMLInputElement
+  | HTMLLegendElement
+  | HTMLLabelElement
+  | HTMLLIElement
+  | HTMLLinkElement
+  | HTMLMapElement
+  | HTMLMenuElement
+  | HTMLMediaElement
+  | HTMLMeterElement
+  | HTMLModElement
+  | HTMLMetaElement
+  | HTMLObjectElement
+  | HTMLOListElement
+  | HTMLOptGroupElement
+  | HTMLParagraphElement
+  | HTMLPreElement
+  | HTMLProgressElement
+  | HTMLQuoteElement
+  | HTMLScriptElement
+  | HTMLSelectElement
+  | HTMLSpanElement
+  | HTMLSourceElement
+  | HTMLStyleElement
+  | HTMLTableCaptionElement
+  | HTMLTableElement
+  | HTMLTableRowElement
+  | HTMLTableCellElement
+  | HTMLTextAreaElement
+  | HTMLTimeElement
+  | HTMLTitleElement
+  | HTMLUListElement
+  | HTMLVideoElement
+  | HTMLUnknownElement
+  | SVGElements;
+
+type SVGElements =
+  | SVGElement
+  | SVGAnimateElement
+  | SVGAnimateMotionElement
+  | SVGAnimateTransformElement
+  | SVGCircleElement
+  | SVGClipPathElement
+  | SVGDefsElement
+  | SVGDescElement
+  | SVGEllipseElement
+  | SVGFEBlendElement
+  | SVGFEColorMatrixElement
+  | SVGFEComponentTransferElement
+  | SVGFECompositeElement
+  | SVGFEConvolveMatrixElement
+  | SVGFEDiffuseLightingElement
+  | SVGFEDisplacementMapElement
+  | SVGFEDistantLightElement
+  | SVGFEDropShadowElement
+  | SVGFEFloodElement
+  | SVGFEFuncAElement
+  | SVGFEFuncBElement
+  | SVGFEFuncGElement
+  | SVGFEFuncRElement
+  | SVGFEGaussianBlurElement
+  | SVGFEImageElement
+  | SVGFEMergeElement
+  | SVGFEMergeNodeElement
+  | SVGFEMorphologyElement
+  | SVGFEOffsetElement
+  | SVGFEPointLightElement
+  | SVGFESpecularLightingElement
+  | SVGFESpotLightElement
+  | SVGFETileElement
+  | SVGFETurbulenceElement
+  | SVGFilterElement
+  | SVGForeignObjectElement
+  | SVGGElement
+  | SVGImageElement
+  | SVGLineElement
+  | SVGLinearGradientElement
+  | SVGMarkerElement
+  | SVGMaskElement
+  | SVGMetadataElement
+  | SVGPathElement
+  | SVGPatternElement
+  | SVGPolygonElement
+  | SVGPolylineElement
+  | SVGRadialGradientElement
+  | SVGRectElement
+  | SVGSVGElement
+  | SVGScriptElement
+  | SVGSetElement
+  | SVGStopElement
+  | SVGStyleElement
+  | SVGSwitchElement
+  | SVGSymbolElement
+  | SVGTextElement
+  | SVGTextPathElement
+  | SVGTitleElement
+  | SVGTSpanElement
+  | SVGUseElement
+  | SVGViewElement;
 
 export type CustomProps = {
   html?: string;
@@ -87,9 +188,8 @@ export type CustomProps = {
   val?: string;
 };
 
-export type FastjsDomProps = CustomProps & {
-  [K in keyof BasicElement]?: BasicElement[K];
-};
+export type FastjsDomProps<ElementType extends ElementList> = CustomProps &
+  Partial<Record<keyof ElementType, any>>;
 
 export type StyleObj = Partial<CSSStyleDeclaration>;
 export type StyleObjKeys = keyof StyleObj;

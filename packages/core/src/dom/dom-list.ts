@@ -1,21 +1,24 @@
-import _dev from "../dev";
-import { isUndefined, isDom } from "../utils";
+import { isDom, isUndefined } from "../utils";
 
-import { createFastjsDom } from "./dom";
-
+import type { ElementList } from "./def";
 import type { FastjsDom } from "./dom-types";
-import type { FastjsDomList, FastjsDomListAPI } from "./dom-list-types";
+import type { FastjsDomList } from "./dom-list-types";
+import _dev from "../dev";
+import { createFastjsDom } from "./dom";
 import { createMethods } from "./dom-list-methods";
 
 export function createFastjsDomList(
-  list: Array<FastjsDom | HTMLElement | Element | null | undefined>
+  list: Array<
+    FastjsDom | FastjsDomList | Element | ElementList | null | undefined
+  >
 ): FastjsDomList {
-  const domList: FastjsDom[] = list
-    .filter((e) => e)
-    .map((e) => {
-      if (!isDom(e)) return createFastjsDom(e as HTMLElement);
-      return e;
-    });
+  const domList: FastjsDom[] = [];
+  for (const el of list) {
+    if (el === null || el === undefined) continue;
+    if (isDom(el)) domList.push(el);
+    else if (Array.isArray(el)) domList.push(...el);
+    else domList.push(createFastjsDom(el as ElementList));
+  }
 
   const _atom = setupAtom(domList);
   const moduleAtom = new Proxy(_atom, {

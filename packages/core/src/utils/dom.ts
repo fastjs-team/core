@@ -16,9 +16,9 @@ export async function copy(text: string): Promise<void> {
     }
   }
 
-  async function createDomElement(text: string): Promise<HTMLElement> {
+  async function createDomElement(text: string): Promise<HTMLSpanElement> {
     const { createFastjsDom } = await import("../dom/dom");
-    let input = createFastjsDom("span");
+    let input = createFastjsDom<HTMLSpanElement>("span");
     input
       .html(replaceNewLinesAndSpaces(text))
       .push(document.body, "lastElementChild");
@@ -29,7 +29,7 @@ export async function copy(text: string): Promise<void> {
     }
   }
 
-  function selectText(element: HTMLElement): Selection | null {
+  function selectText(element: HTMLSpanElement): Selection | null {
     const range: Range = document.createRange();
     range.setStart(element, 0);
     range.setEnd(element, element.childNodes.length);

@@ -11,6 +11,6 @@
     "lib": ["ES6", "dom", "DOM.Iterable"],
     "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "__tests__/unit/dom/dom-api.test.ts", "__tests__/unit/dom/dom.test.ts", "__tests__/unit/dom/list.test.ts", "__tests__/unit/dom/selector.test.ts"],
   "exclude": ["node_modules"]
 }

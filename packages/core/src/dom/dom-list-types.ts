@@ -1,5 +1,6 @@
+import type { EachCallback, ElementList } from "./def";
 import type { FastjsDom, FastjsDomAPI, FastjsDomAtom } from "./dom-types";
-import type { EachCallback } from "./def";
+
 import { FastjsModuleBase } from "../base/def";
 
 export interface FastjsDomListAtom {
@@ -11,9 +12,9 @@ export interface FastjsDomListAtom {
 export interface FastjsDomListAPI {
   add(el: FastjsDom): FastjsDomList;
   delete(key: number, deleteDom?: boolean): FastjsDomList;
-  each(callback: EachCallback): FastjsDomList;
-  el(key?: number): HTMLElement;
-  getElement(key?: number): HTMLElement;
+  each(callback: EachCallback<ElementList>): FastjsDomList;
+  el(key?: number): ElementList;
+  getElement(key?: number): ElementList;
   getDom(key?: number): FastjsDom;
   next<
     T extends FastjsDom | FastjsDomList | null =
@@ -24,12 +25,12 @@ export interface FastjsDomListAPI {
     selector: string
   ): T;
   toArray(): FastjsDomList;
-  toElArray(): Array<HTMLElement>;
+  toElArray(): Array<ElementList>;
 }
 
 export type FastjsDomList = FastjsDomListAtom &
   FastjsDomListAPI &
-  Omit<FastjsDomAtom, "construct"> &
-  Omit<FastjsDomAPI, keyof Array<FastjsDom>> &
+  Omit<FastjsDomAtom<ElementList>, "construct"> &
+  Omit<FastjsDomAPI<ElementList>, keyof Array<FastjsDom>> &
   FastjsModuleBase &
   Array<FastjsDom>;

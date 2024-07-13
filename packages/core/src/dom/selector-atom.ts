@@ -1,14 +1,14 @@
+import { ElementList } from "./def";
 import type { FastjsDom } from "./dom-types";
 import type { FastjsDomList } from "./dom-list-types";
-
 import _dev from "../dev";
 
 function _selector(
   selector: string,
   parent:
     | Document
-    | HTMLElement
-    | HTMLElement[]
+    | ElementList
+    | ElementList[]
     | FastjsDom
     | FastjsDomList = document
 ): HTMLElement | HTMLElement[] | null {
@@ -23,11 +23,23 @@ function _selector(
   // @ts-ignore
   if (parent?.construct === "FastjsDomList") parent = parent._list;
 
+  function select(el: ElementList | FastjsDom, selector: string) {
+    if ((el as FastjsDom).set)
+      return (el as FastjsDom).get("querySelectorAll")(selector);
+    return el.querySelectorAll(selector);
+  }
+
   Array.isArray(parent)
-    ? (parent as HTMLElement[]).forEach((e: HTMLElement) => {
-        result.push(...queryResultToArray(e.querySelectorAll(selector)));
-      })
-    : result.push(...queryResultToArray(parent.querySelectorAll(selector)));
+    ? (parent as ElementList[] | FastjsDomList).forEach(
+        (e: FastjsDom | ElementList) => {
+          result.push(...queryResultToArray(select(e as FastjsDom, selector)));
+        }
+      )
+    : result.push(
+        ...queryResultToArray(
+          select(parent as FastjsDom | ElementList, selector)
+        )
+      );
 
   if (result.length === 0) return null;
   if (

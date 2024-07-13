@@ -8,6 +8,6 @@ export default defineConfig({
     }
   },
   test: {
-    setupFiles: ["./test/env.ts"]
+    setupFiles: ["./__tests__/env.ts"]
   }
 });

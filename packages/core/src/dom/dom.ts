@@ -1,36 +1,39 @@
+import type { ElementList, FastjsDomProps } from "./def";
 import type { FastjsDom, FastjsDomAtom } from "./dom-types";
 
-import type { FastjsDomProps } from "./def";
 import _dev from "../dev";
 import _selector from "./selector-atom";
 import { createMethods } from "./dom-methods";
 import { createModule } from "../base";
 
-export function createFastjsDom(
-  el: FastjsDom | Element | HTMLElement | string = document.body,
-  props?: FastjsDomProps
-): FastjsDom {
+export function createFastjsDom<T extends ElementList = ElementList>(
+  el: FastjsDom | Element | ElementList | string = document.body,
+  props?: FastjsDomProps<T>
+): FastjsDom<T> {
   if (typeof el === "string") el = document.createElement(el);
   else if ("construct" in el && el.construct === "FastjsDom") el = el._el;
 
-  const moduleAtom = createModule<FastjsDomAtom>(() => ({
+  const moduleAtom = createModule<FastjsDomAtom<T>>(() => ({
     construct: "FastjsDom",
     _events: [],
-    _el: el as HTMLElement
+    _el: el as T
   }));
 
-  const module: FastjsDom = Object.assign(
+  const module: FastjsDom<T> = Object.assign(
     moduleAtom,
-    createMethods(moduleAtom as FastjsDom)
+    createMethods(moduleAtom as FastjsDom<T>)
   );
 
-  if (props) mergeProps(module, props);
+  if (props) mergeProps<T>(module, props);
 
   return module;
 }
 
-function mergeProps(el: FastjsDom, props: FastjsDomProps) {
-  let key: keyof FastjsDomProps;
+function mergeProps<T extends ElementList>(
+  el: FastjsDom<T>,
+  props: FastjsDomProps<T>
+) {
+  let key: keyof FastjsDomProps<T>;
   for (key in props) {
     if (key === "html") el.html(props.html!);
     else if (key === "text") el.text(props.text!);
@@ -38,6 +41,6 @@ function mergeProps(el: FastjsDom, props: FastjsDomProps) {
     else if (key === "class") el.addClass(props.class! as string);
     else if (key === "attr") el.setAttr(props.attr!);
     else if (key === "val") el.val(props.val!);
-    else if (key in el._el) el.set(key, props[key]);
+    else if (key in el._el) el.set(key as keyof T, props[key] as T[keyof T]);
   }
 }
