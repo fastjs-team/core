@@ -97,12 +97,12 @@ export interface FastjsDomAPI<ElementType extends ElementList> {
   setAttr(attr: { [key: string]: string | null }): FastjsDom<ElementType>;
   setAttr(key: string, val: string | null): FastjsDom<ElementType>;
   push<T extends PushTarget>(
-    el: HTMLElement | FastjsDomList | FastjsDom,
+    el: ElementList | FastjsDomList | FastjsDom,
     target: T,
     clone?: boolean
   ): PushReturn<T, ElementType>;
   insert<T extends InsertTarget>(
-    el: HTMLElement | FastjsDomList | FastjsDom,
+    el: ElementList | FastjsDomList | FastjsDom,
     target: T,
     clone?: boolean
   ): InsertReturn<ElementType>;
