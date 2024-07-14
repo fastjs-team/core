@@ -41,7 +41,7 @@ export interface FastjsDomAPI<ElementType extends ElementList> {
   father(): FastjsDom<ElementList> | null;
   children(): FastjsDomList;
   next<
-    T extends FastjsDom | FastjsDomList | null =
+    T extends FastjsDom<any> | FastjsDomList | null =
       | FastjsDom
       | FastjsDomList
       | null
@@ -97,12 +97,12 @@ export interface FastjsDomAPI<ElementType extends ElementList> {
   setAttr(attr: { [key: string]: string | null }): FastjsDom<ElementType>;
   setAttr(key: string, val: string | null): FastjsDom<ElementType>;
   push<T extends PushTarget>(
-    el: ElementList | FastjsDomList | FastjsDom,
+    el: ElementList | FastjsDomList | FastjsDom<any>,
     target: T,
     clone?: boolean
   ): PushReturn<T, ElementType>;
   insert<T extends InsertTarget>(
-    el: ElementList | FastjsDomList | FastjsDom,
+    el: ElementList | FastjsDomList | FastjsDom<any>,
     target: T,
     clone?: boolean
   ): InsertReturn<ElementType>;
