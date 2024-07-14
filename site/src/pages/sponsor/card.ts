@@ -38,7 +38,7 @@ export function newCard(params: Member): FastjsDom {
   params.button?.forEach((button) => {
     const color = button.color || "white";
     const icon = dom
-      .newEl("a", {
+      .newEl<HTMLAnchorElement>("a", {
         class: "button",
         href: button.link,
         target: "_blank",
@@ -50,7 +50,10 @@ export function newCard(params: Member): FastjsDom {
       .text(button.text);
     if (button.icon) {
       icon.insert(
-        dom.newEl("img", { src: button.icon, alt: button.text }),
+        dom.newEl<HTMLImageElement>("img", {
+          src: button.icon,
+          alt: button.text
+        }),
         "first"
       );
     }
@@ -59,7 +62,7 @@ export function newCard(params: Member): FastjsDom {
   params.social?.forEach((social) => {
     card.next(".social")!.insert(
       dom
-        .newEl("a", {
+        .newEl<HTMLAnchorElement>("a", {
           class: "social",
           href: social.link,
           target: "_blank"

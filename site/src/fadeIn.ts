@@ -1,4 +1,4 @@
-import { FastjsDomList, dom } from "jsfast";
+import { FastjsDom, FastjsDomList, dom } from "jsfast";
 
 let calc = 0,
   first = true;
@@ -26,7 +26,8 @@ export function renderFadeIn() {
     if (el.getAttr("fade-in-done")) continue;
     if (
       window.scrollY <= offset &&
-      window.scrollY + window.innerHeight > offset + el.get("offsetHeight")
+      window.scrollY + window.innerHeight >
+        offset + (el as FastjsDom<any>).get("offsetHeight")
     ) {
       setTimeout(() => {
         el.setAttr("fade-in", "true");

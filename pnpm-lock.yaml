@@ -49,7 +49,7 @@ importers:
         version: 4.17.2
       vitest:
         specifier: ^1.5.0
-        version: 1.6.0(@types/node@20.12.11)(jsdom@24.0.0)
+        version: 1.6.0(@types/node@20.12.11)(jsdom@24.0.0)(sass@1.77.1)(terser@5.31.0)
 
   packages/create-app:
     dependencies:
@@ -76,8 +76,8 @@ importers:
         specifier: ^11.9.0
         version: 11.9.0
       jsfast:
-        specifier: workspace:*
-        version: link:../packages/core
+        specifier: 1.0.0-beta.18
+        version: 1.0.0-beta.18
     devDependencies:
       sass:
         specifier: ^1.76.0
@@ -87,7 +87,7 @@ importers:
         version: 5.4.5
       vite:
         specifier: ^5.2.8
-        version: 5.2.11(@types/node@20.12.11)(sass@1.77.1)
+        version: 5.2.11(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0)
 
 packages:
 
@@ -762,6 +762,9 @@ packages:
       canvas:
         optional: true
 
+  jsfast@1.0.0-beta.18:
+    resolution: {integrity: sha512-HuPbSMtM+NlEVncq2j+nC11w0MSdwtlw11q+XVtuCDO5vm0JolhD+Ko5QiJwWU1EfRKC4eaZmnHimS2LP3RMTA==}
+
   local-pkg@0.5.0:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==}
     engines: {node: '>=14'}
@@ -1382,28 +1385,32 @@ snapshots:
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
       magic-string: 0.30.10
+    optionalDependencies:
       rollup: 4.17.2
 
   '@rollup/plugin-terser@0.4.4(rollup@4.17.2)':
     dependencies:
-      rollup: 4.17.2
       serialize-javascript: 6.0.2
       smob: 1.5.0
       terser: 5.31.0
+    optionalDependencies:
+      rollup: 4.17.2
 
   '@rollup/plugin-typescript@11.1.6(rollup@4.17.2)(tslib@2.6.2)(typescript@5.4.5)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
       resolve: 1.22.8
+      typescript: 5.4.5
+    optionalDependencies:
       rollup: 4.17.2
       tslib: 2.6.2
-      typescript: 5.4.5
 
   '@rollup/pluginutils@5.1.0(rollup@4.17.2)':
     dependencies:
       '@types/estree': 1.0.5
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
       rollup: 4.17.2
 
   '@rollup/rollup-android-arm-eabi@4.17.2':
@@ -1811,6 +1818,8 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  jsfast@1.0.0-beta.18: {}
+
   local-pkg@0.5.0:
     dependencies:
       mlly: 1.7.0
@@ -2115,13 +2124,13 @@ snapshots:
       querystringify: 2.2.0
       requires-port: 1.0.0
 
-  vite-node@1.6.0(@types/node@20.12.11):
+  vite-node@1.6.0(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.1
-      vite: 5.2.11(@types/node@20.12.11)(sass@1.77.1)
+      vite: 5.2.11(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -2132,19 +2141,19 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.2.11(@types/node@20.12.11)(sass@1.77.1):
+  vite@5.2.11(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0):
     dependencies:
-      '@types/node': 20.12.11
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.17.2
-      sass: 1.77.1
     optionalDependencies:
-      fsevents: 2.3.3
-
-  vitest@1.6.0(@types/node@20.12.11)(jsdom@24.0.0):
-    dependencies:
       '@types/node': 20.12.11
+      fsevents: 2.3.3
+      sass: 1.77.1
+      terser: 5.31.0
+
+  vitest@1.6.0(@types/node@20.12.11)(jsdom@24.0.0)(sass@1.77.1)(terser@5.31.0):
+    dependencies:
       '@vitest/expect': 1.6.0
       '@vitest/runner': 1.6.0
       '@vitest/snapshot': 1.6.0
@@ -2154,7 +2163,6 @@ snapshots:
       chai: 4.4.1
       debug: 4.3.4
       execa: 8.0.1
-      jsdom: 24.0.0
       local-pkg: 0.5.0
       magic-string: 0.30.10
       pathe: 1.1.2
@@ -2163,9 +2171,12 @@ snapshots:
       strip-literal: 2.1.0
       tinybench: 2.8.0
       tinypool: 0.8.4
-      vite: 5.2.11(@types/node@20.12.11)(sass@1.77.1)
-      vite-node: 1.6.0(@types/node@20.12.11)
+      vite: 5.2.11(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0)
+      vite-node: 1.6.0(@types/node@20.12.11)(sass@1.77.1)(terser@5.31.0)
       why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 20.12.11
+      jsdom: 24.0.0
     transitivePeerDependencies:
       - less
       - lightningcss

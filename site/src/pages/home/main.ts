@@ -13,7 +13,7 @@ async function animation(root: FastjsDom) {
   );
 
   for (let key = 0; key < animationList.length; key++) {
-    const el = animationList[key];
+    const el = animationList[key] as FastjsDom<HTMLDivElement>;
     const content = el.getAttr("content");
     const move = el.getAttr("move");
     await delay(200);
@@ -21,7 +21,9 @@ async function animation(root: FastjsDom) {
     if (content) {
       await typeText(content, el);
     } else if (move !== null) {
-      const target = root.next<FastjsDom>(`[move-target="${key}"]`);
+      const target = root.next<FastjsDom<HTMLDivElement>>(
+        `[move-target="${key}"]`
+      );
       const hide = target.getAttr("hide");
 
       target.setStyle("width", hide + "px");
@@ -58,7 +60,7 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function typeText(text: string, el: FastjsDom) {
+async function typeText(text: string, el: FastjsDom<any>) {
   let textArr = text.split("");
   for (let i = 0; i < textArr.length; i++) {
     el.html((el.html() + textArr[i]).replace(/ /g, "&nbsp;"));
