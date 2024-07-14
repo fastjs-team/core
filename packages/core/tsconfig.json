@@ -9,7 +9,10 @@
     "strict": true,
     "skipLibCheck": true,
     "lib": ["ES6", "dom", "DOM.Iterable"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
