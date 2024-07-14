@@ -14,12 +14,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "__tests__/unit/dom/dom-api.test.ts",
-    "__tests__/unit/dom/dom.test.ts",
-    "__tests__/unit/dom/list.test.ts",
-    "__tests__/unit/dom/selector.test.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
