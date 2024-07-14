@@ -1,3 +1,4 @@
+import type { ElementList } from "./def";
 import type { FastjsDom } from "./dom-types";
 import type { FastjsDomList } from "./dom-list-types";
 import _dev from "../dev";
@@ -9,7 +10,7 @@ function selector<
   T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null
 >(
   target: string = "body",
-  parent: Document | HTMLElement | HTMLElement[] = document
+  parent: Document | ElementList | ElementList[] = document
 ): T {
   const result = _selector(target, parent);
   if (Array.isArray(result))
