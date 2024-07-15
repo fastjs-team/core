@@ -413,7 +413,7 @@ export function createMethods<ElementType extends ElementList>(
     clone?: boolean
   ): PushReturn<T, ElementType> {
     // @ts-expect-error Check if el is FastjsDom | FastjsDomList
-    el = el.el ? el : el.el();
+    el = el.tagName ? el : el.el();
 
     type IsReplace<T> = T extends "replaceElement" ? true : false;
     const isReplace = (target === "replaceElement") as IsReplace<T>;
@@ -505,7 +505,7 @@ export function createMethods<ElementType extends ElementList>(
     clone?: boolean
   ): InsertReturn<ElementType> {
     // @ts-expect-error Check if el is FastjsDom | FastjsDomList
-    el = el.el ? el : el.el();
+    el = el.tagName ? el : el.el();
 
     const newElement = createFastjsDom(clone ? el.cloneNode(true) : el);
     if (typeof target === "number") {
