@@ -119,7 +119,7 @@ export function createMethods<ElementType extends ElementList>(
   const children = () => createFastjsDomList([...dom._el.children]);
 
   const next = <
-    T extends FastjsDom | FastjsDomList | null =
+    T extends FastjsDom<any> | FastjsDomList | null =
       | FastjsDom
       | FastjsDomList
       | null

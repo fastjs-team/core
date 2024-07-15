@@ -31,7 +31,7 @@ export function createMethods(list: FastjsDomList): FastjsDomListAPI {
       return list[key];
     },
     next<
-      T extends FastjsDom | FastjsDomList | null =
+      T extends FastjsDom<any> | FastjsDomList | null =
         | FastjsDom
         | FastjsDomList
         | null

@@ -6,7 +6,7 @@ import type { FastjsDomList } from "./dom-list-types";
 
 interface DomModule {
   <
-    T extends FastjsDom | FastjsDomList | null =
+    T extends FastjsDom<any> | FastjsDomList | null =
       | FastjsDom
       | FastjsDomList
       | null
@@ -20,7 +20,10 @@ interface DomModule {
 }
 
 const dom: DomModule = function <
-  T extends FastjsDom | FastjsDomList | null = FastjsDom | FastjsDomList | null
+  T extends FastjsDom<any> | FastjsDomList | null =
+    | FastjsDom
+    | FastjsDomList
+    | null
 >(
   target: string = "body",
   parent: Document | HTMLElement | HTMLElement[] = document

@@ -17,7 +17,7 @@ export interface FastjsDomListAPI {
   getElement(key?: number): ElementList;
   getDom(key?: number): FastjsDom;
   next<
-    T extends FastjsDom | FastjsDomList | null =
+    T extends FastjsDom<any> | FastjsDomList | null =
       | FastjsDom
       | FastjsDomList
       | null
