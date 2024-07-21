@@ -76,8 +76,8 @@ importers:
         specifier: ^11.9.0
         version: 11.9.0
       jsfast:
-        specifier: 1.0.0-beta.18
-        version: 1.0.0-beta.18
+        specifier: workspace:*
+        version: link:../packages/core
     devDependencies:
       sass:
         specifier: ^1.76.0
@@ -761,9 +761,6 @@ packages:
     peerDependenciesMeta:
       canvas:
         optional: true
-
-  jsfast@1.0.0-beta.18:
-    resolution: {integrity: sha512-HuPbSMtM+NlEVncq2j+nC11w0MSdwtlw11q+XVtuCDO5vm0JolhD+Ko5QiJwWU1EfRKC4eaZmnHimS2LP3RMTA==}
 
   local-pkg@0.5.0:
     resolution: {integrity: sha512-ok6z3qlYyCDS4ZEU27HaU6x/xZa9Whf8jD4ptH5UZTQYZVYeb9bnZ3ojVhiJNLiXK1Hfc0GNbLXcmZ5plLDDBg==}
@@ -1817,8 +1814,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  jsfast@1.0.0-beta.18: {}
 
   local-pkg@0.5.0:
     dependencies:

@@ -7,7 +7,10 @@ import { createFastjsDom } from "./dom";
 import { createFastjsDomList } from "./dom-list";
 
 function selector<
-  T extends FastjsDom<any> | FastjsDomList | null = FastjsDom | FastjsDomList | null
+  T extends FastjsDom<any> | FastjsDomList | null =
+    | FastjsDom
+    | FastjsDomList
+    | null
 >(
   target: string = "body",
   parent: Document | ElementList | ElementList[] = document
