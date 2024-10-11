@@ -6,6 +6,7 @@
   "bugs": "https://github.com/fastjs-team/core/issues",
   "funding": "https://github.com/sponsors/xiaodong2008",
   "main": "index.js",
+  "type": "module",
   "module": "dist/fastjs.esm-bundler.js",
   "types": "dist/types/main.d.ts",
   "unpkg": "dist/fastjs.global.js",
@@ -64,6 +65,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "jsdom": "^24.0.0",
+    "rolldown": "^0.13.2",
     "rollup": "^4.9.6",
     "vitest": "^1.5.0"
   }

@@ -1,7 +1,7 @@
 import typescript from "@rollup/plugin-typescript";
 import replace from "@rollup/plugin-replace";
 import terser from "@rollup/plugin-terser";
-import packageInfo from "./package.json" assert { type: "json" };
+import packageInfo from "./package.json" with { type: "json" };
 const version = packageInfo.version;
 const fileBaseName = "fastjs";
 const packageConfig = [];

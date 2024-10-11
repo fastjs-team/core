@@ -3,7 +3,7 @@
     /* Visit https://aka.ms/tsconfig to read more about this file */
     "target": "es2022",
     "module": "ESNext",
-    "sourceMap": true,
+    "sourceMap": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -12,7 +12,9 @@
     "moduleResolution": "node",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "declaration": true,
+    "declarationDir": "./dist/types"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
