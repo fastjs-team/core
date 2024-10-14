@@ -39,6 +39,9 @@ const { request } = require("jsfast"); // cjs
 
 ```html
 <script src="https://unpkg.com/jsfast/dist/fastjs.global.js"></script>
+<script>
+  fastjs.dom().text("Hello World!");
+</script>
 ```
 
 ### Browser (ES Module)
