@@ -409,7 +409,7 @@ export function createMethods<ElementType extends ElementList>(
 
   function push<T extends PushTarget>(
     el: ElementList | FastjsDomList | FastjsDom = document.body,
-    target: T,
+    target: T = "lastElementChild" as T,
     clone?: boolean
   ): PushReturn<T, ElementType> {
     // @ts-expect-error Check if el is FastjsDom | FastjsDomList
@@ -501,7 +501,7 @@ export function createMethods<ElementType extends ElementList>(
 
   function insert<T extends InsertTarget>(
     el: ElementList | FastjsDomList | FastjsDom,
-    target: T,
+    target: T = "last" as T,
     clone?: boolean
   ): InsertReturn<ElementType> {
     // @ts-expect-error Check if el is FastjsDom | FastjsDomList
