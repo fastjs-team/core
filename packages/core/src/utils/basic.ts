@@ -48,5 +48,5 @@ export function callPromiseUntilEnd(
   immediate: boolean = false,
   continueEvenError: boolean = false
 ): Promise<void> {
-  return callUntilEnd(func, timeout, immediate, true);
+  return callUntilEnd(func, timeout, immediate, continueEvenError, true);
 }
