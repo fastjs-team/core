@@ -34,7 +34,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "npm run rm && rollup -cw",
+    "dev": "rollup -cw",
     "build": "npm run rm && rollup -c",
     "type-check": "tsc --noEmit",
     "rm": "rm -rf ./dist",
