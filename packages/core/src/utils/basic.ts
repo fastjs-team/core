@@ -6,6 +6,7 @@ export async function callUntilEnd<T extends boolean>(
     : (end: () => boolean) => void | boolean,
   timeout: number,
   immediate: boolean = false,
+  continueEvenError: boolean = false,
   promise: T = false as T
 ): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -26,11 +27,16 @@ export async function callUntilEnd<T extends boolean>(
           _dev.warn(
             "fastjs/utils/doUntilEnd",
             "An error occurred while executing the function",
-            error
+            [error.toString()]
           );
         }
-        reject(error);
-        end = true;
+        if (continueEvenError) {
+          setTimeout(callFunc, timeout);
+          console.error(error);
+        } else {
+          reject(error);
+          end = true;
+        }
       }
     }
   });
@@ -39,9 +45,8 @@ export async function callUntilEnd<T extends boolean>(
 export function callPromiseUntilEnd(
   func: (end: () => boolean) => Promise<void | boolean>,
   timeout: number = 1000,
-  immediate: boolean = false
+  immediate: boolean = false,
+  continueEvenError: boolean = false
 ): Promise<void> {
-  return new Promise((resolve) => {
-    callUntilEnd(func, timeout, immediate, true).then(resolve);
-  });
+  return callUntilEnd(func, timeout, immediate, true);
 }
