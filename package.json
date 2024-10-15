@@ -6,6 +6,7 @@
     "prod": "pnpm -r --filter=./packages/** run prod",
     "dev": "pnpm --parallel --filter=./** run dev",
     "test": "pnpm -r --filter=./packages/** run test",
+    "test:core": "pnpm -r --filter=./packages/core run test",
     "type-check": "pnpm -r --filter=./packages/** run type-check",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
