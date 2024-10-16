@@ -1,33 +1,33 @@
-import { callPromiseUntilEnd, callUntilEnd } from "@/main";
 import { expect, test } from "vitest";
+
+import { callUntilEnd } from "@/main";
 
 test("Call until end", async () => {
   const startT = Date.now();
   let i = 0;
   await callUntilEnd(() => {
-    expect(Date.now() - startT).toBeGreaterThanOrEqual(100 * i);
-    return ++i === 10;
-  }, 100);
+    expect(Date.now() - startT).toBeGreaterThanOrEqual(50 * i);
+    return ++i === 5;
+  }, 50);
 
-  expect(Date.now() - startT).toBeGreaterThanOrEqual(1000);
-  expect(i).toBe(10);
+  expect(Date.now() - startT).toBeGreaterThanOrEqual(250);
+  expect(i).toBe(5);
 });
 
 test("Call promise until end", async () => {
   const startT = Date.now();
   let i = 0;
-  await callPromiseUntilEnd(async () => {
+  await callUntilEnd(async () => {
     return new Promise((resolve) =>
       setTimeout(() => {
         i++;
-        expect(Date.now() - startT).toBeGreaterThanOrEqual(100 * i * 2);
-        console.log(Date.now() - startT, i);
+        expect(Date.now() - startT).toBeGreaterThanOrEqual(25 * i * 2);
 
-        resolve(i >= 10);
-      }, 100)
+        resolve(i >= 5);
+      }, 25)
     );
-  }, 100);
+  }, 25);
 
-  expect(Date.now() - startT).toBeGreaterThanOrEqual(2000);
-  expect(i).toBe(10);
+  expect(Date.now() - startT).toBeGreaterThanOrEqual(250);
+  expect(i).toBe(5);
 });

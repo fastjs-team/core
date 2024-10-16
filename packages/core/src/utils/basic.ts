@@ -1,13 +1,10 @@
 import _dev from "../dev";
 
-export async function callUntilEnd<T extends boolean>(
-  func: T extends true
-    ? (end: () => boolean) => Promise<void | boolean>
-    : (end: () => boolean) => void | boolean,
+export async function callUntilEnd(
+  func: (end: () => boolean) => Promise<void | boolean> | void | boolean,
   timeout: number,
   immediate: boolean = false,
-  continueEvenError: boolean = false,
-  promise: T = false as T
+  continueEvenError: boolean = false
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     let end = false;
@@ -17,8 +14,11 @@ export async function callUntilEnd<T extends boolean>(
 
     async function callFunc() {
       try {
-        end = promise ? !!(await func(endFunc)) : !!func(endFunc);
-        // Don't use else, using else can't detect is endFunc called, it can only detect is func returns true
+        let res = func(endFunc);
+        if (res instanceof Promise) {
+          res = await res;
+        }
+        end = !!res;
         if (!end) {
           setTimeout(callFunc, timeout);
         } else resolve();
@@ -40,13 +40,4 @@ export async function callUntilEnd<T extends boolean>(
       }
     }
   });
-}
-
-export function callPromiseUntilEnd(
-  func: (end: () => boolean) => Promise<void | boolean>,
-  timeout: number = 1000,
-  immediate: boolean = false,
-  continueEvenError: boolean = false
-): Promise<void> {
-  return callUntilEnd(func, timeout, immediate, continueEvenError, true);
 }
