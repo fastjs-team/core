@@ -18,8 +18,7 @@ export async function callUntilEnd(
         if (res instanceof Promise) {
           res = await res;
         }
-        end = !!res;
-        if (!end) {
+        if (end || !res) {
           setTimeout(callFunc, timeout);
         } else resolve();
       } catch (error: any) {
