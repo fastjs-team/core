@@ -4,3 +4,4 @@
 dist/
 node_modules/
 playground/
+.DS_Store
