@@ -246,7 +246,9 @@ export function createMethods<ElementType extends ElementList>(
     );
 
     if (typeof keyOrCallback === "string")
-      return styles.getPropertyValue(keyOrCallback);
+      return styles.getPropertyValue(
+        keyOrCallback.replace(/[A-Z]/g, (v) => "-" + v.toLowerCase())
+      );
     else if (typeof keyOrCallback === "function")
       keyOrCallback(getStyleProxy(), dom);
     else return getStyleProxy();
@@ -269,7 +271,7 @@ export function createMethods<ElementType extends ElementList>(
   ): FastjsDom<ElementType> {
     if (val)
       dom._el.style.setProperty(
-        strOrObj as string,
+        (strOrObj as string).replace(/[A-Z]/g, (v) => "-" + v.toLowerCase()),
         val,
         important ? "important" : ""
       );

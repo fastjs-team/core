@@ -101,20 +101,23 @@ test("Test FastjsDom.getStyle.proxy", () => {
 
 test("Test FastjsDom.setStyle.obj", () => {
   const root = getRoot();
-  root.setStyle({ color: "red" });
+  root.setStyle({ color: "red", backgroundColor: "blue" });
   expect(root.getStyle("color")).toBe("red");
+  expect(root.getStyle("backgroundColor")).toBe("blue");
 });
 
 test("Test FastjsDom.setStyle.string", () => {
   const root = getRoot();
-  root.setStyle("color: red");
+  root.setStyle("color: red; background-color: blue;");
   expect(root.getStyle("color")).toBe("red");
+  expect(root.getStyle("backgroundColor")).toBe("blue");
 });
 
 test("Test FastjsDom.setStyle.key", () => {
   const root = getRoot();
-  root.setStyle("color", "red");
+  root.setStyle("color", "red").setStyle("backgroundColor", "blue");
   expect(root.getStyle("color")).toBe("red");
+  expect(root.getStyle("backgroundColor")).toBe("blue");
 });
 
 test("Test FastjsDom.getClass", () => {
