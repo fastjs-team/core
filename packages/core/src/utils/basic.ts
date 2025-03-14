@@ -40,3 +40,49 @@ export async function callUntilEnd(
     }
   });
 }
+
+export function catchError(
+  func: () => Promise<any> | any,
+  onError?: (error: Error) => void
+): Promise<any> | any {
+  const err = (error: Error) => {
+    if (__DEV__) {
+      _dev.warn(
+        "fastjs/utils/catchError",
+        "An error occurred while executing the function",
+        [error.toString()]
+      );
+    }
+    if (onError) onError(error);
+    else console.error(error);
+    return error;
+  };
+
+  try {
+    const res = func();
+    if (res instanceof Promise) {
+      return res.then((res) => res).catch(err);
+    }
+    return res;
+  } catch (error: any) {
+    return err(error);
+  }
+}
+
+export function secureCall(
+  func: () => Promise<any> | any
+): [any, Error | null] | Promise<[any, Error | null]> {
+  try {
+    const res = func();
+    if (res instanceof Promise) {
+      return new Promise((resolve, reject) => {
+        res
+          .then((res) => resolve([res, null]))
+          .catch((error) => resolve([undefined, error]));
+      });
+    }
+    return [res, null];
+  } catch (error: any) {
+    return [undefined, error];
+  }
+}
