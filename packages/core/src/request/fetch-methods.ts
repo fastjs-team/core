@@ -36,8 +36,10 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
   }
 
   function unifiedRequest(method: RequestMethod) {
-    return <T extends any = string | RequestReturnData>(p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler<T>(method, p1, p2);
+    return <T extends any = string | RequestReturnData>(
+      p1?: RequestData | string,
+      p2?: string | RequestData
+    ) => wrappedFunctionHandler<T>(method, p1, p2);
   }
 
   const methods: FastjsRequestAPI = {

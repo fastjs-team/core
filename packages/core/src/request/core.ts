@@ -145,10 +145,10 @@ export function sendRequest<T extends any = string | RequestReturnData>(
           resend: () => sendRequest(request, method)
         };
 
-        const proto = Object.create(Object.getPrototypeOf(returnData))
-        proto.getFullReturn = () => requestReturn
+        const proto = Object.create(Object.getPrototypeOf(returnData));
+        proto.getFullReturn = () => requestReturn;
 
-        Object.setPrototypeOf(returnData, proto)
+        Object.setPrototypeOf(returnData, proto);
 
         if (!globalConfig.handler.responseCode(response.status, request))
           return await handleBadResponse(requestReturn, request, passthrough);

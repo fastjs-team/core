@@ -15,9 +15,15 @@ const create = (
 };
 
 function unifiedRequest(method: RequestMethod) {
-  return <T extends any = string | RequestReturnData>(url: string, data?: RequestData, config?: Partial<RequestConfig>): FastjsRequest<T> => {
-    return createRequest(url, data, config)[method.toLowerCase()]() as FastjsRequest<T>;
-  }
+  return <T extends any = string | RequestReturnData>(
+    url: string,
+    data?: RequestData,
+    config?: Partial<RequestConfig>
+  ): FastjsRequest<T> => {
+    return createRequest(url, data, config)[
+      method.toLowerCase()
+    ]() as FastjsRequest<T>;
+  };
 }
 
 export default {

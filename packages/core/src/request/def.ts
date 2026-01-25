@@ -2,13 +2,12 @@ import type { FastjsHeaders, RequestData, RequestMethod } from "./base-types";
 
 import type { FastjsRequest } from "./fetch-types";
 
-export type RequestReturnData =
-  (string | { [key: string]: any; })
-  & RequestReturnProto;
+export type RequestReturnData = (string | { [key: string]: any }) &
+  RequestReturnProto;
 
 export type RequestReturnProto = {
   getFullReturn: () => RequestReturn;
-}
+};
 
 export interface RequestReturn {
   headers: FastjsHeaders;
