@@ -4,9 +4,10 @@ import type {
   RequestHook,
   RequestHookKey,
   RequestHooks,
-  RequestMethod,
-  RequestReturn
+  RequestReturn,
+  RequestReturnData
 } from "./def";
+import type { FastjsHeaders, RequestMethod } from "./base-types";
 import { addQuery, parse, transformPathParams } from "./lib";
 
 import type { FastjsRequest } from "./fetch-types";
@@ -16,7 +17,7 @@ import { globalConfig } from "./config";
 export function sendRequest(
   request: FastjsRequest,
   method: RequestMethod,
-  url: string = request.url
+  url: string | undefined = request.url
 ): FastjsRequest {
   if (__DEV__) {
     if (["GET", "HEAD", "OPTIONS"].includes(method) && request.config.body) {
@@ -34,6 +35,23 @@ export function sendRequest(
         ["fastjs.warn"]
       );
     }
+  }
+
+  if (!url) {
+    if (__DEV__) {
+      throw _dev.error(
+        "fastjs/request",
+        "A correct url is **required**.",
+        [
+          `*url: **undefined**`,
+          "data: ", request.data,
+          "config: ", request.config,
+          "super: ", request
+        ],
+        ["fastjs.wrong", "fastjs.wrong", "fastjs.wrong"]
+      );
+    }
+    throw new Error("A correct url is required.");
   }
 
   const data = {
@@ -57,11 +75,11 @@ export function sendRequest(
 
   async function passthrough() {
     const hooks = request.config.hooks;
-    if (!runHooks(hooks.before, [request]))
+    if (!(await runHooks(hooks.before, [request])))
       return hookFailed("before", request, null);
 
     let pathParamMatches: string[] = [];
-    [url, pathParamMatches] = transformPathParams(url, request.data);
+    [url, pathParamMatches] = transformPathParams(url!, request.data);
     for (const match of pathParamMatches) {
       delete request.data[match];
     }
@@ -69,40 +87,84 @@ export function sendRequest(
     request.request = new Request(addQuery(url, data.query), {
       method,
       headers: request.config.headers,
-      body: data.body ? JSON.stringify(data.body) : undefined
+      body: data.body ? JSON.stringify(data.body) : undefined,
     });
 
-    if (!runHooks(hooks.init, [request]))
+    if (!(await runHooks(hooks.init, [request])))
       return hookFailed("init", request, null);
 
-    fetch(request.request)
+    const signal = request.config.timeout ? AbortSignal.timeout(request.config.timeout) : null;
+
+    if (__DEV__ && request.config.timeout && request.config.timeout <= 1000) {
+      _dev.warn(
+        "fastjs/request",
+        "Timeout is too short, it may cause the request to be interrupted.",
+        [
+          `url: ${url}`,
+          `method: ${method}`,
+          "body: ", request.body,
+          `*timeout: ${request.config.timeout}`,
+          "super: ", request
+        ],
+        ["fastjs.warn"]
+      );
+    }
+
+    fetch(request.request, { signal })
       .then(async (response: Response) => {
         const data = await globalConfig.handler.handleResponse(
           response,
           request
         );
 
+        const headers = response.headers as FastjsHeaders;
+        headers.toArray = () => [...response.headers.entries()];
+        headers.toObject = () => Object.fromEntries(response.headers.entries());
+
+        const returnData = parse(data) as RequestReturnData;
+        // if (typeof returnData === "object") {
+        //   returnData.getFullData = () => data;
+        // }
+
         const requestReturn: RequestReturn = {
-          headers: [...response.headers.entries()],
-          headersObj: Object.fromEntries(response.headers.entries()),
+          headers,
           response,
-          data: parse(data),
+          data: returnData,
           status: response.status,
           request,
           resend: () => sendRequest(request, method)
         };
 
-        if (!globalConfig.handler.responseCode(response.status, request))
-          return handleBadResponse(requestReturn, request, passthrough);
+        if (typeof returnData === "object") {
+          returnData.getFullReturn = () => requestReturn;
+        }
 
-        if (!runHooks(hooks.success, [requestReturn, request]))
+        if (!globalConfig.handler.responseCode(response.status, request))
+          return await handleBadResponse(requestReturn, request, passthrough);
+
+        if (!(await runHooks(hooks.success, [requestReturn, request])))
           return hookFailed("success", request, requestReturn);
 
         matchCallback(request.callback.success, [data, requestReturn], method);
         matchCallback(request.callback.finally, [request], method);
       })
-      .catch((error: Error) => {
-        if (__DEV__)
+      .catch(async (error: Error) => {
+        if (__DEV__) {
+          if (error.message === "signal timed out") {
+            _dev.warn(
+              "fastjs/request",
+              `${method} Request timed out.`,
+              [
+                `url: ${url}`,
+                "body: ", request.body,
+                `*timeout: ${request.config.timeout}`,
+                "super: ",
+                request
+              ],
+              ["fastjs.warn"]
+            );
+          }
+        } else {
           _dev.warn(
             "fastjs/request",
             "Failed to send request.",
@@ -117,8 +179,9 @@ export function sendRequest(
             ],
             ["fastjs.wrong"]
           );
+        }
 
-        if (!runHooks(hooks.failed, [error, request]))
+        if (!(await runHooks(hooks.failed, [error, request])))
           return hookFailed("failed", request, null);
 
         const failedParams = {
@@ -126,7 +189,9 @@ export function sendRequest(
           request,
           intercept: false,
           hook: null,
-          response: null
+          response: null,
+          headers: null,
+          resend: () => sendRequest(request, request.request?.method as RequestMethod)
         };
 
         request.config.failed(failedParams);
@@ -149,7 +214,7 @@ function matchCallback(
   }
 }
 
-function handleBadResponse(
+async function handleBadResponse(
   response: RequestReturn,
   request: FastjsRequest,
   resend: Function
@@ -173,7 +238,7 @@ function handleBadResponse(
     );
   }
 
-  if (!runHooks(request.config.hooks.failed, [status, request]))
+  if (!(await runHooks(request.config.hooks.failed, [status, request])))
     return hookFailed("failed", request, null);
 
   const failedParams: FailedParams<number> = {
@@ -181,7 +246,9 @@ function handleBadResponse(
     request,
     intercept: false,
     hook: null,
-    response
+    response,
+    headers: response.headers,
+    resend: () => sendRequest(request, request.request?.method as RequestMethod)
   };
 
   request.config.failed(failedParams);
@@ -199,27 +266,32 @@ function hookFailed(
     request,
     intercept: true,
     hook,
-    response
+    response,
+    headers: response?.headers || null,
+    resend: () => sendRequest(request, request.request?.method as RequestMethod)
   };
   request.config.failed(failedParams);
   matchCallback(request.callback.failed, [failedParams], null);
   matchCallback(request.callback.finally, [request], null);
 }
 
-function runHooks<T extends RequestHook[] | RequestHook | undefined>(
+async function runHooks<T extends RequestHook[] | RequestHook | undefined>(
   hooks: T,
   params: T extends RequestHooks.BeforeSend
     ? [FastjsRequest]
     : [RequestReturn | Error | number, FastjsRequest]
-): boolean {
+): Promise<boolean> {
   type FirstParam = ((number & FastjsRequest) | (Error & FastjsRequest)) &
     RequestReturn;
   if (!hooks) return true;
-  if (typeof hooks === "function")
-    return hooks(params[0] as FirstParam, params[1] as FastjsRequest);
+  if (typeof hooks === "function") {
+    const result = await hooks(params[0] as FirstParam, params[1] as FastjsRequest);
+    return result ?? true;
+  }
   let result = true;
   for (const hook of hooks as RequestHook[]) {
-    if (!hook(params[0] as FirstParam, params[1] as FastjsRequest)) {
+    const hookResult = await hook(params[0] as FirstParam, params[1] as FastjsRequest);
+    if (hookResult === false) {
       result = false;
       if (!globalConfig.hooks.runAll) break;
     }

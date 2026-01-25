@@ -1,17 +1,17 @@
+import type { RequestData, RequestMethod } from "./base-types";
 import type {
-  RequestData,
-  RequestReturn,
-  RequestMethod,
   FailedParams,
-  RequestCallback
+  RequestCallback,
+  RequestReturn,
+  RequestReturnData
 } from "./def";
-import type { RequestConfig } from "./config";
 
 import type { FastjsModuleBase } from "../base/def";
+import type { RequestConfig } from "./config";
 
 export interface FastjsRequestAtom {
   readonly construct: "FastjsRequest";
-  url: string;
+  url?: string;
   data: RequestData;
   config: RequestConfig;
   callback: RequestCallback;
@@ -20,21 +20,28 @@ export interface FastjsRequestAtom {
   wait?: NodeJS.Timeout | null;
 }
 
+type FastjsRequestWrapped =
+  & (() => FastjsRequest)
+  & ((url: string) => FastjsRequest)
+  & ((data?: RequestData) => FastjsRequest)
+  & ((url: string, data?: RequestData) => FastjsRequest)
+  & ((data?: RequestData, url?: string) => FastjsRequest)
+
 export interface FastjsRequestAPI {
   send: (
     method: RequestMethod,
     data?: RequestData,
     url?: string
   ) => FastjsRequest;
-  get: (data?: RequestData, url?: string) => FastjsRequest;
-  post: (data?: RequestData, url?: string) => FastjsRequest;
-  put: (data?: RequestData, url?: string) => FastjsRequest;
-  delete: (data?: RequestData, url?: string) => FastjsRequest;
-  patch: (data?: RequestData, url?: string) => FastjsRequest;
-  head: (data?: RequestData, url?: string) => FastjsRequest;
-  options: (data?: RequestData, url?: string) => FastjsRequest;
+  get: FastjsRequestWrapped;
+  post: FastjsRequestWrapped;
+  put: FastjsRequestWrapped;
+  delete: FastjsRequestWrapped;
+  patch: FastjsRequestWrapped;
+  head: FastjsRequestWrapped;
+  options: FastjsRequestWrapped;
   then: (
-    callback: (data: any, response: RequestReturn) => void,
+    callback: (data: RequestReturnData, response: RequestReturn) => void,
     repeat?: boolean,
     method?: RequestMethod
   ) => FastjsRequest;
@@ -48,4 +55,4 @@ export interface FastjsRequestAPI {
 
 export type FastjsRequest = FastjsRequestAtom &
   FastjsRequestAPI &
-  FastjsModuleBase;
+  Omit<FastjsModuleBase, 'then'>;

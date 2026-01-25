@@ -1,13 +1,12 @@
-import _dev from "../dev";
-
-import type { FastjsRequest } from "./fetch-types";
 import type {
   FailedParams,
   RequestHook,
   RequestHookObject,
   RequestHookParam
 } from "./def";
-import type { RequestReturn } from "./def";
+import type { RequestReturn, RequestReturnData } from "./def";
+
+import type { FastjsRequest } from "./fetch-types";
 
 export interface GlobalConfig {
   timeout: number;
@@ -99,18 +98,18 @@ export interface RequestConfig {
   };
   wait: number;
   failed: (error: FailedParams<Error | number>) => void;
-  callback: (data: any, response: RequestReturn) => void;
+  callback: (data: RequestReturnData, response: RequestReturn) => void;
   query:
-    | {
-        [key: string]: any;
-      }
-    | string
-    | null;
+  | {
+    [key: string]: any;
+  }
+  | string
+  | null;
   body:
-    | {
-        [key: string]: any;
-      }
-    | string
-    | null;
+  | {
+    [key: string]: any;
+  }
+  | string
+  | null;
   hooks: RequestHookParam;
 }

@@ -1,26 +1,17 @@
-import _dev from "../dev";
-import { createModule } from "../base";
-import { createConfig } from "./config";
-
 import type { FastjsRequest, FastjsRequestAtom } from "./fetch-types";
+
+import type { RequestCallback } from "./def";
 import type { RequestConfig } from "./config";
-import type { RequestData, RequestCallback } from "./def";
+import type { RequestData } from "./base-types";
+import { createConfig } from "./config";
 import { createMethods } from "./fetch-methods";
+import { createModule } from "../base";
 
 export function createRequest(
-  url: string,
+  url?: string,
   data: RequestData | null = null,
   config?: Partial<RequestConfig>
 ): FastjsRequest {
-  if (__DEV__ && typeof url !== "string") {
-    throw _dev.error(
-      "fastjs/request",
-      "A correct url is **required**.",
-      [`***url: ${url}`, "data: ", data, "config: ", config],
-      ["fastjs.wrong"]
-    );
-  }
-
   const moduleAtom = createModule<FastjsRequestAtom>(() => ({
     construct: "FastjsRequest",
     url,
@@ -31,7 +22,7 @@ export function createRequest(
 
   const module: FastjsRequest = Object.assign(
     moduleAtom,
-    createMethods(moduleAtom as FastjsRequest)
+    createMethods(moduleAtom as unknown as FastjsRequest)
   );
 
   return module;
