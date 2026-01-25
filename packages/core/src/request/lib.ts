@@ -1,4 +1,4 @@
-import type { RequestData } from "./def";
+import type { RequestData } from "./base-types";
 
 export function addQuery(
   url: string,

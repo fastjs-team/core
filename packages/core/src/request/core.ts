@@ -14,18 +14,18 @@ import type { FastjsRequest } from "./fetch-types";
 import _dev from "../dev";
 import { globalConfig } from "./config";
 
-export function sendRequest(
-  request: FastjsRequest,
+export function sendRequest<T extends any = string | RequestReturnData>(
+  request: FastjsRequest<T>,
   method: RequestMethod,
   url: string | undefined = request.url
-): FastjsRequest {
+): FastjsRequest<T> {
   if (__DEV__) {
     if (["GET", "HEAD", "OPTIONS"].includes(method) && request.config.body) {
       _dev.warn(
         "fastjs/request",
         `Body is not allowed in ${method} request, use POST instead. (HTTP 1.1)`,
         [
-          `url: ${url}`,
+          `url: ${url || request.url}`,
           `*method: ${method}`,
           `*body: `,
           request.body,
@@ -36,6 +36,8 @@ export function sendRequest(
       );
     }
   }
+
+  if (!url) url = request.url;
 
   if (!url) {
     if (__DEV__) {
@@ -87,6 +89,10 @@ export function sendRequest(
       delete request.data[match];
     }
 
+    if (typeof data.body === "object") {
+      request.config.headers["Content-Type"] = "application/json";
+    }
+
     request.request = new Request(addQuery(url, data.query), {
       method,
       headers: request.config.headers,
@@ -129,9 +135,6 @@ export function sendRequest(
         headers.toObject = () => Object.fromEntries(response.headers.entries());
 
         const returnData = parse(data) as RequestReturnData;
-        // if (typeof returnData === "object") {
-        //   returnData.getFullData = () => data;
-        // }
 
         const requestReturn: RequestReturn = {
           headers,
@@ -142,9 +145,10 @@ export function sendRequest(
           resend: () => sendRequest(request, method)
         };
 
-        if (typeof returnData === "object") {
-          returnData.getFullReturn = () => requestReturn;
-        }
+        const proto = Object.create(Object.getPrototypeOf(returnData))
+        proto.getFullReturn = () => requestReturn
+
+        Object.setPrototypeOf(returnData, proto)
 
         if (!globalConfig.handler.responseCode(response.status, request))
           return await handleBadResponse(requestReturn, request, passthrough);

@@ -5,16 +5,16 @@ import type { RequestData, RequestMethod } from "./base-types";
 import { sendRequest } from "./core";
 
 export function createMethods(request: FastjsRequest): FastjsRequestAPI {
-  const send = (
+  const send = <T extends any = string | RequestReturnData>(
     method: RequestMethod,
     data: RequestData = {},
     url?: string
-  ) => {
+  ): FastjsRequest<T> => {
     request.data = Object.assign(request.data, data);
-    return sendRequest(request, method, url);
+    return sendRequest<T>(request as FastjsRequest<T>, method, url);
   };
 
-  function wrappedFunctionHandler(
+  function wrappedFunctionHandler<T extends any = string | RequestReturnData>(
     method: RequestMethod,
     p1?: RequestData | string,
     p2?: string | RequestData
@@ -32,25 +32,23 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
       }
     }
 
-    return send(method, data, url);
+    return send<T>(method, data, url);
+  }
+
+  function unifiedRequest(method: RequestMethod) {
+    return <T extends any = string | RequestReturnData>(p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler<T>(method, p1, p2);
   }
 
   const methods: FastjsRequestAPI = {
     send,
-    get: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("GET", p1, p2),
-    post: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("POST", p1, p2),
-    put: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("PUT", p1, p2),
-    delete: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("DELETE", p1, p2),
-    patch: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("PATCH", p1, p2),
-    head: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("HEAD", p1, p2),
-    options: (p1?: RequestData | string, p2?: string | RequestData) =>
-      wrappedFunctionHandler("OPTIONS", p1, p2),
+    get: unifiedRequest("GET"),
+    post: unifiedRequest("POST"),
+    put: unifiedRequest("PUT"),
+    delete: unifiedRequest("DELETE"),
+    patch: unifiedRequest("PATCH"),
+    head: unifiedRequest("HEAD"),
+    options: unifiedRequest("OPTIONS"),
     then: (
       callback: (data: RequestReturnData, response: RequestReturn) => void,
       repeat: boolean = false,
