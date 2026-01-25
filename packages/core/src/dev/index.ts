@@ -1,5 +1,3 @@
-import { rand } from "../utils/index";
-
 function browserCheck(module: string): void {
   const isBrowser: boolean = typeof window !== "undefined";
   if (!isBrowser) {
@@ -73,8 +71,8 @@ function warn(
   args = args.filter((arg) => arg !== "");
   args = args.map((arg, k) =>
     typeof arg === "string" &&
-    arg[0] !== "&" &&
-    args[k - 1]?.[args[k - 1].length - 1] !== "&"
+      arg[0] !== "&" &&
+      args[k - 1]?.[args[k - 1].length - 1] !== "&"
       ? "\n    > " + arg
       : arg
   );
@@ -132,8 +130,7 @@ function error(
   args: Array<any> = [],
   styleArgs: Array<style | Array<style>> = []
 ): Error {
-  // Note: Called utils.rand, but it should be tree-shaked after build(prod mode)
-  const eid = rand(1e7, 1e8 - 1);
+  const eid = Math.floor(Math.random() * (1e8 - 1e7) + 1e7);
   args.push(`Trace: ${eid}`);
   warn(module, message, args, styleArgs);
   return new Error(
