@@ -44,9 +44,12 @@ export function sendRequest(
         "A correct url is **required**.",
         [
           `*url: **undefined**`,
-          "data: ", request.data,
-          "config: ", request.config,
-          "super: ", request
+          "data: ",
+          request.data,
+          "config: ",
+          request.config,
+          "super: ",
+          request
         ],
         ["fastjs.wrong", "fastjs.wrong", "fastjs.wrong"]
       );
@@ -87,13 +90,15 @@ export function sendRequest(
     request.request = new Request(addQuery(url, data.query), {
       method,
       headers: request.config.headers,
-      body: data.body ? JSON.stringify(data.body) : undefined,
+      body: data.body ? JSON.stringify(data.body) : undefined
     });
 
     if (!(await runHooks(hooks.init, [request])))
       return hookFailed("init", request, null);
 
-    const signal = request.config.timeout ? AbortSignal.timeout(request.config.timeout) : null;
+    const signal = request.config.timeout
+      ? AbortSignal.timeout(request.config.timeout)
+      : null;
 
     if (__DEV__ && request.config.timeout && request.config.timeout <= 1000) {
       _dev.warn(
@@ -102,9 +107,11 @@ export function sendRequest(
         [
           `url: ${url}`,
           `method: ${method}`,
-          "body: ", request.body,
+          "body: ",
+          request.body,
           `*timeout: ${request.config.timeout}`,
-          "super: ", request
+          "super: ",
+          request
         ],
         ["fastjs.warn"]
       );
@@ -156,7 +163,8 @@ export function sendRequest(
               `${method} Request timed out.`,
               [
                 `url: ${url}`,
-                "body: ", request.body,
+                "body: ",
+                request.body,
                 `*timeout: ${request.config.timeout}`,
                 "super: ",
                 request
@@ -191,7 +199,8 @@ export function sendRequest(
           hook: null,
           response: null,
           headers: null,
-          resend: () => sendRequest(request, request.request?.method as RequestMethod)
+          resend: () =>
+            sendRequest(request, request.request?.method as RequestMethod)
         };
 
         request.config.failed(failedParams);
@@ -285,12 +294,18 @@ async function runHooks<T extends RequestHook[] | RequestHook | undefined>(
     RequestReturn;
   if (!hooks) return true;
   if (typeof hooks === "function") {
-    const result = await hooks(params[0] as FirstParam, params[1] as FastjsRequest);
+    const result = await hooks(
+      params[0] as FirstParam,
+      params[1] as FastjsRequest
+    );
     return result ?? true;
   }
   let result = true;
   for (const hook of hooks as RequestHook[]) {
-    const hookResult = await hook(params[0] as FirstParam, params[1] as FastjsRequest);
+    const hookResult = await hook(
+      params[0] as FirstParam,
+      params[1] as FastjsRequest
+    );
     if (hookResult === false) {
       result = false;
       if (!globalConfig.hooks.runAll) break;

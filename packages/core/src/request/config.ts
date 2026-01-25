@@ -100,16 +100,16 @@ export interface RequestConfig {
   failed: (error: FailedParams<Error | number>) => void;
   callback: (data: RequestReturnData, response: RequestReturn) => void;
   query:
-  | {
-    [key: string]: any;
-  }
-  | string
-  | null;
+    | {
+        [key: string]: any;
+      }
+    | string
+    | null;
   body:
-  | {
-    [key: string]: any;
-  }
-  | string
-  | null;
+    | {
+        [key: string]: any;
+      }
+    | string
+    | null;
   hooks: RequestHookParam;
 }

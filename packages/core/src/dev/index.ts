@@ -71,8 +71,8 @@ function warn(
   args = args.filter((arg) => arg !== "");
   args = args.map((arg, k) =>
     typeof arg === "string" &&
-      arg[0] !== "&" &&
-      args[k - 1]?.[args[k - 1].length - 1] !== "&"
+    arg[0] !== "&" &&
+    args[k - 1]?.[args[k - 1].length - 1] !== "&"
       ? "\n    > " + arg
       : arg
   );

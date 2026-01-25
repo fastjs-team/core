@@ -2,10 +2,12 @@ import type { FastjsHeaders, RequestData, RequestMethod } from "./base-types";
 
 import type { FastjsRequest } from "./fetch-types";
 
-export type RequestReturnData = string | {
-  [key: string]: any;
-  getFullReturn: () => RequestReturn;
-}
+export type RequestReturnData =
+  | string
+  | {
+      [key: string]: any;
+      getFullReturn: () => RequestReturn;
+    };
 
 export interface RequestReturn {
   headers: FastjsHeaders;
@@ -17,8 +19,12 @@ export interface RequestReturn {
 }
 
 export namespace RequestHooks {
-  export type BeforeSend = (request: FastjsRequest) => boolean | undefined | Promise<boolean | undefined>;
-  export type RequestSuccess = (response: RequestReturn) => boolean | undefined | Promise<boolean | undefined>;
+  export type BeforeSend = (
+    request: FastjsRequest
+  ) => boolean | undefined | Promise<boolean | undefined>;
+  export type RequestSuccess = (
+    response: RequestReturn
+  ) => boolean | undefined | Promise<boolean | undefined>;
   export type RequestFailed = (
     error: Error | number,
     request: FastjsRequest
@@ -65,7 +71,9 @@ export interface CallbackObject<T> {
 }
 
 export interface RequestCallback {
-  success: CallbackObject<(data: RequestReturnData, response: RequestReturn) => void>[];
+  success: CallbackObject<
+    (data: RequestReturnData, response: RequestReturn) => void
+  >[];
   failed: CallbackObject<(err: FailedParams<Error | number>) => void>[];
   finally: CallbackObject<(request: FastjsRequest) => void>[];
 }

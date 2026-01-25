@@ -1,8 +1,4 @@
-import type {
-  FailedParams,
-  RequestReturn,
-  RequestReturnData
-} from "./def";
+import type { FailedParams, RequestReturn, RequestReturnData } from "./def";
 import type { FastjsRequest, FastjsRequestAPI } from "./fetch-types";
 import type { RequestData, RequestMethod } from "./base-types";
 
@@ -18,7 +14,11 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
     return sendRequest(request, method, url);
   };
 
-  function wrappedFunctionHandler(method: RequestMethod, p1?: RequestData | string, p2?: string | RequestData) {
+  function wrappedFunctionHandler(
+    method: RequestMethod,
+    p1?: RequestData | string,
+    p2?: string | RequestData
+  ) {
     let data: RequestData = {};
     let url: string = "";
 
@@ -37,13 +37,20 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
 
   const methods: FastjsRequestAPI = {
     send,
-    get: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("GET", p1, p2),
-    post: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("POST", p1, p2),
-    put: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("PUT", p1, p2),
-    delete: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("DELETE", p1, p2),
-    patch: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("PATCH", p1, p2),
-    head: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("HEAD", p1, p2),
-    options: (p1?: RequestData | string, p2?: string | RequestData) => wrappedFunctionHandler("OPTIONS", p1, p2),
+    get: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("GET", p1, p2),
+    post: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("POST", p1, p2),
+    put: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("PUT", p1, p2),
+    delete: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("DELETE", p1, p2),
+    patch: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("PATCH", p1, p2),
+    head: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("HEAD", p1, p2),
+    options: (p1?: RequestData | string, p2?: string | RequestData) =>
+      wrappedFunctionHandler("OPTIONS", p1, p2),
     then: (
       callback: (data: RequestReturnData, response: RequestReturn) => void,
       repeat: boolean = false,

@@ -20,12 +20,11 @@ export interface FastjsRequestAtom {
   wait?: NodeJS.Timeout | null;
 }
 
-type FastjsRequestWrapped =
-  & (() => FastjsRequest)
-  & ((url: string) => FastjsRequest)
-  & ((data?: RequestData) => FastjsRequest)
-  & ((url: string, data?: RequestData) => FastjsRequest)
-  & ((data?: RequestData, url?: string) => FastjsRequest)
+type FastjsRequestWrapped = (() => FastjsRequest) &
+  ((url: string) => FastjsRequest) &
+  ((data?: RequestData) => FastjsRequest) &
+  ((url: string, data?: RequestData) => FastjsRequest) &
+  ((data?: RequestData, url?: string) => FastjsRequest);
 
 export interface FastjsRequestAPI {
   send: (
@@ -55,4 +54,4 @@ export interface FastjsRequestAPI {
 
 export type FastjsRequest = FastjsRequestAtom &
   FastjsRequestAPI &
-  Omit<FastjsModuleBase, 'then'>;
+  Omit<FastjsModuleBase, "then">;
