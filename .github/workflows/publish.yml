@@ -10,18 +10,20 @@ jobs:
 
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Setup pnpm
         run: npm install -g pnpm
@@ -53,11 +55,7 @@ jobs:
           github_token: ${{ secrets.PUSH_TOKEN }}
           branch: main
 
-      - name: Create .npmrc file
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish Package
-        run: pnpm -r publish --access public --no-git-checks
+        run: |
+          cd packages/core
+          npm publish --access public --tag latest
