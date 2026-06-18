@@ -13,9 +13,12 @@ function selector<
     | null
 >(
   target: string = "body",
-  parent: Document | ElementList | ElementList[] = document
+  parent?: Document | ElementList | ElementList[]
 ): T {
-  const result = _selector(target, parent);
+  const result = _selector(
+    target,
+    parent ?? (typeof document !== "undefined" ? document : undefined)
+  );
   if (Array.isArray(result))
     return createFastjsDomList(result) as FastjsDomList as T;
   if (result === null) return null as T;

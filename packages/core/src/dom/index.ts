@@ -26,9 +26,9 @@ const dom: DomModule = function <
     | null
 >(
   target: string = "body",
-  parent: Document | HTMLElement | HTMLElement[] = document
+  parent?: Document | HTMLElement | HTMLElement[]
 ): T {
-  return selector(target, parent);
+  return selector(target, parent ?? document);
 };
 dom.select = selector;
 dom.newEl = createFastjsDom;

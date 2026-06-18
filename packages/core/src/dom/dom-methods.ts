@@ -83,9 +83,11 @@ export function createMethods<ElementType extends ElementList>(
   function val(val: string): FastjsDom<ElementType>;
 
   function val(val?: string): string | FastjsDom<ElementType> {
-    const key = (
-      (dom._el as HTMLElement).tagName === "TEXTAREA" ? "textContent" : "value"
-    ) as keyof ElementType;
+    // HTMLTextAreaElement exposes `value` (which mirrors the current
+    // user-entered content) just like HTMLInputElement; using
+    // `textContent` here returns the *default* value baked into the
+    // markup, not the live user input.
+    const key = "value" as keyof ElementType;
     if (val === undefined) return dom._el[key] as string;
     set(key, val as ElementType[typeof key]);
     return dom;
@@ -186,26 +188,36 @@ export function createMethods<ElementType extends ElementList>(
     };
 
     if (attrs.callback) {
-      dom._events.forEach((v, i) => {
+      // Walk backwards to safely splice while iterating.
+      for (let i = dom._events.length - 1; i >= 0; i--) {
+        const v = dom._events[i];
         if (v.callback === attrs.callback) {
           dom._el.removeEventListener(v.type, v.trigger);
           dom._events.splice(i, 1);
         }
-      });
+      }
     } else if (attrs.type) {
       if (attrs.key !== undefined) {
-        dom._el.removeEventListener(
-          dom._events[attrs.key].type,
-          dom._events[attrs.key].trigger
-        );
-        dom._events.splice(attrs.key, 1);
+        const entry = dom._events[attrs.key];
+        if (entry) {
+          dom._el.removeEventListener(entry.type, entry.trigger);
+          dom._events.splice(attrs.key, 1);
+        }
       } else {
-        dom._events.forEach((v) => {
+        for (let i = dom._events.length - 1; i >= 0; i--) {
+          const v = dom._events[i];
           if (v.type === attrs.type) {
             dom._el.removeEventListener(v.type, v.trigger);
-            dom._events.splice(dom._events.indexOf(v), 1);
+            dom._events.splice(i, 1);
           }
-        });
+        }
+      }
+    } else {
+      // No filter provided: drop every registered listener for this dom.
+      for (let i = dom._events.length - 1; i >= 0; i--) {
+        const v = dom._events[i];
+        dom._el.removeEventListener(v.type, v.trigger);
+        dom._events.splice(i, 1);
       }
     }
 
@@ -223,37 +235,40 @@ export function createMethods<ElementType extends ElementList>(
       | keyof CSSStyleDeclaration
       | ((style: StyleObj, dom: FastjsDom<ElementType>) => void)
   ) {
+    // The computed style object is intentionally read-only: previously
+    // Object.assign was used to splat inline styles onto it which throws
+    // in strict mode. The proxy now reads inline first, falls back to
+    // computed, and forwards writes through `setStyle`.
+    const computedStyle = window.getComputedStyle(dom._el);
+    const inlineStyle = dom._el.style;
+
+    const lookup = (key: string): string => {
+      const kebab = key.replace(/[A-Z]/g, (v) => "-" + v.toLowerCase());
+      const inline =
+        inlineStyle.getPropertyValue(kebab) ||
+        (inlineStyle as any)[key] ||
+        "";
+      if (inline) return inline;
+      return computedStyle.getPropertyValue(kebab);
+    };
+
     const getStyleProxy = (): StyleObj => {
-      return new Proxy(styles, {
-        get: (target, key: string) => {
-          return (
-            target.getPropertyValue(key) ||
-            target[key as keyof CSSStyleDeclaration] ||
-            null
-          );
-        },
-        set: (target, key: string, value) => {
+      return new Proxy({} as StyleObj, {
+        get: (_target, key: string) => lookup(key) || null,
+        set: (_target, key: string, value) => {
           dom.setStyle(key as keyof CSSStyleDeclaration, value);
-          return Reflect.set(target, key, value);
+          return true;
         }
       });
     };
 
-    const computedStyle = window.getComputedStyle(dom._el);
-    const styles: CSSStyleDeclaration = Object.assign(
-      computedStyle,
-      dom._el.style
-    );
-
     if (typeof keyOrCallback === "string")
-      return styles.getPropertyValue(
-        keyOrCallback.replace(/[A-Z]/g, (v) => "-" + v.toLowerCase())
-      );
-    else if (typeof keyOrCallback === "function")
+      return lookup(keyOrCallback as string);
+    if (typeof keyOrCallback === "function") {
       keyOrCallback(getStyleProxy(), dom);
-    else return getStyleProxy();
-
-    return dom;
+      return dom;
+    }
+    return getStyleProxy();
   }
 
   function setStyle(style: SetStyleObj): FastjsDom<ElementType>;
@@ -480,11 +495,20 @@ export function createMethods<ElementType extends ElementList>(
       event[target as Exclude<PushTarget, "replaceElement" | number>]();
     }
 
+    // `beforeElement`/`afterElement` insert the new node as a sibling of
+    // `el`, so its position must be looked up in `el.parentElement`.
+    const indexContainer =
+      target === "beforeElement" || target === "afterElement"
+        ? newElement._el.parentElement
+        : (el as ElementList);
+
     return {
       isReplace,
       newElement: (isReplace && newElement) as ElementReturn<T, ElementList>,
       oldElement: isReplace && (dom as ElementReturn<T, ElementType>),
-      index: [...(el as ElementList).children].indexOf(newElement._el),
+      index: indexContainer
+        ? [...indexContainer.children].indexOf(newElement._el)
+        : -1,
       el: newElement,
       origin: dom,
       father: newElement.father()

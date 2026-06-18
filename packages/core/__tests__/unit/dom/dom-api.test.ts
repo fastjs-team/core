@@ -214,3 +214,32 @@ test("Test FastjsDom.setAttr.key", () => {
   root.setAttr("data-test", "test");
   expect(root.getAttr("data-test")).toBe("test");
 });
+
+test("Test FastjsDom.removeEvent removes all callbacks for type", () => {
+  const root = getRoot();
+  const noop1 = () => 0;
+  const noop2 = () => 0;
+  root.addEvent("click", noop1);
+  root.addEvent("click", noop2);
+  root.addEvent("mousemove", noop1);
+  expect(root._events.length).toBe(3);
+  root.removeEvent("click");
+  expect(root._events.length).toBe(1);
+  expect(root._events[0].type).toBe("mousemove");
+});
+
+test("Test FastjsDom.removeEvent removes by callback safely with multiple matches", () => {
+  const root = getRoot();
+  const sharedCallback = () => 0;
+  root.addEvent("click", sharedCallback);
+  root.addEvent("mouseenter", sharedCallback);
+  root.addEvent("focus", sharedCallback);
+  root.removeEvent(sharedCallback);
+  expect(root._events.length).toBe(0);
+});
+
+test("Test FastjsDom.val reads live textarea value", () => {
+  const textarea = document.createElement("textarea");
+  textarea.value = "live";
+  expect(dom.newEl(textarea).val()).toBe("live");
+});

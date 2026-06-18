@@ -71,3 +71,11 @@ test("Select child of FastjsDom", () => {
     "5 children of root div should be selected"
   );
 });
+
+test("Compound selector containing #id returns a list, not just the first match", () => {
+  const el = dom.select("#root .div-child");
+  assert(
+    (el as any)?.construct === "FastjsDomList" && (el as any).length === 3,
+    "all three children should be returned"
+  );
+});

@@ -7,11 +7,18 @@ import { createMethods } from "./dom-methods";
 import { createModule } from "../base";
 
 export function createFastjsDom<T extends ElementList = ElementList>(
-  el: FastjsDom | Element | ElementList | string = document.body,
+  el?: FastjsDom | Element | ElementList | string,
   props?: FastjsDomProps<T>
 ): FastjsDom<T> {
-  if (typeof el === "string") el = document.createElement(el);
-  else if ("construct" in el && el.construct === "FastjsDom") el = el._el;
+  if (__DEV__) _dev.browserCheck("fastjs/dom");
+
+  if (el === undefined) {
+    el = document.body;
+  } else if (typeof el === "string") {
+    el = document.createElement(el);
+  } else if ("construct" in el && el.construct === "FastjsDom") {
+    el = el._el;
+  }
 
   const moduleAtom = createModule<FastjsDomAtom<T>>(() => ({
     construct: "FastjsDom",
