@@ -10,7 +10,7 @@ export interface FastjsCookieAtom {
 export interface FastjsCookieAPI {
   get(name: string): string | null;
   set(name: string, value: string, options?: CookieOptions): FastjsCookie;
-  remove(name: string): FastjsCookie;
+  remove(name: string, options?: CookieOptions): FastjsCookie;
 }
 
 export type FastjsCookie = FastjsCookieAtom &

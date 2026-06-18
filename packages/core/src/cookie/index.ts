@@ -18,8 +18,11 @@ export const set = (
   return createFastjsCookie().set(name, value, options);
 };
 
-export const remove = (name: string): FastjsCookie => {
-  return createFastjsCookie().remove(name);
+export const remove = (
+  name: string,
+  options: CookieOptions = {}
+): FastjsCookie => {
+  return createFastjsCookie().remove(name, options);
 };
 
 export default {
