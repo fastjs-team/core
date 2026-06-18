@@ -8,7 +8,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "lib": ["ES6", "dom", "DOM.Iterable"],
+    "lib": ["ES2022", "dom", "DOM.Iterable"],
     "moduleResolution": "node",
     "paths": {
       "@/*": ["../src/*"]

@@ -1,7 +1,7 @@
 if (__DEV__ && !__TEST__ && !__ESM_BUNDLER__) {
   console.info(
     "You are running fastjs in development mode.\n" +
-      "Make sure to use the production build (*.prod.js) when deploying for production."
+      "Make sure to use the production build (*.prod.{js,cjs}) when deploying for production."
   );
 }
 

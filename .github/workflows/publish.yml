@@ -19,17 +19,20 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Setup pnpm
-        run: npm install -g pnpm
+          cache: pnpm
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Set Git Config
         run: |
@@ -50,7 +53,9 @@ jobs:
         run: pnpm run prod
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        # Pinned to a specific tag - using `master` lets an upstream
+        # compromise execute arbitrary code with our PUSH_TOKEN.
+        uses: ad-m/github-push-action@d91a481090679876dfc4178fef17f286781251df # v0.8.0
         with:
           github_token: ${{ secrets.PUSH_TOKEN }}
           branch: main
