@@ -123,15 +123,25 @@ export function parseFormatString(
   dateString: string
 ): number {
   let isInIgnoreToken = false;
-  let parsedDate = new Date();
-  parsedDate.setMilliseconds(0);
-  let is12Hour = "";
-  let isAm = null;
   let isToken = false;
   let dateStringPointer = -1;
   const allTokens: Array<string> = getReplacement().map(
     (replacement) => replacement[0]
   );
+
+  // Collect the parsed components first so we can apply them in a
+  // deterministic order via `new Date(y, m, d, ...)` and avoid the
+  // setMonth/setDate rolling pitfall (e.g. setDate(31) on a 30-day month).
+  const now = new Date();
+  let year: number | null = null;
+  let month: number | null = null;
+  let day: number | null = null;
+  let hour: number | null = null;
+  let minute: number | null = null;
+  let second: number | null = null;
+  let ms: number | null = null;
+  let twelveHour: number | null = null;
+  let isAm: boolean | null = null;
 
   for (let i = 0; i < formatString.length; i++) {
     dateStringPointer++;
@@ -169,26 +179,27 @@ export function parseFormatString(
 
       switch (char) {
         case "Y":
-          parsedDate.setFullYear(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 4))
+          year = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 4)
           );
           dateStringPointer += 3;
           break;
         case "M":
-          parsedDate.setMonth(
+          month =
             Number(dateString.slice(dateStringPointer, dateStringPointer + 2)) -
-              1
-          );
+            1;
           dateStringPointer += 1;
           break;
         case "D":
-          parsedDate.setDate(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 2))
+          day = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 2)
           );
           dateStringPointer += 1;
           break;
         case "H":
-          is12Hour = dateString.slice(dateStringPointer, dateStringPointer + 2);
+          twelveHour = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 2)
+          );
           dateStringPointer += 1;
           break;
         case "A":
@@ -202,26 +213,26 @@ export function parseFormatString(
           dateStringPointer += 1;
           break;
         case "h":
-          parsedDate.setHours(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 2))
+          hour = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 2)
           );
           dateStringPointer += 1;
           break;
         case "m":
-          parsedDate.setMinutes(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 2))
+          minute = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 2)
           );
           dateStringPointer += 1;
           break;
         case "s":
-          parsedDate.setSeconds(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 2))
+          second = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 2)
           );
           dateStringPointer += 1;
           break;
         case "S":
-          parsedDate.setMilliseconds(
-            Number(dateString.slice(dateStringPointer, dateStringPointer + 3))
+          ms = Number(
+            dateString.slice(dateStringPointer, dateStringPointer + 3)
           );
           dateStringPointer += 2;
           break;
@@ -232,7 +243,7 @@ export function parseFormatString(
     }
   }
 
-  if (is12Hour) {
+  if (twelveHour !== null) {
     if (isAm === null) {
       if (__DEV__) {
         throw _dev.error(
@@ -250,11 +261,38 @@ export function parseFormatString(
         "[fastjs/date] Invalid format string: 12-hour format requires an AM/PM token"
       );
     }
-    const hour12 = Number(is12Hour);
-    // 12 AM is 00:00 and 12 PM is 12:00 in 24-hour format
-    const normalized = hour12 % 12;
-    parsedDate.setHours(isAm ? normalized : normalized + 12);
+    if (__DEV__ && (twelveHour < 1 || twelveHour > 12)) {
+      _dev.warn(
+        "fastjs/date/FastjsDate",
+        `12-hour value must be in 1..12, received ${twelveHour}`,
+        [
+          "***formatString: " + formatString,
+          "***dateString: " + dateString
+        ],
+        ["fastjs.warn"]
+      );
+    }
+    const normalized = twelveHour % 12;
+    hour = isAm ? normalized : normalized + 12;
   }
 
-  return parsedDate.getTime();
+  // Apply fallbacks from `now` for unspecified components, then construct
+  // the Date in one shot so the month/day pair never rolls over.
+  const finalYear = year ?? now.getFullYear();
+  const finalMonth = month ?? now.getMonth();
+  const finalDay = day ?? now.getDate();
+  const finalHour = hour ?? 0;
+  const finalMinute = minute ?? 0;
+  const finalSecond = second ?? 0;
+  const finalMs = ms ?? 0;
+
+  return new Date(
+    finalYear,
+    finalMonth,
+    finalDay,
+    finalHour,
+    finalMinute,
+    finalSecond,
+    finalMs
+  ).getTime();
 }

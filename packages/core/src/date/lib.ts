@@ -35,6 +35,8 @@ export function getReplacement(date: Date = new Date()): replacement[] {
   const hours24 = date.getHours();
   const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
 
+  // NOTE: For backwards compatibility, `H` is 12-hour and `h`/`hh` are
+  // 24-hour. The two-character variants are padded to two digits.
   const replacement: Array<replacement> = [
     ["Y", date.getFullYear()],
     ["M", date.getMonth() + 1],
@@ -55,8 +57,11 @@ export function getReplacement(date: Date = new Date()): replacement[] {
   return replacement.map((entry) => {
     if (typeof entry[1] !== "number") return entry;
     if (entry[0] === "S") return [entry[0], padZero(entry[1], 3)];
-    if (entry[0].length === 1) return [entry[0], padZero(entry[1], 2)];
-    return entry;
+    // Pad both single-character and double-character numeric tokens
+    // (`Y`, `M`, `D`, `H`, `hh`, `mm`, `ss`, `h`, `m`, `s`) to a stable
+    // two-digit width so output is fixed-length and round-trippable.
+    if (entry[0] === "Y") return [entry[0], padZero(entry[1], 4)];
+    return [entry[0], padZero(entry[1], 2)];
   });
 
   function padZero(number: number, width: number): string {
