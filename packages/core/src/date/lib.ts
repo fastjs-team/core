@@ -32,30 +32,35 @@ export function extractIgnoreTokens(formatString: string): [string, string[]] {
 }
 
 export function getReplacement(date: Date = new Date()): replacement[] {
+  const hours24 = date.getHours();
+  const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
+
   const replacement: Array<replacement> = [
     ["Y", date.getFullYear()],
     ["M", date.getMonth() + 1],
     ["D", date.getDate()],
-    ["H", date.getHours() % 12],
-    ["hh", date.getHours()],
-    ["h", date.getHours()],
+    ["H", hours12],
+    ["hh", hours24],
+    ["h", hours24],
     ["mm", date.getMinutes()],
     ["m", date.getMinutes()],
     ["ss", date.getSeconds()],
     ["s", date.getSeconds()],
     ["S", date.getMilliseconds()],
     // A and a should be the last one because it will affect the result of replacement
-    ["A", date.getHours() >= 12 ? "PM" : "AM"],
-    ["a", date.getHours() >= 12 ? "pm" : "am"]
+    ["A", hours24 >= 12 ? "PM" : "AM"],
+    ["a", hours24 >= 12 ? "pm" : "am"]
   ];
 
-  return replacement.map((replacement) =>
-    replacement[0].length === 1 && typeof replacement[1] === "number"
-      ? [replacement[0], padZero(replacement[1])]
-      : replacement
-  );
+  return replacement.map((entry) => {
+    if (typeof entry[1] !== "number") return entry;
+    if (entry[0] === "S") return [entry[0], padZero(entry[1], 3)];
+    if (entry[0].length === 1) return [entry[0], padZero(entry[1], 2)];
+    return entry;
+  });
 
-  function padZero(number: number): string {
-    return number < 10 ? "0" + number : number.toString();
+  function padZero(number: number, width: number): string {
+    const str = String(number);
+    return str.length >= width ? str : "0".repeat(width - str.length) + str;
   }
 }

@@ -162,7 +162,9 @@ export function parseFormatString(
             ["fastjs.wrong"]
           );
         }
-        throw "fg3j";
+        throw new Error(
+          "[fastjs/date] Invalid format string: tokens cannot be adjacent"
+        );
       }
 
       switch (char) {
@@ -244,13 +246,14 @@ export function parseFormatString(
           ["fastjs.wrong"]
         );
       }
-      throw "2b5s";
+      throw new Error(
+        "[fastjs/date] Invalid format string: 12-hour format requires an AM/PM token"
+      );
     }
-    if (isAm) {
-      parsedDate.setHours(Number(is12Hour));
-    } else {
-      parsedDate.setHours(Number(is12Hour) + 12);
-    }
+    const hour12 = Number(is12Hour);
+    // 12 AM is 00:00 and 12 PM is 12:00 in 24-hour format
+    const normalized = hour12 % 12;
+    parsedDate.setHours(isAm ? normalized : normalized + 12);
   }
 
   return parsedDate.getTime();
