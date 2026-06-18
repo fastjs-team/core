@@ -6,9 +6,17 @@ export function isUndefined(value: any): value is undefined {
 }
 
 export function isDom(value: any): value is FastjsDom {
-  return value.construct === "FastjsDom";
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    (value as { construct?: string }).construct === "FastjsDom"
+  );
 }
 
 export function isDomList(value: any): value is FastjsDomList {
-  return value.construct === "FastjsDomList";
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    (value as { construct?: string }).construct === "FastjsDomList"
+  );
 }

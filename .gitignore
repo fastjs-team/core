@@ -5,3 +5,4 @@ dist/
 node_modules/
 playground/
 .DS_Store
+.pnpm-store/
