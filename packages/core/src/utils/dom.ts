@@ -1,52 +1,92 @@
 import _dev from "../dev";
 
-export async function copy(text: string): Promise<void> {
+/**
+ * Copy text to the system clipboard.
+ *
+ * Prefers the asynchronous Clipboard API (`navigator.clipboard.writeText`)
+ * when available (requires a secure context). Falls back to a hidden
+ * `<textarea>` and the deprecated `document.execCommand("copy")` for
+ * older browsers.
+ *
+ * @returns `true` if the copy succeeded, `false` otherwise.
+ */
+export async function copy(text: string): Promise<boolean> {
+  if (typeof document === "undefined") {
+    if (__DEV__) {
+      _dev.warn(
+        "fastjs/utils/copy",
+        "document is not defined; copy() requires a browser environment",
+        [`*text: ${text}`]
+      );
+    }
+    return false;
+  }
+
+  if (
+    typeof navigator !== "undefined" &&
+    navigator.clipboard &&
+    typeof navigator.clipboard.writeText === "function"
+  ) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error: any) {
+      if (__DEV__) {
+        _dev.warn(
+          "fastjs/utils/copy",
+          "navigator.clipboard.writeText failed, falling back to execCommand",
+          [`error: ${error?.message || error}`]
+        );
+      }
+    }
+  }
+
+  return fallbackCopy(text);
+}
+
+function fallbackCopy(text: string): boolean {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "0";
+  textarea.style.left = "0";
+  textarea.style.width = "1px";
+  textarea.style.height = "1px";
+  textarea.style.padding = "0";
+  textarea.style.border = "none";
+  textarea.style.outline = "none";
+  textarea.style.boxShadow = "none";
+  textarea.style.background = "transparent";
+  textarea.style.opacity = "0";
+
+  const activeElement = document.activeElement as HTMLElement | null;
+  document.body.appendChild(textarea);
+
+  let success = false;
   try {
-    const input = await createDomElement(text);
-    const selection = selectText(input);
-    copyToClipboard(selection);
-    input.remove();
+    textarea.focus();
+    textarea.select();
+    textarea.setSelectionRange(0, text.length);
+    success = document.execCommand("copy");
   } catch (error: any) {
     if (__DEV__) {
       _dev.warn(
         "fastjs/utils/copy",
-        "An error occurred while copying text to clipboard",
-        error
+        "document.execCommand('copy') failed",
+        [`error: ${error?.message || error}`]
       );
     }
-  }
-
-  async function createDomElement(text: string): Promise<HTMLSpanElement> {
-    const { createFastjsDom } = await import("../dom/dom");
-    let input = createFastjsDom<HTMLSpanElement>("span");
-    input
-      .html(replaceNewLinesAndSpaces(text))
-      .push(document.body, "lastElementChild");
-    return input.el();
-
-    function replaceNewLinesAndSpaces(text: string): string {
-      return text.replace(/\n/g, "<br>").replace(/ /g, "&nbsp;");
-    }
-  }
-
-  function selectText(element: HTMLSpanElement): Selection | null {
-    const range: Range = document.createRange();
-    range.setStart(element, 0);
-    range.setEnd(element, element.childNodes.length);
-    const selection: Selection | null = window.getSelection();
-    if (!selection) return null;
-    selection.removeAllRanges();
-    selection.addRange(range);
-    return selection;
-  }
-
-  function copyToClipboard(selection: Selection | null): void {
-    if (!selection) {
-      if (__DEV__) {
-        _dev.warn("fastjs/utils/copy", "selection is null");
+  } finally {
+    textarea.remove();
+    if (activeElement && typeof activeElement.focus === "function") {
+      try {
+        activeElement.focus();
+      } catch {
+        /* ignore */
       }
-      return;
     }
-    document.execCommand("copy");
   }
+
+  return success;
 }
