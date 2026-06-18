@@ -308,9 +308,7 @@ describe("Body Serialisation", () => {
       const req = request.create("https://example.com/");
       // bypass plain-object stringification by passing FormData as send body
       (req as any).data = form;
-      req
-        .send("POST")
-        .finally(() => resolve());
+      req.send("POST").finally(() => resolve());
       setTimeout(resolve, 200);
     });
 

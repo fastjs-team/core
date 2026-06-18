@@ -1,5 +1,6 @@
 .idea/
 .vscode/
+.cursor/
 *.secret
 dist/
 node_modules/

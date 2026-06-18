@@ -48,7 +48,8 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
   const isBundlerESMBuild = /esm-bundler/.test(formatsExport[formatName].file);
   const isBrowserESMBuild = /esm-browser/.test(formatsExport[formatName].file);
   const isProductionBuild =
-    process.env.__DEV__ === "false" || /\.prod\.(js|cjs)$/.test(rollupOutput.file);
+    process.env.__DEV__ === "false" ||
+    /\.prod\.(js|cjs)$/.test(rollupOutput.file);
   const isGlobalBuild = /global/.test(rollupOutput.file);
   const isCJSBuild = /cjs/.test(rollupOutput.file);
 

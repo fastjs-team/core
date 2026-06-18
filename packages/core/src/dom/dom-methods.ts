@@ -245,9 +245,7 @@ export function createMethods<ElementType extends ElementList>(
     const lookup = (key: string): string => {
       const kebab = key.replace(/[A-Z]/g, (v) => "-" + v.toLowerCase());
       const inline =
-        inlineStyle.getPropertyValue(kebab) ||
-        (inlineStyle as any)[key] ||
-        "";
+        inlineStyle.getPropertyValue(kebab) || (inlineStyle as any)[key] || "";
       if (inline) return inline;
       return computedStyle.getPropertyValue(kebab);
     };

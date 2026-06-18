@@ -265,10 +265,7 @@ export function parseFormatString(
       _dev.warn(
         "fastjs/date/FastjsDate",
         `12-hour value must be in 1..12, received ${twelveHour}`,
-        [
-          "***formatString: " + formatString,
-          "***dateString: " + dateString
-        ],
+        ["***formatString: " + formatString, "***dateString: " + dateString],
         ["fastjs.warn"]
       );
     }

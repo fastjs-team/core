@@ -5,12 +5,7 @@ import _dev from "../dev";
 
 function _selector(
   selector: string,
-  parent?:
-    | Document
-    | ElementList
-    | ElementList[]
-    | FastjsDom
-    | FastjsDomList
+  parent?: Document | ElementList | ElementList[] | FastjsDom | FastjsDomList
 ): HTMLElement | HTMLElement[] | null {
   // Always assert browser availability - production builds previously
   // skipped this check and surfaced an opaque ReferenceError.
@@ -47,9 +42,7 @@ function _selector(
     );
   } else {
     result.push(
-      ...queryResultToArray(
-        select(scope as FastjsDom | ElementList, selector)
-      )
+      ...queryResultToArray(select(scope as FastjsDom | ElementList, selector))
     );
   }
 
@@ -82,7 +75,10 @@ function isSingleIdSelector(selector: string, id: string | undefined): boolean {
   const trimmed = selector.trim();
   if (!trimmed.includes(`#${id}`)) return false;
   // A pure id reference, possibly combined with a tag prefix like `div#root`
-  return /^[a-zA-Z][\w-]*$/.test(trimmed.replace(`#${id}`, "")) || trimmed === `#${id}`;
+  return (
+    /^[a-zA-Z][\w-]*$/.test(trimmed.replace(`#${id}`, "")) ||
+    trimmed === `#${id}`
+  );
 }
 
 export default _selector;

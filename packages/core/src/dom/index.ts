@@ -24,10 +24,7 @@ const dom: DomModule = function <
     | FastjsDom
     | FastjsDomList
     | null
->(
-  target: string = "body",
-  parent?: Document | HTMLElement | HTMLElement[]
-): T {
+>(target: string = "body", parent?: Document | HTMLElement | HTMLElement[]): T {
   return selector(target, parent ?? document);
 };
 dom.select = selector;

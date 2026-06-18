@@ -11,10 +11,7 @@ function selector<
     | FastjsDom
     | FastjsDomList
     | null
->(
-  target: string = "body",
-  parent?: Document | ElementList | ElementList[]
-): T {
+>(target: string = "body", parent?: Document | ElementList | ElementList[]): T {
   const result = _selector(
     target,
     parent ?? (typeof document !== "undefined" ? document : undefined)

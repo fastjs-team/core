@@ -86,11 +86,9 @@ function fallbackCopy(text: string): boolean {
     success = document.execCommand("copy");
   } catch (error: any) {
     if (__DEV__) {
-      _dev.warn(
-        "fastjs/utils/copy",
-        "document.execCommand('copy') failed",
-        [`error: ${error?.message || error}`]
-      );
+      _dev.warn("fastjs/utils/copy", "document.execCommand('copy') failed", [
+        `error: ${error?.message || error}`
+      ]);
     }
   } finally {
     textarea.remove();

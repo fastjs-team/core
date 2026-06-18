@@ -137,7 +137,11 @@ export function sendRequest<T extends any = string | RequestReturnData>(
 
     const headers: Record<string, string> = { ...request.config.headers };
     let serializedBody: BodyInit | undefined = undefined;
-    if (isBodyAllowed(method) && data.body !== null && data.body !== undefined) {
+    if (
+      isBodyAllowed(method) &&
+      data.body !== null &&
+      data.body !== undefined
+    ) {
       if (isPlainBody(data.body)) {
         serializedBody = JSON.stringify(data.body);
         if (!hasHeader(headers, "Content-Type")) {
@@ -155,7 +159,8 @@ export function sendRequest<T extends any = string | RequestReturnData>(
       typeof AbortController !== "undefined" ? new AbortController() : null;
     if (controller) request.abortController = controller;
     const timeoutSignal =
-      request.config.timeout && typeof AbortSignal !== "undefined" &&
+      request.config.timeout &&
+      typeof AbortSignal !== "undefined" &&
       typeof AbortSignal.timeout === "function"
         ? AbortSignal.timeout(request.config.timeout)
         : null;
