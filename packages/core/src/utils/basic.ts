@@ -75,11 +75,10 @@ export function secureCall(
   try {
     const res = func();
     if (res instanceof Promise) {
-      return new Promise((resolve, reject) => {
-        res
-          .then((res) => resolve([res, null]))
-          .catch((error) => resolve([undefined, error]));
-      });
+      return res.then(
+        (value): [any, null] => [value, null],
+        (error): [undefined, Error] => [undefined, error]
+      );
     }
     return [res, null];
   } catch (error: any) {

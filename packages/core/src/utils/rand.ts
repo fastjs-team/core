@@ -44,12 +44,24 @@ export function rand(min: number, max: number, decimal: number = 0): number {
 }
 
 export interface RandStringOptions {
+  /** When set, the resulting length is randomised in `[length, max]`. */
   max: number;
+  /** Include digits `0-9`. Defaults to `false`. */
   number: boolean;
+  /** Include alphabetic characters. Defaults to `true`. */
   letter: boolean;
+  /** Include uppercase letters. Defaults to `true` when `letter` is enabled. */
   upper: boolean;
+  /** Include lowercase letters. Defaults to `true` when `letter` is enabled. */
   lower: boolean;
+  /** Additional characters to draw from. */
   custom: string | string[];
+  /**
+   * When `true`, draws from a cryptographically-secure RNG
+   * (`crypto.getRandomValues`) instead of `Math.random`. Falls back to
+   * the insecure RNG when crypto is unavailable.
+   */
+  secure: boolean;
 }
 
 export function randString(
@@ -57,6 +69,7 @@ export function randString(
   options: Partial<RandStringOptions> = {}
 ) {
   const letters = "abcdefghijklmnopqrstuvwxyz";
+
   let choices: string = "";
   if (options.number) choices += "0123456789";
   if (options.letter !== false) {
@@ -80,11 +93,43 @@ export function randString(
   if (options.max) length = rand(length, options.max);
   if (length <= 0) return "";
 
+  if (options.secure) return secureRandString(length, choices);
+
   let result = "";
   for (let i = 0; i < length; i++) {
     result += choices.charAt(rand(0, choices.length - 1));
   }
+  return result;
+}
 
+function secureRandString(length: number, choices: string): string {
+  const g: { crypto?: Crypto } =
+    typeof globalThis !== "undefined" ? (globalThis as any) : ({} as any);
+  if (!g.crypto || typeof g.crypto.getRandomValues !== "function") {
+    if (__DEV__) {
+      _dev.warn(
+        "fastjs/utils/randString",
+        "secure RNG requested but crypto.getRandomValues is unavailable; falling back to Math.random",
+        []
+      );
+    }
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += choices.charAt(rand(0, choices.length - 1));
+    }
+    return result;
+  }
+  // Reject biased values so the resulting characters are uniformly drawn.
+  const max = 256 - (256 % choices.length);
+  const buffer = new Uint8Array(length);
+  let result = "";
+  while (result.length < length) {
+    g.crypto.getRandomValues(buffer);
+    for (let i = 0; i < buffer.length && result.length < length; i++) {
+      const value = buffer[i];
+      if (value < max) result += choices.charAt(value % choices.length);
+    }
+  }
   return result;
 }
 

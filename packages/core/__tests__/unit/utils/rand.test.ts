@@ -89,3 +89,16 @@ test("Random uuid generates distinct values", () => {
   for (let i = 0; i < 100; i++) set.add(utils.uuid());
   expect(set.size).toBe(100);
 });
+
+test("Random string with secure RNG honours custom charset", () => {
+  const str = utils.randString(32, { upper: true, number: true, secure: true });
+  expect(str).toMatch(/^[a-zA-Z0-9]{32}$/);
+});
+
+test("Random string with secure RNG uniformly populates output", () => {
+  // With 200 chars drawn from a 26-char alphabet we should hit a healthy
+  // mix; cheap statistical check to confirm we don't always return 'a'.
+  const str = utils.randString(200, { secure: true });
+  const unique = new Set(str.split(""));
+  expect(unique.size).toBeGreaterThan(10);
+});

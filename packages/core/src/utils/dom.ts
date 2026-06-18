@@ -45,6 +45,21 @@ export async function copy(text: string): Promise<boolean> {
 }
 
 function fallbackCopy(text: string): boolean {
+  // The fallback relies on attaching a hidden textarea to the document
+  // body, which is unavailable when the script runs before the DOM is
+  // parsed (e.g. an inline <head> script).
+  const host = document.body || document.documentElement;
+  if (!host) {
+    if (__DEV__) {
+      _dev.warn(
+        "fastjs/utils/copy",
+        "document.body is not yet available; cannot fall back to execCommand",
+        []
+      );
+    }
+    return false;
+  }
+
   const textarea = document.createElement("textarea");
   textarea.value = text;
   textarea.setAttribute("readonly", "");
@@ -61,7 +76,7 @@ function fallbackCopy(text: string): boolean {
   textarea.style.opacity = "0";
 
   const activeElement = document.activeElement as HTMLElement | null;
-  document.body.appendChild(textarea);
+  host.appendChild(textarea);
 
   let success = false;
   try {
