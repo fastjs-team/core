@@ -51,6 +51,14 @@ export function createMethods(request: FastjsRequest): FastjsRequestAPI {
     patch: unifiedRequest("PATCH"),
     head: unifiedRequest("HEAD"),
     options: unifiedRequest("OPTIONS"),
+    abort: (reason?: any) => {
+      if (request.wait) {
+        clearTimeout(request.wait);
+        request.wait = null;
+      }
+      request.abortController?.abort(reason);
+      return request;
+    },
     then: (
       callback: (data: RequestReturnData, response: RequestReturn) => void,
       repeat: boolean = false,

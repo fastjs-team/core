@@ -14,13 +14,46 @@ import type { FastjsRequest } from "./fetch-types";
 import _dev from "../dev";
 import { globalConfig } from "./config";
 
+const NO_BODY_METHODS = new Set<RequestMethod>(["GET", "HEAD", "OPTIONS"]);
+
+function isBodyAllowed(method: RequestMethod): boolean {
+  return !NO_BODY_METHODS.has(method);
+}
+
+function isPlainBody(body: unknown): body is Record<string, any> {
+  if (body === null || typeof body !== "object") return false;
+  if (typeof FormData !== "undefined" && body instanceof FormData) return false;
+  if (typeof Blob !== "undefined" && body instanceof Blob) return false;
+  if (typeof URLSearchParams !== "undefined" && body instanceof URLSearchParams)
+    return false;
+  if (typeof ArrayBuffer !== "undefined" && ArrayBuffer.isView(body))
+    return false;
+  if (typeof ArrayBuffer !== "undefined" && body instanceof ArrayBuffer)
+    return false;
+  if (typeof ReadableStream !== "undefined" && body instanceof ReadableStream)
+    return false;
+  return true;
+}
+
+function ensureFetchAvailable(): boolean {
+  if (typeof fetch === "function") return true;
+  if (__DEV__) {
+    _dev.warn(
+      "fastjs/request",
+      "global fetch is not available; install a polyfill or upgrade to Node >= 18.",
+      []
+    );
+  }
+  return false;
+}
+
 export function sendRequest<T extends any = string | RequestReturnData>(
   request: FastjsRequest<T>,
   method: RequestMethod,
   url: string | undefined = request.url
 ): FastjsRequest<T> {
   if (__DEV__) {
-    if (["GET", "HEAD", "OPTIONS"].includes(method) && request.config.body) {
+    if (NO_BODY_METHODS.has(method) && request.config.body) {
       _dev.warn(
         "fastjs/request",
         `Body is not allowed in ${method} request, use POST instead. (HTTP 1.1)`,
@@ -74,13 +107,26 @@ export function sendRequest<T extends any = string | RequestReturnData>(
 
   return request;
 
-  function isBodyAllowed(method: RequestMethod): boolean {
-    return !["GET", "HEAD", "OPTIONS"].includes(method);
-  }
-
   async function passthrough() {
+    if (!ensureFetchAvailable()) {
+      const error = new Error("global fetch is not available");
+      const failedParams: FailedParams<Error> = {
+        error,
+        request,
+        intercept: false,
+        hook: null,
+        response: null,
+        headers: null,
+        resend: () => sendRequest(request, method)
+      };
+      request.config.failed(failedParams);
+      matchCallback(request.callback.failed, [failedParams], method);
+      matchCallback(request.callback.finally, [request], method);
+      return;
+    }
+
     const hooks = request.config.hooks;
-    if (!(await runHooks(hooks.before, [request])))
+    if (!(await runHooks(hooks.before, [request], hooks.runAll)))
       return hookFailed("before", request, null);
 
     let pathParamMatches: string[] = [];
@@ -89,22 +135,40 @@ export function sendRequest<T extends any = string | RequestReturnData>(
       delete request.data[match];
     }
 
-    if (typeof data.body === "object") {
-      request.config.headers["Content-Type"] = "application/json";
+    const headers: Record<string, string> = { ...request.config.headers };
+    let serializedBody: BodyInit | undefined = undefined;
+    if (isBodyAllowed(method) && data.body !== null && data.body !== undefined) {
+      if (isPlainBody(data.body)) {
+        serializedBody = JSON.stringify(data.body);
+        if (!hasHeader(headers, "Content-Type")) {
+          headers["Content-Type"] = "application/json";
+        }
+      } else if (typeof data.body === "string") {
+        serializedBody = data.body;
+      } else {
+        // Pass-through for FormData, Blob, URLSearchParams, ArrayBuffer, etc.
+        serializedBody = data.body as BodyInit;
+      }
     }
+
+    const controller =
+      typeof AbortController !== "undefined" ? new AbortController() : null;
+    if (controller) request.abortController = controller;
+    const timeoutSignal =
+      request.config.timeout && typeof AbortSignal !== "undefined" &&
+      typeof AbortSignal.timeout === "function"
+        ? AbortSignal.timeout(request.config.timeout)
+        : null;
+    const signal = pickSignal(controller?.signal, timeoutSignal);
 
     request.request = new Request(addQuery(url, data.query), {
       method,
-      headers: request.config.headers,
-      body: data.body ? JSON.stringify(data.body) : undefined
+      headers,
+      body: serializedBody
     });
 
-    if (!(await runHooks(hooks.init, [request])))
+    if (!(await runHooks(hooks.init, [request], hooks.runAll)))
       return hookFailed("init", request, null);
-
-    const signal = request.config.timeout
-      ? AbortSignal.timeout(request.config.timeout)
-      : null;
 
     if (__DEV__ && request.config.timeout && request.config.timeout <= 1000) {
       _dev.warn(
@@ -123,7 +187,7 @@ export function sendRequest<T extends any = string | RequestReturnData>(
       );
     }
 
-    fetch(request.request, { signal })
+    fetch(request.request, signal ? { signal } : undefined)
       .then(async (response: Response) => {
         const data = await globalConfig.handler.handleResponse(
           response,
@@ -145,15 +209,22 @@ export function sendRequest<T extends any = string | RequestReturnData>(
           resend: () => sendRequest(request, method)
         };
 
-        const proto = Object.create(Object.getPrototypeOf(returnData));
-        proto.getFullReturn = () => requestReturn;
-
-        Object.setPrototypeOf(returnData, proto);
+        if (returnData !== null && typeof returnData === "object") {
+          const proto = Object.create(Object.getPrototypeOf(returnData));
+          proto.getFullReturn = () => requestReturn;
+          Object.setPrototypeOf(returnData, proto);
+        }
 
         if (!globalConfig.handler.responseCode(response.status, request))
           return await handleBadResponse(requestReturn, request, passthrough);
 
-        if (!(await runHooks(hooks.success, [requestReturn, request])))
+        if (
+          !(await runHooks(
+            hooks.success,
+            [requestReturn, request],
+            hooks.runAll
+          ))
+        )
           return hookFailed("success", request, requestReturn);
 
         matchCallback(request.callback.success, [data, requestReturn], method);
@@ -161,7 +232,10 @@ export function sendRequest<T extends any = string | RequestReturnData>(
       })
       .catch(async (error: Error) => {
         if (__DEV__) {
-          if (error.message === "signal timed out") {
+          if (
+            error.name === "TimeoutError" ||
+            error.message === "signal timed out"
+          ) {
             _dev.warn(
               "fastjs/request",
               `${method} Request timed out.`,
@@ -175,25 +249,25 @@ export function sendRequest<T extends any = string | RequestReturnData>(
               ],
               ["fastjs.warn"]
             );
+          } else {
+            _dev.warn(
+              "fastjs/request",
+              "Failed to send request.",
+              [
+                `url: ${url}`,
+                `method: ${method}`,
+                `body: `,
+                request.body,
+                `error: ${error.message}`,
+                "super: ",
+                request
+              ],
+              ["fastjs.wrong"]
+            );
           }
-        } else {
-          _dev.warn(
-            "fastjs/request",
-            "Failed to send request.",
-            [
-              `url: ${url}`,
-              `method: ${method}`,
-              `body: `,
-              request.body,
-              `error: ${error.message}`,
-              "super: ",
-              request
-            ],
-            ["fastjs.wrong"]
-          );
         }
 
-        if (!(await runHooks(hooks.failed, [error, request])))
+        if (!(await runHooks(hooks.failed, [error, request], hooks.runAll)))
           return hookFailed("failed", request, null);
 
         const failedParams = {
@@ -212,6 +286,23 @@ export function sendRequest<T extends any = string | RequestReturnData>(
         matchCallback(request.callback.finally, [request], method);
       });
   }
+}
+
+function hasHeader(headers: Record<string, string>, name: string): boolean {
+  const target = name.toLowerCase();
+  return Object.keys(headers).some((key) => key.toLowerCase() === target);
+}
+
+function pickSignal(
+  ...signals: Array<AbortSignal | null | undefined>
+): AbortSignal | null {
+  const valid = signals.filter(Boolean) as AbortSignal[];
+  if (valid.length === 0) return null;
+  if (valid.length === 1) return valid[0];
+  if (typeof (AbortSignal as any)?.any === "function") {
+    return (AbortSignal as any).any(valid) as AbortSignal;
+  }
+  return valid[0];
 }
 
 function matchCallback(
@@ -251,7 +342,13 @@ async function handleBadResponse(
     );
   }
 
-  if (!(await runHooks(request.config.hooks.failed, [status, request])))
+  if (
+    !(await runHooks(
+      request.config.hooks.failed,
+      [status, request],
+      request.config.hooks.runAll
+    ))
+  )
     return hookFailed("failed", request, null);
 
   const failedParams: FailedParams<number> = {
@@ -292,7 +389,8 @@ async function runHooks<T extends RequestHook[] | RequestHook | undefined>(
   hooks: T,
   params: T extends RequestHooks.BeforeSend
     ? [FastjsRequest]
-    : [RequestReturn | Error | number, FastjsRequest]
+    : [RequestReturn | Error | number, FastjsRequest],
+  runAll: boolean | undefined
 ): Promise<boolean> {
   type FirstParam = ((number & FastjsRequest) | (Error & FastjsRequest)) &
     RequestReturn;
@@ -312,7 +410,7 @@ async function runHooks<T extends RequestHook[] | RequestHook | undefined>(
     );
     if (hookResult === false) {
       result = false;
-      if (!globalConfig.hooks.runAll) break;
+      if (!runAll) break;
     }
   }
   return result;

@@ -18,7 +18,14 @@ export interface FastjsRequestAtom {
   callback: RequestCallback;
   request?: Request;
   response?: Response;
-  wait?: NodeJS.Timeout | null;
+  /**
+   * Cross-platform timer handle returned by `setTimeout` (`number` in
+   * browsers, `NodeJS.Timeout` in Node). Stored when `config.wait` is
+   * used to debounce subsequent calls.
+   */
+  wait?: ReturnType<typeof setTimeout> | null;
+  /** Created lazily per in-flight request; call `abort()` to cancel. */
+  abortController?: AbortController;
 }
 
 type FastjsRequestWrapped = (<
@@ -52,6 +59,11 @@ export interface FastjsRequestAPI<T extends any = string | RequestReturnData> {
   patch: FastjsRequestWrapped;
   head: FastjsRequestWrapped;
   options: FastjsRequestWrapped;
+  /**
+   * Cancel the in-flight request, if any. Cancelling is a no-op when
+   * no request has been dispatched yet.
+   */
+  abort: (reason?: any) => FastjsRequest<T>;
   then: (
     callback: (data: T & RequestReturnProto, response: RequestReturn) => void,
     repeat?: boolean,
