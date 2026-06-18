@@ -5,25 +5,21 @@
   "author": "xiaodong2008 <hi@xiaodong.moe>",
   "bugs": "https://github.com/fastjs-team/core/issues",
   "funding": "https://github.com/sponsors/xiaodong2008",
-  "main": "index.js",
+  "main": "index.cjs",
   "type": "module",
   "module": "dist/fastjs.esm-bundler.js",
   "types": "dist/types/main.d.ts",
   "unpkg": "dist/fastjs.global.js",
   "jsdelivr": "dist/fastjs.global.js",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": {
-        "require": "./dist/types/main.d.ts",
-        "node": "./dist/types/main.d.ts",
-        "default": "./dist/types/main.d.ts"
-      },
-      "default": {
-        "require": "./index.cjs",
-        "node": "./index.cjs",
-        "default": "./dist/fastjs.esm-bundler.js"
-      }
-    }
+      "types": "./dist/types/main.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",

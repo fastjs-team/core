@@ -6,9 +6,12 @@ const version = packageInfo.version;
 const fileBaseName = "fastjs";
 const packageConfig = [];
 
+// NOTE: package.json sets "type": "module", so files ending with `.js`
+// are interpreted as ESM. The CJS bundle therefore uses the `.cjs`
+// extension to force Node to treat it as CommonJS.
 const formatsExport = {
   cjs: {
-    file: `dist/${fileBaseName}.cjs.js`,
+    file: `dist/${fileBaseName}.cjs`,
     format: "cjs"
   },
   esm: {
@@ -45,7 +48,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
   const isBundlerESMBuild = /esm-bundler/.test(formatsExport[formatName].file);
   const isBrowserESMBuild = /esm-browser/.test(formatsExport[formatName].file);
   const isProductionBuild =
-    process.env.__DEV__ === "false" || /\.prod\.js$/.test(rollupOutput.file);
+    process.env.__DEV__ === "false" || /\.prod\.(js|cjs)$/.test(rollupOutput.file);
   const isGlobalBuild = /global/.test(rollupOutput.file);
   const isCJSBuild = /cjs/.test(rollupOutput.file);
 
@@ -114,7 +117,7 @@ function generateConfig(formatName, rollupOutput, plugins = []) {
 /** @param format {string} */
 function generateProductionConfig(format) {
   return generateConfig(format, {
-    file: formatsExport[format].file.replace(/\.js$/, ".prod.js"),
+    file: prodFile(formatsExport[format].file),
     format: formatsExport[format].format
   });
 }
@@ -124,9 +127,17 @@ function generateMinifiedConfig(format) {
   return generateConfig(
     format,
     {
-      file: formatsExport[format].file.replace(/\.js$/, ".prod.js"),
+      file: prodFile(formatsExport[format].file),
       format: formatsExport[format].format
     },
     [terser()]
   );
+}
+
+/**
+ * Insert `.prod` before the file extension. Works for both `.js` and `.cjs`,
+ * so the resulting filenames stay consistent across formats.
+ */
+function prodFile(file) {
+  return file.replace(/\.(js|cjs)$/, ".prod.$1");
 }
